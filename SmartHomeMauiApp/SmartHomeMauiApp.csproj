@@ -69,12 +69,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="MVVM\Models\" />
-	  <Folder Include="MVVM\ViewModels\" />
+	  <ProjectReference Include="..\Shared.Library\Shared.Library.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Shared.Library\Shared.Library.csproj" />
+	  <Folder Include="MVVM\ViewModels\" />
 	</ItemGroup>
 
 </Project>
