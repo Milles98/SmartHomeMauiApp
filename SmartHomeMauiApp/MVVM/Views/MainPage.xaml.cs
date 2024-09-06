@@ -1,4 +1,4 @@
-﻿namespace SmartHomeMauiApp;
+﻿namespace SmartHomeMauiApp.MVVM.Views;
 
 public partial class MainPage : ContentPage
 {
@@ -6,5 +6,4 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 	}
-
 }

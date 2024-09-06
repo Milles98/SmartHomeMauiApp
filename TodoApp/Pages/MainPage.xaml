@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:TodoApp.ViewModels"
+             xmlns:pages="clr-namespace:TodoApp.Pages"
+             xmlns:models="clr-namespace:Shared.Library.Models;assembly=Shared.Library"
+             x:DataType="{x:Type viewModels:MainViewModel}"
+             x:Class="TodoApp.Pages.MainPage"
+             Title="MainPage">
+
+    <ScrollView>
+
+        <VerticalStackLayout Margin="20">
+            <Label Text="Activity"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"/>
+            <Entry Text="{Binding TodoItem.Activity}" />
+            <Button Command="{Binding SaveTodoCommand}"
+                    Text="Save Activity" />
+
+
+            <CollectionView ItemsSource="{Binding TodoItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TodoItem">
+                        <StackLayout HorizontalOptions="Center"
+                                     Margin="15 0 0 0">
+                            <Label Text="{Binding Activity}"
+                                   FontSize="16"
+                                   FontAttributes="Italic"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

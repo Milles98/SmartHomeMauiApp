@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHomeMauiApp", "SmartHomeMauiApp\SmartHomeMauiApp.csproj", "{C100653C-C321-4F44-AF48-28F831FD9CBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartHomeMauiApp", "SmartHomeMauiApp\SmartHomeMauiApp.csproj", "{C100653C-C321-4F44-AF48-28F831FD9CBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Library", "Shared.Library\Shared.Library.csproj", "{406507F0-DE2F-4A6A-8E77-42FB099E4CE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApp", "TodoApp\TodoApp.csproj", "{CC5356E2-7A8B-4746-96A6-5D3E0173D003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateApp", "TemplateApp\TemplateApp.csproj", "{4F23D015-6354-414D-8E52-B84BFF7A1E7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +23,22 @@ Global
 		{C100653C-C321-4F44-AF48-28F831FD9CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C100653C-C321-4F44-AF48-28F831FD9CBA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C100653C-C321-4F44-AF48-28F831FD9CBA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{406507F0-DE2F-4A6A-8E77-42FB099E4CE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{406507F0-DE2F-4A6A-8E77-42FB099E4CE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{406507F0-DE2F-4A6A-8E77-42FB099E4CE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{406507F0-DE2F-4A6A-8E77-42FB099E4CE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC5356E2-7A8B-4746-96A6-5D3E0173D003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC5356E2-7A8B-4746-96A6-5D3E0173D003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC5356E2-7A8B-4746-96A6-5D3E0173D003}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CC5356E2-7A8B-4746-96A6-5D3E0173D003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC5356E2-7A8B-4746-96A6-5D3E0173D003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC5356E2-7A8B-4746-96A6-5D3E0173D003}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4F23D015-6354-414D-8E52-B84BFF7A1E7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F23D015-6354-414D-8E52-B84BFF7A1E7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F23D015-6354-414D-8E52-B84BFF7A1E7B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{4F23D015-6354-414D-8E52-B84BFF7A1E7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F23D015-6354-414D-8E52-B84BFF7A1E7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F23D015-6354-414D-8E52-B84BFF7A1E7B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
