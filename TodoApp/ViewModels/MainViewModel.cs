@@ -16,6 +16,9 @@ public partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	private void SaveTodo()
 	{
+		TodoItem.Id = Guid.NewGuid().ToString();
+		TodoItem.Created = DateTime.Now;
+
 		TodoItems.Add(TodoItem);
 		TodoItem = new TodoItem();
 	}

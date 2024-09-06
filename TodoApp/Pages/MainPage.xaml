@@ -21,26 +21,30 @@
                 <Entry Text="{Binding TodoItem.Activity}" />
                 <Button Command="{Binding SaveTodoCommand}"
                         Text="Save Activity"
-                        Margin="0 20 0 0" />
+                        Margin="0, 20, 0, 0" />
             </VerticalStackLayout>
+
+            <CollectionView Margin="0, 20, 0, 0" Grid.Row="1" ItemsSource="{Binding TodoItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:TodoItem}">
+                        <Grid ColumnDefinitions="*, auto">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="{Binding Activity}"
+                                       FontSize="16" />
+                                <Label Text="{Binding Created}"
+                                       FontSize="11" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Margin="10"
+                                    Text="X" />
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
         </Grid>
-
-
-
-
-        <!--<CollectionView ItemsSource="{Binding TodoItems}">
-<CollectionView.ItemTemplate>
-<DataTemplate x:DataType="models:TodoItem">
-<StackLayout HorizontalOptions="Center"
-Margin="15 0 0 0">
-<Label Text="{Binding Activity}"
-FontSize="16"
-FontAttributes="Italic" />
-</StackLayout>
-</DataTemplate>
-</CollectionView.ItemTemplate>
-</CollectionView>-->
-
 
     </ScrollView>
 
