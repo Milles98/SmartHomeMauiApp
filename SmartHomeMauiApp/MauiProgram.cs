@@ -20,9 +20,9 @@ namespace SmartHomeMauiApp
 					fonts.AddFont("fa-solid-900.ttf", "fa-solid");
 				});
 
+			builder.Services.AddSingleton(new DeviceManager("HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="));
 			builder.Services.AddSingleton<MainViewModel>();
 			builder.Services.AddSingleton<MainPage>();
-			builder.Services.AddSingleton<DeviceManager>();
 
 #if DEBUG
 			builder.Logging.AddDebug();
