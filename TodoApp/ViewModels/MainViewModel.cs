@@ -22,6 +22,7 @@ public partial class MainViewModel : ObservableObject
 		var result = _todoService.AddToList(TodoItem);
 		if (result)
 		{
+			SetTodoList();
 			TodoItem = new TodoItem();
 		}
 	}
@@ -32,12 +33,18 @@ public partial class MainViewModel : ObservableObject
 		var result = _todoService.RemoveFromList(todoItem.Id);
 		if (result)
 		{
-
+			SetTodoList();
 		}
+	}
+
+	private void SetTodoList()
+	{
+		TodoItems = new ObservableCollection<TodoItem>(_todoService.GetTodos().Select(x => x));
 	}
 
 	public MainViewModel(TodoService todoService)
 	{
 		_todoService = todoService;
+		SetTodoList();
 	}
 }
