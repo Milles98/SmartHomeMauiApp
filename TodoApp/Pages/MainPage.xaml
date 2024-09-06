@@ -10,30 +10,37 @@
 
     <ScrollView>
 
-        <VerticalStackLayout Margin="20">
-            <Label Text="Activity"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalTextAlignment="Center"/>
-            <Entry Text="{Binding TodoItem.Activity}" />
-            <Button Command="{Binding SaveTodoCommand}"
-                    Text="Save Activity" />
+        <Grid RowDefinitions="auto, *"
+              Margin="20">
+
+            <VerticalStackLayout Grid.Row="0">
+                <Label Text="Activity"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <Entry Text="{Binding TodoItem.Activity}" />
+                <Button Command="{Binding SaveTodoCommand}"
+                        Text="Save Activity"
+                        Margin="0 20 0 0" />
+            </VerticalStackLayout>
+        </Grid>
 
 
-            <CollectionView ItemsSource="{Binding TodoItems}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:TodoItem">
-                        <StackLayout HorizontalOptions="Center"
-                                     Margin="15 0 0 0">
-                            <Label Text="{Binding Activity}"
-                                   FontSize="16"
-                                   FontAttributes="Italic"/>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
 
-        </VerticalStackLayout>
+
+        <!--<CollectionView ItemsSource="{Binding TodoItems}">
+<CollectionView.ItemTemplate>
+<DataTemplate x:DataType="models:TodoItem">
+<StackLayout HorizontalOptions="Center"
+Margin="15 0 0 0">
+<Label Text="{Binding Activity}"
+FontSize="16"
+FontAttributes="Italic" />
+</StackLayout>
+</DataTemplate>
+</CollectionView.ItemTemplate>
+</CollectionView>-->
+
 
     </ScrollView>
 
