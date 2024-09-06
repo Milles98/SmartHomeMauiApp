@@ -22,4 +22,10 @@ public partial class MainViewModel : ObservableObject
 		TodoItems.Add(TodoItem);
 		TodoItem = new TodoItem();
 	}
+
+	[RelayCommand]
+	private void RemoveTodoItem(TodoItem todoItem)
+	{
+		TodoItems.Remove(todoItem);
+	}
 }
