@@ -14,17 +14,18 @@ public class DeviceManager
 		_serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
 	}
 
-	public async Task<IEnumerable<Twin>> GetDevices(string query)
+	public async Task<IEnumerable<Twin>> GetDevicesAsync(string query)
 	{
 		try
 		{
 			var q = _registryManager.CreateQuery(query);
 			return await q.GetNextAsTwinAsync();
+			//Kanske responseresult här också antar jag, viktigare i catchen dock
 		}
 		catch
 		{
-			//Bättre med responseresult klassen här !
-			return null!;
+			//Lägg till responseresult klassen här !
 		}
+		return null!;
 	}
 }
