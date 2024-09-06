@@ -13,7 +13,8 @@
             <Label Text="Activity"
                    FontSize="12" />
             <Entry Text="{Binding TodoItem.Activity}" />
-            <Button />
+            <Button Command="{Binding SaveTodoCommand}"
+                    Text="Save Activity" />
         </VerticalStackLayout>
 
     </ScrollView>
