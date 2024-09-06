@@ -20,5 +20,6 @@ public partial class MainViewModel : ObservableObject
 	public MainViewModel(DeviceManager deviceManager)
 	{
 		_deviceManager = deviceManager;
+		Task.Run(SetDevicesAsync);
 	}
 }
