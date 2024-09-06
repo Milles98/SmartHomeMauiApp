@@ -14,11 +14,17 @@ public class DeviceManager
 		_serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
 	}
 
-	public async Task GetDevices(string query)
+	public async Task<IEnumerable<Twin>> GetDevices(string query)
 	{
-		var q = _registryManager.CreateQuery(query);
-		var deviceTwins = new List<Twin>();
-
-		var devices = await q.GetNextAsTwinAsync();
+		try
+		{
+			var q = _registryManager.CreateQuery(query);
+			return await q.GetNextAsTwinAsync();
+		}
+		catch
+		{
+			//Bättre med responseresult klassen här !
+			return null!;
+		}
 	}
 }
