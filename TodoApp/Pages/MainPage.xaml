@@ -40,7 +40,7 @@
                             <Button Grid.Column="1"
                                     Margin="0,0,0,15"
                                     FontFamily="fa-solid"
-                                    Command="{Binding Path=RemoveTodoCommand, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}"
+                                    Command="{Binding Path=RemoveTodoItemCommand, Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}}"
                                     CommandParameter="{Binding .}"
                                     FontSize="16"
                                     Text="&#xf2ed;"
