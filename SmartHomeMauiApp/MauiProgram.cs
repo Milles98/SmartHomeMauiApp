@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using Shared.Library.Services;
+using SmartHomeMauiApp.MVVM.ViewModels;
+using SmartHomeMauiApp.MVVM.Views;
 
 namespace SmartHomeMauiApp
 {
@@ -16,6 +19,10 @@ namespace SmartHomeMauiApp
 					fonts.AddFont("fa-brands-400.ttf", "fa-brands");
 					fonts.AddFont("fa-solid-900.ttf", "fa-solid");
 				});
+
+			builder.Services.AddSingleton(new DeviceManager("HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="));
+			builder.Services.AddSingleton<MainViewModel>();
+			builder.Services.AddSingleton<MainPage>();
 
 #if DEBUG
 			builder.Logging.AddDebug();

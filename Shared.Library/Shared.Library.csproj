@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="microsoft.azure.devices" Version="1.39.1" />
+  </ItemGroup>
+
 </Project>
