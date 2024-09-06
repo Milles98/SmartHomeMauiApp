@@ -10,30 +10,46 @@
 
     <ScrollView>
 
-        <VerticalStackLayout Margin="20">
-            <Label Text="Activity"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalTextAlignment="Center"/>
-            <Entry Text="{Binding TodoItem.Activity}" />
-            <Button Command="{Binding SaveTodoCommand}"
-                    Text="Save Activity" />
+        <Grid RowDefinitions="auto, *"
+              Margin="20">
 
+            <VerticalStackLayout Grid.Row="0">
+                <Label Text="Activity"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <Entry Text="{Binding TodoItem.Activity}" />
+                <Button Command="{Binding SaveTodoCommand}"
+                        Text="Save Activity"
+                        Margin="0, 20, 0, 0" />
+            </VerticalStackLayout>
 
-            <CollectionView ItemsSource="{Binding TodoItems}">
+            <CollectionView Margin="0, 20, 0, 0"
+                            Grid.Row="1"
+                            ItemsSource="{Binding TodoItems}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:TodoItem">
-                        <StackLayout HorizontalOptions="Center"
-                                     Margin="15 0 0 0">
-                            <Label Text="{Binding Activity}"
-                                   FontSize="16"
-                                   FontAttributes="Italic"/>
-                        </StackLayout>
+                    <DataTemplate x:DataType="{x:Type models:TodoItem}">
+                        <Grid ColumnDefinitions="*, auto">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="{Binding Activity}"
+                                       FontSize="16" />
+                                <Label Text="{Binding Created}"
+                                       FontSize="11" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Margin="10"
+                                    FontFamily="fa-solid"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=BindingContext.RemoveTodoItemCommand}"
+                                    FontSize="16"
+                                    Text="&#xf2ed;" />
+
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-        </VerticalStackLayout>
+        </Grid>
 
     </ScrollView>
 
