@@ -72,8 +72,4 @@
 	  <ProjectReference Include="..\Shared.Library\Shared.Library.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="MVVM\ViewModels\" />
-	</ItemGroup>
-
 </Project>
