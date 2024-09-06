@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Shared.Library.Services;
 using TodoApp.Pages;
 using TodoApp.ViewModels;
 
@@ -21,6 +22,8 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<MainViewModel>();
 		builder.Services.AddSingleton<MainPage>();
+
+		builder.Services.AddSingleton<TodoService>();
 
 		builder.Logging.AddDebug();
 		return builder.Build();

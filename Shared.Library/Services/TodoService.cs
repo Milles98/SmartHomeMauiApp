@@ -14,6 +14,9 @@ public class TodoService
 		{
 			if (!string.IsNullOrEmpty(todoItem.Activity))
 			{
+				todoItem.Id = Guid.NewGuid().ToString();
+				todoItem.Created = DateTime.Now;
+
 				_todos.Add(todoItem);
 				return true;
 			}
