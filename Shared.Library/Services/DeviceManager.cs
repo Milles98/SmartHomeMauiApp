@@ -19,9 +19,6 @@ public class DeviceManager
 		var q = _registryManager.CreateQuery(query);
 		var deviceTwins = new List<Twin>();
 
-		foreach (var twin in await q.GetNextAsTwinAsync())
-		{
-			deviceTwins.Add(twin);
-		}
+		var devices = await q.GetNextAsTwinAsync();
 	}
 }
