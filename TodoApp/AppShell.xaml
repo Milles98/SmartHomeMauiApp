@@ -6,7 +6,7 @@
        Shell.FlyoutBehavior="Disabled"
        Title="TodoApp">
 
-    <ShellContent Title="Home"
+    <ShellContent Title="Todo Application"
                   ContentTemplate="{DataTemplate pages:MainPage}"
                   Route="MainPage" />
 

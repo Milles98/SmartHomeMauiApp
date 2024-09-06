@@ -16,7 +16,7 @@ public partial class MainViewModel : ObservableObject
 	[RelayCommand]
 	private void SaveTodo()
 	{
-		TodoItems.Clear();
 		TodoItems.Add(TodoItem);
+		TodoItem = new TodoItem();
 	}
 }
