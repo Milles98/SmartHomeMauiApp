@@ -26,8 +26,8 @@
                              Color="Black" />
         </FlyoutItem.FlyoutIcon>
         <ShellContent Title="Settings"
-                      ContentTemplate="{DataTemplate views:SettingsView}"
-                      Route="SettingsView" />
+                      ContentTemplate="{DataTemplate views:SettingsPage}"
+                      Route="SettingsPage" />
     </FlyoutItem>
 
 </Shell>

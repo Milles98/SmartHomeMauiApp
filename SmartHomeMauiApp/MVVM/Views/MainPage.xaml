@@ -5,13 +5,14 @@
              xmlns:views="clr-namespace:SmartHomeMauiApp.MVVM.Views"
              x:DataType="{x:Type viewModels:MainViewModel}"
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
-             x:Class="SmartHomeMauiApp.MVVM.Views.MainPage">
+             x:Class="SmartHomeMauiApp.MVVM.Views.MainPage"
+             BackgroundColor="Black">
 
     <Grid>
 
         <Image Source="maui_background.png"
                Aspect="AspectFill"
-               Opacity="0.6"
+               Opacity="0.4"
                IsEnabled="False" />
 
         <!-- Main content area -->
@@ -23,7 +24,8 @@
                 <DataTemplate x:DataType="{x:Type azureshared:Twin}">
                     <Grid>
                         <VerticalStackLayout>
-                            <Label Text="{Binding DeviceId}" />
+                            <Label Text="{Binding DeviceId}"
+                                   TextColor="White" />
                         </VerticalStackLayout>
                     </Grid>
                 </DataTemplate>
@@ -32,34 +34,5 @@
 
 
     </Grid>
-
-
-
-
-
-
-    <!--<VerticalStackLayout>
-        <CollectionView ItemsSource="{Binding Devices}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding SelectedDevice}"
-                        SelectionChangedCommand="{Binding ToggleDeviceStateCommand}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type azureshared:Twin}">
-                    <Grid>
-                        <VerticalStackLayout>
-                            <Label Text="{Binding DeviceId}" />
-                        </VerticalStackLayout>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <Button Text="Toggle Device State"
-                Command="{Binding ToggleDeviceStateCommand}" />
-
-
-        <views:SettingsView x:Name="SettingsView"
-                            BindingContext="{Binding SettingsViewModel}" />
-    </VerticalStackLayout>-->
 
 </ContentPage>
