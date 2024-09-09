@@ -8,7 +8,10 @@
              x:Class="SmartHomeMauiApp.MVVM.Views.MainPage">
 
     <VerticalStackLayout>
-        <CollectionView ItemsSource="{Binding Devices}">
+        <CollectionView ItemsSource="{Binding Devices}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedDevice}"
+                        SelectionChangedCommand="{Binding ToggleDeviceStateCommand}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type azureshared:Twin}">
                     <Grid>
@@ -19,6 +22,9 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Button Text="Toggle Device State"
+                Command="{Binding ToggleDeviceStateCommand}" />
 
 
         <views:SettingsView x:Name="SettingsView"
