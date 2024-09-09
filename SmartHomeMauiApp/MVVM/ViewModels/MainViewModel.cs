@@ -19,7 +19,7 @@ public partial class MainViewModel : ObservableObject
 	[ObservableProperty]
 	private Twin _selectedDevice;
 
-	private async Task SetDevicesAsync()
+	public async Task SetDevicesAsync()
 	{
 		Devices = new ObservableCollection<Twin>(await _deviceManager.GetDevicesAsync("SELECT * FROM devices"));
 	}

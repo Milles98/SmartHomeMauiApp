@@ -10,6 +10,7 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 public partial class DeviceDetailViewModel : ObservableObject
 {
 	private readonly DeviceManager _deviceManager;
+	private readonly MainViewModel _mainViewModel;
 
 	[ObservableProperty]
 	private string _deviceId;
@@ -29,9 +30,10 @@ public partial class DeviceDetailViewModel : ObservableObject
 	[ObservableProperty]
 	private string _emailAddress;
 
-	public DeviceDetailViewModel(DeviceManager deviceManager)
+	public DeviceDetailViewModel(DeviceManager deviceManager, MainViewModel mainViewModel)
 	{
 		_deviceManager = deviceManager;
+		_mainViewModel = mainViewModel;
 	}
 
 	partial void OnDeviceIdChanged(string value)
@@ -94,6 +96,10 @@ public partial class DeviceDetailViewModel : ObservableObject
 					"Success",
 					$"Device {DeviceId} removed successfully.",
 					"OK");
+
+				await _mainViewModel.SetDevicesAsync();
+
+				await Shell.Current.GoToAsync($"///MainPage");
 			}
 			else
 			{
