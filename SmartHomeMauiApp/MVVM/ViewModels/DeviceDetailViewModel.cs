@@ -44,6 +44,36 @@ public partial class DeviceDetailViewModel : ObservableObject
 		}
 	}
 
+	[RelayCommand]
+	private async Task ToggleFanStateAsync()
+	{
+		try
+		{
+			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ToggleFan");
+
+			if (result != null && result.Status == 200)
+			{
+				await LoadDeviceDetailsAsync(DeviceId);
+			}
+			else
+			{
+				await Application.Current.MainPage.DisplayAlert(
+					"Error",
+					"Failed to toggle fan state.",
+					"OK");
+			}
+		}
+		catch (Exception ex)
+		{
+			await Application.Current.MainPage.DisplayAlert(
+				"Error",
+				$"Failed to toggle fan state: {ex.Message}",
+				"OK");
+		}
+	}
+
+
+
 	public async Task LoadDeviceDetailsAsync(string deviceId)
 	{
 		DeviceId = deviceId;
