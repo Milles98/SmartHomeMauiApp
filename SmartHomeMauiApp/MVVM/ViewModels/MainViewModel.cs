@@ -19,7 +19,7 @@ public partial class MainViewModel : ObservableObject
 	[ObservableProperty]
 	private Twin _selectedDevice;
 
-	private async Task SetDevicesAsync()
+	public async Task SetDevicesAsync()
 	{
 		Devices = new ObservableCollection<Twin>(await _deviceManager.GetDevicesAsync("SELECT * FROM devices"));
 	}
@@ -42,7 +42,10 @@ public partial class MainViewModel : ObservableObject
 		if (device == null)
 			return;
 
-		await Shell.Current.GoToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}");
+
+		var emailAddress = Preferences.Get("EmailAddress", string.Empty);
+
+		await Shell.Current.GoToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}&emailAddress={emailAddress}");
 	}
 
 

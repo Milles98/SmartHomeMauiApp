@@ -36,6 +36,12 @@
                FontAttributes="Bold" />
         <Label Text="{Binding FanState}"
                FontAttributes="Italic" />
+
+        <Button Text="Remove Device"
+                Command="{Binding RemoveDeviceCommand}"
+                BackgroundColor="Red"
+                TextColor="White"
+                Margin="10, 20, 10, 0" />
     </StackLayout>
 
 </ContentPage>

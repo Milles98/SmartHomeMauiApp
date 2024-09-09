@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="azure.communication.email" Version="1.0.1" />
     <PackageReference Include="microsoft.azure.devices" Version="1.39.1" />
   </ItemGroup>
 

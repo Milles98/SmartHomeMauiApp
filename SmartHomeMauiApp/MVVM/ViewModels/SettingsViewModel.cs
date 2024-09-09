@@ -33,6 +33,8 @@ public partial class SettingsViewModel : ObservableObject
 
 		Console.WriteLine("Settings have been saved and IoT Hub connection has been updated.");
 
+		Preferences.Set("EmailAddress", EmailAddress);
+
 		await Task.CompletedTask;
 	}
 }

@@ -32,6 +32,7 @@
 
     <ShellContent Title="Device Detail"
                   ContentTemplate="{DataTemplate views:DeviceDetailPage}"
-                  Route="DeviceDetailPage" />
+                  Route="DeviceDetailPage"
+                  FlyoutItemIsVisible="False" />
 
 </Shell>
