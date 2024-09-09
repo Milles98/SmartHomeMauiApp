@@ -2,6 +2,8 @@
 using Azure.Communication.Email;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Shared;
+using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Net.Mail;
 using System.Text;
 
@@ -52,21 +54,34 @@ public class DeviceManager
 		}
 	}
 
-	public async Task InvokeDirectMethodAsync(string deviceId, string methodName, string payload)
+	public async Task<CloudToDeviceMethodResult> InvokeDirectMethodAsync(string deviceId, string methodName, object? payload = null, int responseTimeoutSeconds = 30)
 	{
 		try
 		{
-			var methodInvocation = new CloudToDeviceMethod(methodName) { ResponseTimeout = TimeSpan.FromSeconds(30) };
-			methodInvocation.SetPayloadJson(payload);
+			var cloudMethod = new CloudToDeviceMethod(methodName)
+			{
+				ResponseTimeout = TimeSpan.FromSeconds(responseTimeoutSeconds)
+			};
 
-			var response = await _serviceClient.InvokeDeviceMethodAsync(deviceId, methodInvocation);
-			Console.WriteLine($"Response status: {response.Status}, payload: {response.GetPayloadAsJson()}");
+			if (payload != null)
+			{
+				cloudMethod.SetPayloadJson(JsonConvert.SerializeObject(payload));
+			}
+
+			var result = await _serviceClient.InvokeDeviceMethodAsync(deviceId, cloudMethod);
+			if (result != null)
+			{
+				return result;
+			}
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error invoking direct method: {ex.Message}");
+			Debug.WriteLine($"Error invoking direct method: {ex.Message}");
 		}
+
+		return null!;
 	}
+
 
 	public async Task SendCloudToDeviceMessageAsync(string deviceId, string messageContent)
 	{
