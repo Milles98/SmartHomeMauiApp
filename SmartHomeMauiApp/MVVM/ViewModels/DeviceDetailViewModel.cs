@@ -32,7 +32,6 @@ public partial class DeviceDetailViewModel : ObservableObject
 	{
 		if (!string.IsNullOrEmpty(value))
 		{
-			// Ladda detaljer om enheten när DeviceId är satt
 			Task.Run(() => LoadDeviceDetailsAsync(value));
 		}
 	}
@@ -42,19 +41,16 @@ public partial class DeviceDetailViewModel : ObservableObject
 		DeviceId = deviceId;
 		try
 		{
-			// Använd DeviceManager för att hämta enhetens tvilling (twin)
 			var twin = await _deviceManager.GetDeviceTwinAsync(DeviceId);
 
 			if (twin != null)
 			{
-				// Uppdatera egenskaper för UI
 				Status = twin.Status.ToString();
 				ConnectionState = twin.ConnectionState.ToString();
 
-				// Kontrollera om LastActivityTime har ett värde innan konvertering
 				LastActivityTime = twin.LastActivityTime.HasValue
 					? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
-					: "No Activity"; // Standardvärde om det är null
+					: "No Activity";
 
 				FanState = twin.Properties.Reported["fanState"]?.ToString();
 			}
