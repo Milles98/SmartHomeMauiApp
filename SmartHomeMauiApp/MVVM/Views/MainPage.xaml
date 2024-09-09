@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
-             xmlns:models="clr-namespace:Shared.Library.Models;assembly=Shared.Library"
              xmlns:views="clr-namespace:SmartHomeMauiApp.MVVM.Views"
              x:DataType="{x:Type viewModels:MainViewModel}"
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
