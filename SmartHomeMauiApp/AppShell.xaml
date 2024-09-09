@@ -30,4 +30,8 @@
                       Route="SettingsPage" />
     </FlyoutItem>
 
+    <ShellContent Title="Device Detail"
+                  ContentTemplate="{DataTemplate views:DeviceDetailPage}"
+                  Route="DeviceDetailPage" />
+
 </Shell>

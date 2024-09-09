@@ -36,6 +36,19 @@ public class DeviceManager
 		}
 	}
 
+	public async Task<Twin> GetDeviceTwinAsync(string deviceId)
+	{
+		try
+		{
+			return await _registryManager.GetTwinAsync(deviceId);
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error fetching device twin: {ex.Message}");
+			return null!;
+		}
+	}
+
 	public async Task InvokeDirectMethodAsync(string deviceId, string methodName, string payload)
 	{
 		try
