@@ -33,8 +33,16 @@ public partial class MainViewModel : ObservableObject
 			return;
 		}
 
-		// Skicka Direct Method till den valda enheten utan att ange någon specifik payload
 		await _deviceManager.InvokeDirectMethodAsync(SelectedDevice.DeviceId, "ToggleFan", "{}");
+	}
+
+	[RelayCommand]
+	private async Task NavigateToDeviceDetailAsync(Twin device)
+	{
+		if (device == null)
+			return;
+
+		await Shell.Current.GoToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}");
 	}
 
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHomeMauiApp.MVVM.Views.DeviceDetailPage"
+             xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
+             x:DataType="{x:Type viewModels:DeviceDetailViewModel}"
+             Title="Device Details">
+
+    <StackLayout Padding="10">
+
+        <Label Text="Device ID:"
+               FontAttributes="Bold" />
+        <Label Text="{Binding DeviceId}"
+               FontAttributes="Italic"
+               Margin="0, 0, 0, 10" />
+
+        <Label Text="Status:"
+               FontAttributes="Bold" />
+        <Label Text="{Binding Status}"
+               FontAttributes="Italic"
+               Margin="0, 0, 0, 10" />
+
+        <Label Text="Connection State:"
+               FontAttributes="Bold" />
+        <Label Text="{Binding ConnectionState}"
+               FontAttributes="Italic"
+               Margin="0, 0, 0, 10" />
+
+        <Label Text="Last Activity Time:"
+               FontAttributes="Bold" />
+        <Label Text="{Binding LastActivityTime}"
+               FontAttributes="Italic"
+               Margin="0, 0, 0, 10" />
+
+        <Label Text="Fan State:"
+               FontAttributes="Bold" />
+        <Label Text="{Binding FanState}"
+               FontAttributes="Italic" />
+    </StackLayout>
+
+</ContentPage>

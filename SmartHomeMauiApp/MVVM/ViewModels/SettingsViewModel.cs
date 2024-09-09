@@ -23,18 +23,16 @@ public partial class SettingsViewModel : ObservableObject
 	[RelayCommand]
 	private async Task SaveSettingsAsync()
 	{
-		// Validera connection string
 		if (string.IsNullOrWhiteSpace(ConnectionString))
 		{
 			Console.WriteLine("Connection String cannot be empty.");
 			return;
 		}
 
-		// Uppdatera DeviceManager med ny connection string
 		_deviceManager.UpdateConnectionString(ConnectionString);
 
 		Console.WriteLine("Settings have been saved and IoT Hub connection has been updated.");
 
-		await Task.CompletedTask; // Behåll denna om du planerar att lägga till asynkrona operationer
+		await Task.CompletedTask;
 	}
 }

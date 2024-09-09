@@ -5,30 +5,59 @@
              xmlns:views="clr-namespace:SmartHomeMauiApp.MVVM.Views"
              x:DataType="{x:Type viewModels:MainViewModel}"
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
-             x:Class="SmartHomeMauiApp.MVVM.Views.MainPage">
+             x:Class="SmartHomeMauiApp.MVVM.Views.MainPage"
+             BackgroundColor="Black">
 
-    <VerticalStackLayout>
+    <Grid>
+
+        <Image Source="maui_background.png"
+               Aspect="AspectFill"
+               Opacity="0.4"
+               IsEnabled="False" />
+
+        <!-- Main content area -->
         <CollectionView ItemsSource="{Binding Devices}"
                         SelectionMode="Single"
                         SelectedItem="{Binding SelectedDevice}"
-                        SelectionChangedCommand="{Binding ToggleDeviceStateCommand}">
+                        SelectionChangedCommand="{Binding NavigateToDeviceDetailCommand}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type azureshared:Twin}">
-                    <Grid>
-                        <VerticalStackLayout>
-                            <Label Text="{Binding DeviceId}" />
-                        </VerticalStackLayout>
-                    </Grid>
+                    <Frame BorderColor="Gray"
+                           CornerRadius="10"
+                           Margin="10"
+                           Padding="10"
+                           BackgroundColor="#1e1e1e">
+                        <Grid ColumnDefinitions="Auto, *"
+                              RowDefinitions="Auto, Auto">
+                            <!-- Device Status Indicator -->
+                            <BoxView WidthRequest="10"
+                                     HeightRequest="10"
+                                     CornerRadius="5"
+                                     Color="{Binding ConnectionState, Converter={StaticResource BooleanToColorConverter}}"
+                                     VerticalOptions="Center"
+                                     Margin="0,0,5,0" />
+
+                            <!-- Device ID -->
+                            <Label Grid.Column="1"
+                                   Text="{Binding DeviceId}"
+                                   FontSize="Medium"
+                                   TextColor="White"
+                                   VerticalOptions="Center" />
+
+                            <!-- Clickable area -->
+                            <Button Grid.ColumnSpan="2"
+                                    Text="Details"
+                                    VerticalOptions="End"
+                                    HorizontalOptions="End"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=NavigateToDeviceDetailCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Text="Toggle Device State"
-                Command="{Binding ToggleDeviceStateCommand}" />
 
-
-        <views:SettingsView x:Name="SettingsView"
-                            BindingContext="{Binding SettingsViewModel}" />
-    </VerticalStackLayout>
+    </Grid>
 
 </ContentPage>
