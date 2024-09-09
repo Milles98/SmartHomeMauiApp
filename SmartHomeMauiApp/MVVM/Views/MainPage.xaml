@@ -7,16 +7,22 @@
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
              x:Class="SmartHomeMauiApp.MVVM.Views.MainPage">
 
-    <CollectionView ItemsSource="{Binding Devices}">
-        <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="{x:Type azureshared:Twin}">
-                <Grid>
-                    <VerticalStackLayout>
-                        <Label Text="{Binding DeviceId}" />
-                    </VerticalStackLayout>
-                </Grid>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+    <VerticalStackLayout>
+        <CollectionView ItemsSource="{Binding Devices}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type azureshared:Twin}">
+                    <Grid>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding DeviceId}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+
+        <views:SettingsView x:Name="SettingsView"
+                            BindingContext="{Binding SettingsViewModel}" />
+    </VerticalStackLayout>
 
 </ContentPage>

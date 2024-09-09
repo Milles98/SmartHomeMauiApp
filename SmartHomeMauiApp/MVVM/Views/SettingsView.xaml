@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
+             x:DataType="{x:Type viewModels:SettingsViewModel}"
+             x:Class="SmartHomeMauiApp.MVVM.Views.SettingsView">
+
+    <StackLayout Padding="10">
+        <Label Text="Settings"
+               FontSize="Large" />
+
+        <Label Text="Connection String:" />
+        <Entry Text="{Binding ConnectionString, Mode=TwoWay}" />
+
+        <Label Text="Email Address for Notifications:" />
+        <Entry Text="{Binding EmailAddress, Mode=TwoWay}" />
+
+        <Button Text="Save Settings"
+                Command="{Binding SaveSettingsCommand}" />
+    </StackLayout>
+
+</ContentView>

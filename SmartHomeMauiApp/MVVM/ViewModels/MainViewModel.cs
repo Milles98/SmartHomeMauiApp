@@ -12,6 +12,9 @@ public partial class MainViewModel : ObservableObject
 	[ObservableProperty]
 	private ObservableCollection<Twin> _devices = [];
 
+	[ObservableProperty]
+	private SettingsViewModel _settingsViewModel;
+
 	private async Task SetDevicesAsync()
 	{
 		Devices = new ObservableCollection<Twin>(await _deviceManager.GetDevicesAsync("SELECT * FROM devices"));
@@ -20,6 +23,9 @@ public partial class MainViewModel : ObservableObject
 	public MainViewModel(DeviceManager deviceManager)
 	{
 		_deviceManager = deviceManager;
+
+		_settingsViewModel = new SettingsViewModel();
+
 		Task.Run(SetDevicesAsync);
 	}
 }

@@ -24,6 +24,9 @@ namespace SmartHomeMauiApp
 			builder.Services.AddSingleton<MainViewModel>();
 			builder.Services.AddSingleton<MainPage>();
 
+			builder.Services.AddSingleton<SettingsViewModel>();
+			builder.Services.AddSingleton<SettingsView>();
+
 #if DEBUG
 			builder.Logging.AddDebug();
 #endif
