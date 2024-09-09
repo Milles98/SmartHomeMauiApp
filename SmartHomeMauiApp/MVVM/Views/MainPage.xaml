@@ -7,7 +7,38 @@
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
              x:Class="SmartHomeMauiApp.MVVM.Views.MainPage">
 
-    <VerticalStackLayout>
+    <Grid>
+
+        <Image Source="maui_background.png"
+               Aspect="AspectFill"
+               Opacity="0.6"
+               IsEnabled="False" />
+
+        <!-- Main content area -->
+        <CollectionView ItemsSource="{Binding Devices}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedDevice}"
+                        SelectionChangedCommand="{Binding ToggleDeviceStateCommand}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type azureshared:Twin}">
+                    <Grid>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding DeviceId}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+
+    </Grid>
+
+
+
+
+
+
+    <!--<VerticalStackLayout>
         <CollectionView ItemsSource="{Binding Devices}"
                         SelectionMode="Single"
                         SelectedItem="{Binding SelectedDevice}"
@@ -29,6 +60,6 @@
 
         <views:SettingsView x:Name="SettingsView"
                             BindingContext="{Binding SettingsViewModel}" />
-    </VerticalStackLayout>
+    </VerticalStackLayout>-->
 
 </ContentPage>
