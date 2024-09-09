@@ -10,4 +10,8 @@
     <PackageReference Include="microsoft.azure.devices" Version="1.39.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
