@@ -59,7 +59,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 			{
 				await Application.Current!.MainPage!.DisplayAlert(
 					"Error",
-					"Failed to toggle fan state.",
+					"Failed to toggle fan state, have you started the WPF application?",
 					"OK");
 			}
 		}
