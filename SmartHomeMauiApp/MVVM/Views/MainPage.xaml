@@ -12,7 +12,7 @@
 
         <Image Source="maui_background.png"
                Aspect="AspectFill"
-               Opacity="0.4"
+               Opacity="0.6"
                IsEnabled="False" />
 
         <!-- Main content area -->
