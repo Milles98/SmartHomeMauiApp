@@ -1,6 +1,7 @@
 ﻿using Azure.Communication.Email;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using Shared.Library.Services;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
@@ -30,10 +31,21 @@ public partial class DeviceDetailViewModel : ObservableObject
 	[ObservableProperty]
 	private string _emailAddress;
 
+	private System.Timers.Timer _updateTimer;
+
 	public DeviceDetailViewModel(DeviceManager deviceManager, MainViewModel mainViewModel)
 	{
 		_deviceManager = deviceManager;
 		_mainViewModel = mainViewModel;
+
+		_updateTimer = new System.Timers.Timer(5000);
+		_updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
+		_updateTimer.Start();
+	}
+	~DeviceDetailViewModel()
+	{
+		_updateTimer?.Stop();
+		_updateTimer?.Dispose();
 	}
 
 	partial void OnDeviceIdChanged(string value)
@@ -41,6 +53,70 @@ public partial class DeviceDetailViewModel : ObservableObject
 		if (!string.IsNullOrEmpty(value))
 		{
 			Task.Run(() => LoadDeviceDetailsAsync(value));
+		}
+	}
+
+	[RelayCommand]
+	private async Task ConnectDeviceAsync()
+	{
+		try
+		{
+			var isConnected = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ConnectDevice");
+			if (isConnected.Status == 200)
+			{
+				await LoadDeviceDetailsAsync(DeviceId);
+				ConnectionState = "Connected";
+			}
+			else
+			{
+				await Application.Current!.MainPage!.DisplayAlert(
+					"Error",
+					"Failed to connect the device, have you started the WPF application?",
+					"OK");
+			}
+		}
+		catch (Exception ex)
+		{
+			await Application.Current!.MainPage!.DisplayAlert(
+				"Error",
+				$"Failed to connect the device: {ex.Message}",
+				"OK");
+		}
+	}
+
+	[RelayCommand]
+	private async Task DisconnectDeviceAsync()
+	{
+		try
+		{
+			var isDisconnected = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "DisconnectDevice");
+
+			if (isDisconnected == null || isDisconnected.Status != 200)
+			{
+				await Application.Current!.MainPage!.DisplayAlert(
+					"Error",
+					"Failed to disconnect the device.",
+					"OK");
+			}
+			else
+			{
+				await LoadDeviceDetailsAsync(DeviceId);
+				ConnectionState = "Disconnected";
+			}
+		}
+		catch (DeviceNotFoundException)
+		{
+			await Application.Current!.MainPage!.DisplayAlert(
+				"Info",
+				"Device is already disconnected or not available.",
+				"OK");
+		}
+		catch (Exception ex)
+		{
+			await Application.Current!.MainPage!.DisplayAlert(
+				"Error",
+				$"Failed to disconnect the device: {ex.Message}",
+				"OK");
 		}
 	}
 
@@ -57,21 +133,26 @@ public partial class DeviceDetailViewModel : ObservableObject
 			}
 			else
 			{
-				await Application.Current.MainPage.DisplayAlert(
+				await Application.Current!.MainPage!.DisplayAlert(
 					"Error",
-					"Failed to toggle fan state.",
+					"Failed to toggle fan state, have you started the WPF application?",
 					"OK");
 			}
 		}
 		catch (Exception ex)
 		{
-			await Application.Current.MainPage.DisplayAlert(
+			await Application.Current!.MainPage!.DisplayAlert(
 				"Error",
 				$"Failed to toggle fan state: {ex.Message}",
 				"OK");
 		}
 	}
 
+	[RelayCommand]
+	private async Task LoadDeviceDetailsAsync()
+	{
+		await LoadDeviceDetailsAsync(DeviceId);
+	}
 
 
 	public async Task LoadDeviceDetailsAsync(string deviceId)
@@ -104,14 +185,14 @@ public partial class DeviceDetailViewModel : ObservableObject
 	{
 		if (string.IsNullOrWhiteSpace(EmailAddress))
 		{
-			await Application.Current.MainPage.DisplayAlert(
+			await Application.Current!.MainPage!.DisplayAlert(
 				"Error",
 				"No email address registered. Cannot remove device.",
 				"OK");
 			return;
 		}
 
-		var confirmed = await Application.Current.MainPage.DisplayAlert(
+		var confirmed = await Application.Current!.MainPage!.DisplayAlert(
 			"Confirm",
 			"Are you sure you want to remove this device?",
 			"Yes",

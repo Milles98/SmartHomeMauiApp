@@ -4,19 +4,45 @@
              x:Class="SmartHomeMauiApp.MVVM.Views.SettingsPage"
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
              x:DataType="{x:Type viewModels:SettingsViewModel}"
-             Title="SettingsPage">
+             BackgroundColor="#f0f0f0">
 
-    <StackLayout Padding="10">
-        <Label Text="Settings"
-               FontSize="Large" />
+    <ContentPage.Resources>
+        <Style x:Key="LabelStyle"
+               TargetType="Label">
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="TextColor"
+                    Value="#666666" />
+            <Setter Property="Margin"
+                    Value="0,10,0,5" />
+        </Style>
 
-        <Label Text="Connection String:" />
-        <Entry Text="{Binding ConnectionString, Mode=TwoWay}" />
+        <Style x:Key="EntryStyle"
+               TargetType="Entry">
+            <Setter Property="TextColor"
+                    Value="#333333" />
+            <Setter Property="Margin"
+                    Value="0,5,0,15" />
+            <Setter Property="HeightRequest"
+                    Value="40" />
+        </Style>
 
-        <Label Text="Email Address for Notifications:" />
-        <Entry Text="{Binding EmailAddress, Mode=TwoWay}" />
+    </ContentPage.Resources>
+
+    <StackLayout Padding="20"
+                 Spacing="10">
+
+        <Label Text="Connection String:"
+               Style="{StaticResource LabelStyle}"/>
+        <Entry Text="{Binding ConnectionString, Mode=TwoWay}"
+               Style="{StaticResource EntryStyle}"/>
+
+        <Label Text="Email Address for Notifications:"
+               Style="{StaticResource LabelStyle}"/>
+        <Entry Text="{Binding EmailAddress, Mode=TwoWay}"
+               Style="{StaticResource EntryStyle}"/>
 
         <Button Text="Save Settings"
-                Command="{Binding SaveSettingsCommand}" />
+                Command="{Binding SaveSettingsCommand}"/>
     </StackLayout>
 </ContentPage>

@@ -4,7 +4,8 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:SmartHomeMauiApp.MVVM.Views"
        Shell.FlyoutBehavior="Flyout"
-       Title="SmartHomeMauiApp">
+       Title="SmartHomeMauiApp"
+       BackgroundColor="#f0f0f0">
 
     <FlyoutItem Title="SmartHome Control Panel">
         <FlyoutItem.FlyoutIcon>

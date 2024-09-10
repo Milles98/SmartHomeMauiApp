@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -25,6 +26,15 @@ public class DeviceManager
 		_connectionString = connectionString;
 		_registryManager = RegistryManager.CreateFromConnectionString(connectionString);
 		_serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
+
+		if (_serviceClient == null || _registryManager == null)
+		{
+			Debug.WriteLine("Error: ServiceClient or RegistryManager is not initialized.");
+		}
+		else
+		{
+			Debug.WriteLine("ServiceClient and RegistryManager are initialized successfully.");
+		}
 	}
 
 	public async Task<IEnumerable<Twin>> GetDevicesAsync(string query)
@@ -74,13 +84,24 @@ public class DeviceManager
 				return result;
 			}
 		}
+		catch (DeviceNotFoundException ex)
+		{
+			Debug.WriteLine("Device is not available or disconnected.");
+		}
 		catch (Exception ex)
 		{
 			Debug.WriteLine($"Error invoking direct method: {ex.Message}");
+			Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+			if (ex.InnerException != null)
+			{
+				Debug.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+				Debug.WriteLine($"Inner Stack Trace: {ex.InnerException.StackTrace}");
+			}
 		}
 
 		return null!;
 	}
+
 
 
 	public async Task SendCloudToDeviceMessageAsync(string deviceId, string messageContent)

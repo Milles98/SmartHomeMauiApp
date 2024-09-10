@@ -6,7 +6,7 @@
              x:DataType="{x:Type viewModels:MainViewModel}"
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
              x:Class="SmartHomeMauiApp.MVVM.Views.MainPage"
-             BackgroundColor="Black">
+             BackgroundColor="#1a1a1a">
 
     <Grid>
 
@@ -26,29 +26,57 @@
                            CornerRadius="10"
                            Margin="10"
                            Padding="10"
-                           BackgroundColor="#1e1e1e">
-                        <Grid ColumnDefinitions="Auto, *"
-                              RowDefinitions="Auto, Auto">
-                            <!-- Device Status Indicator -->
-                            <BoxView WidthRequest="10"
-                                     HeightRequest="10"
-                                     CornerRadius="5"
-                                     Color="{Binding ConnectionState, Converter={StaticResource BooleanToColorConverter}}"
-                                     VerticalOptions="Center"
-                                     Margin="0,0,5,0" />
+                           BackgroundColor="#1e1e1e"
+                           HeightRequest="140">
+                        <Grid ColumnDefinitions="Auto, *, Auto"
+                              RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+
+                            <!-- Fan Icon -->
+                            <Image Grid.Row="3"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0"
+                                   Source="fan_icon.png"
+                                   HeightRequest="80"
+                                   WidthRequest="80" />
 
                             <!-- Device ID -->
-                            <Label Grid.Column="1"
+                            <Label Grid.Row="0"
+                                   Grid.Column="1"
+                                   Grid.ColumnSpan="4"
                                    Text="{Binding DeviceId}"
-                                   FontSize="Medium"
+                                   FontSize="14"
                                    TextColor="White"
-                                   VerticalOptions="Center" />
+                                   HorizontalTextAlignment="Center"/>
 
-                            <!-- Clickable area -->
-                            <Button Grid.ColumnSpan="2"
+                            <!-- Last Activity Time -->
+                            <Label Grid.Row="2"
+                                   Grid.Column="1"
+                                   Text="Last Activity:"
+                                   FontSize="Small"
+                                   TextColor="Gray"/>
+                            <Label Grid.Row="2"
+                                   Grid.Column="2"
+                                   Text="{Binding LastActivityTime}"
+                                   FontSize="Small"
+                                   TextColor="White"/>
+
+                            <!-- Fan State -->
+                            <Label Grid.Row="3"
+                                   Grid.Column="1"
+                                   Text="Connection:"
+                                   FontSize="Small"
+                                   TextColor="Gray"/>
+                            <Label Grid.Row="3"
+                                   Grid.Column="2"
+                                   Text="{Binding ConnectionState}"
+                                   FontSize="Small"
+                                   TextColor="White"/>
+
+                            <!-- Details Button -->
+                            <Button Grid.Row="4"
+                                    Grid.Column="1"
+                                    Grid.ColumnSpan="2"
                                     Text="Details"
-                                    VerticalOptions="End"
-                                    HorizontalOptions="End"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=NavigateToDeviceDetailCommand}"
                                     CommandParameter="{Binding .}" />
                         </Grid>

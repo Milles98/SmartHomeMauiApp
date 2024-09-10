@@ -17,7 +17,7 @@ public partial class SettingsViewModel : ObservableObject
 	public SettingsViewModel(DeviceManager deviceManager)
 	{
 		_deviceManager = deviceManager;
-		_connectionString = "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="; // Sätt en standard connection string om det behövs
+		ConnectionString = "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="; // Sätt en standard connection string om det behövs
 	}
 
 	[RelayCommand]
@@ -25,13 +25,19 @@ public partial class SettingsViewModel : ObservableObject
 	{
 		if (string.IsNullOrWhiteSpace(ConnectionString))
 		{
-			Console.WriteLine("Connection String cannot be empty.");
+			await Application.Current!.MainPage!.DisplayAlert(
+					"Error",
+					"Connection String cannot be empty.",
+					"OK");
 			return;
 		}
 
 		_deviceManager.UpdateConnectionString(ConnectionString);
 
-		Console.WriteLine("Settings have been saved and IoT Hub connection has been updated.");
+		await Application.Current!.MainPage!.DisplayAlert(
+					"Success",
+					"Settings have been saved and IoT Hub connection has been updated.",
+					"OK");
 
 		Preferences.Set("EmailAddress", EmailAddress);
 
