@@ -37,16 +37,34 @@
         <Label Text="{Binding FanState}"
                FontAttributes="Italic" />
 
+        <Button Text="Connect Device"
+                Command="{Binding ConnectDeviceCommand}"
+                BackgroundColor="Blue"
+                TextColor="White"
+                Margin="10, 20, 10, 0" />
+
+        <Button Text="Disconnect Device"
+                Command="{Binding DisconnectDeviceCommand}"
+                BackgroundColor="DarkBlue"
+                TextColor="White"
+                Margin="10, 20, 10, 0" />
+
         <Button Text="Toggle Fan State"
                 Command="{Binding ToggleFanStateCommand}"
                 BackgroundColor="Green"
                 TextColor="White"
                 Margin="10, 20, 10, 0" />
 
-
         <Button Text="Remove Device"
                 Command="{Binding RemoveDeviceCommand}"
                 BackgroundColor="Red"
+                TextColor="White"
+                Margin="10, 20, 10, 0" />
+
+        <Label Text="Currently buggy? Refresh below" />
+        <Button Text="Refresh Device Details"
+                Command="{Binding LoadDeviceDetailsCommand}"
+                BackgroundColor="Gray"
                 TextColor="White"
                 Margin="10, 20, 10, 0" />
     </StackLayout>
