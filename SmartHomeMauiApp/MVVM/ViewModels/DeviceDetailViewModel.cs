@@ -61,8 +61,9 @@ public partial class DeviceDetailViewModel : ObservableObject
 	{
 		try
 		{
-			var isConnected = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ConnectDevice");
-			if (isConnected.Status == 200)
+			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ConnectDevice");
+
+			if (result != null && result.Status == 200)
 			{
 				await LoadDeviceDetailsAsync(DeviceId);
 				ConnectionState = "Connected";
@@ -89,19 +90,19 @@ public partial class DeviceDetailViewModel : ObservableObject
 	{
 		try
 		{
-			var isDisconnected = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "DisconnectDevice");
+			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "DisconnectDevice");
 
-			if (isDisconnected == null || isDisconnected.Status != 200)
+			if (result != null && result.Status == 200)
+			{
+				await LoadDeviceDetailsAsync(DeviceId);
+				ConnectionState = "Disconnected";
+			}
+			else
 			{
 				await Application.Current!.MainPage!.DisplayAlert(
 					"Error",
 					"Failed to disconnect the device.",
 					"OK");
-			}
-			else
-			{
-				await LoadDeviceDetailsAsync(DeviceId);
-				ConnectionState = "Disconnected";
 			}
 		}
 		catch (DeviceNotFoundException)
