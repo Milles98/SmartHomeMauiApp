@@ -14,9 +14,6 @@ public partial class MainViewModel : ObservableObject
 	private ObservableCollection<Twin> _devices = [];
 
 	[ObservableProperty]
-	private SettingsViewModel _settingsViewModel;
-
-	[ObservableProperty]
 	private Twin _selectedDevice;
 
 	public async Task SetDevicesAsync()
@@ -52,8 +49,6 @@ public partial class MainViewModel : ObservableObject
 	public MainViewModel(DeviceManager deviceManager)
 	{
 		_deviceManager = deviceManager;
-
-		_settingsViewModel = new SettingsViewModel(deviceManager);
 
 		Task.Run(SetDevicesAsync);
 	}
