@@ -4,7 +4,7 @@
              x:Class="SmartHomeMauiApp.MVVM.Views.SettingsPage"
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
              x:DataType="{x:Type viewModels:SettingsViewModel}"
-             BackgroundColor="#f0f0f0">
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Resources>
         <Style x:Key="LabelStyle"
@@ -29,20 +29,33 @@
 
     </ContentPage.Resources>
 
-    <StackLayout Padding="20"
-                 Spacing="10">
+    <Grid RowDefinitions="auto, auto"
+          Margin="30">
 
-        <Label Text="Connection String:"
-               Style="{StaticResource LabelStyle}"/>
-        <Entry Text="{Binding ConnectionString, Mode=TwoWay}"
-               Style="{StaticResource EntryStyle}"/>
+        <Button Grid.Row="0"
+                Text="&#xf015;"
+                FontSize="18"
+                FontFamily="fa-solid"
+                Command="{Binding NavigateHomeCommand}"
+                HorizontalOptions="Start" />
 
-        <Label Text="Email Address for Notifications:"
-               Style="{StaticResource LabelStyle}"/>
-        <Entry Text="{Binding EmailAddress, Mode=TwoWay}"
-               Style="{StaticResource EntryStyle}"/>
+        <StackLayout Grid.Row="1"
+                     Padding="20"
+                     Spacing="10">
 
-        <Button Text="Save Settings"
-                Command="{Binding SaveSettingsCommand}"/>
-    </StackLayout>
+            <Label Text="Connection String:"
+                   Style="{StaticResource LabelStyle}" />
+            <Entry Text="{Binding ConnectionString, Mode=TwoWay}"
+                   Style="{StaticResource EntryStyle}" />
+
+            <Label Text="Email Address for Notifications:"
+                   Style="{StaticResource LabelStyle}" />
+            <Entry Text="{Binding EmailAddress, Mode=TwoWay}"
+                   Style="{StaticResource EntryStyle}" />
+
+            <Button Text="Save Settings"
+                    Command="{Binding SaveSettingsCommand}" />
+        </StackLayout>
+
+    </Grid>
 </ContentPage>

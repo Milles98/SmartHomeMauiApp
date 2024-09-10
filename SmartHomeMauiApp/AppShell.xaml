@@ -3,11 +3,13 @@
        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:SmartHomeMauiApp.MVVM.Views"
-       Shell.FlyoutBehavior="Flyout"
-       Title="SmartHomeMauiApp"
-       BackgroundColor="#f0f0f0">
+       NavigationPage.HasNavigationBar="False"
+       Shell.FlyoutBehavior="Disabled">
 
-    <FlyoutItem Title="SmartHome Control Panel">
+    <!--Shell.FlyoutBehavior="Flyout"-->
+
+
+    <!--<FlyoutItem Title="SmartHome Control Panel">
         <FlyoutItem.FlyoutIcon>
             <FontImageSource Glyph="&#xf015;"
                              FontFamily="fa-solid"
@@ -29,11 +31,17 @@
         <ShellContent Title="Settings"
                       ContentTemplate="{DataTemplate views:SettingsPage}"
                       Route="SettingsPage" />
-    </FlyoutItem>
+    </FlyoutItem>-->
 
-    <ShellContent Title="Device Detail"
-                  ContentTemplate="{DataTemplate views:DeviceDetailPage}"
+    <ShellContent ContentTemplate="{DataTemplate views:MainPage}"
+                  Route="MainPage" />
+
+    <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}"
+                  Route="SettingsPage" />
+
+    <ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
                   Route="DeviceDetailPage"
                   FlyoutItemIsVisible="False" />
+    <!--FlyoutItemIsVisible="False"-->
 
 </Shell>

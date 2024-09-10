@@ -48,6 +48,12 @@ public partial class DeviceDetailViewModel : ObservableObject
 		_updateTimer?.Dispose();
 	}
 
+	[RelayCommand]
+	private async Task NavigateHomeAsync()
+	{
+		await Shell.Current.GoToAsync("//MainPage");
+	}
+
 	partial void OnDeviceIdChanged(string value)
 	{
 		if (!string.IsNullOrEmpty(value))
