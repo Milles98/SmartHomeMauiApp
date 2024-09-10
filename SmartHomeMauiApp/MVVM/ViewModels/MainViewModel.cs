@@ -45,6 +45,12 @@ public partial class MainViewModel : ObservableObject
 		await Shell.Current.GoToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}&emailAddress={emailAddress}");
 	}
 
+	[RelayCommand]
+	private async Task NavigateToSettingsAsync()
+	{
+		await Shell.Current.GoToAsync("///SettingsPage");
+	}
+
 
 	public MainViewModel(DeviceManager deviceManager)
 	{

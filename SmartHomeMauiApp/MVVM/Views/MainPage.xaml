@@ -6,7 +6,7 @@
              x:DataType="{x:Type viewModels:MainViewModel}"
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
              x:Class="SmartHomeMauiApp.MVVM.Views.MainPage"
-             BackgroundColor="#1a1a1a">
+             NavigationPage.HasNavigationBar="False">
 
     <Grid>
 
@@ -15,76 +15,80 @@
                Opacity="0.4"
                IsEnabled="False" />
 
-        <!-- Main content area -->
-        <CollectionView ItemsSource="{Binding Devices}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding SelectedDevice}"
-                        SelectionChangedCommand="{Binding NavigateToDeviceDetailCommand}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type azureshared:Twin}">
-                    <Frame BorderColor="Gray"
-                           CornerRadius="10"
-                           Margin="10"
-                           Padding="10"
-                           BackgroundColor="#1e1e1e"
-                           HeightRequest="140">
-                        <Grid ColumnDefinitions="Auto, *, Auto"
-                              RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+        <Grid RowDefinitions="auto, auto"
+              Margin="30">
 
-                            <!-- Fan Icon -->
-                            <Image Grid.Row="3"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0"
-                                   Source="fan_icon.png"
-                                   HeightRequest="80"
-                                   WidthRequest="80" />
+            <Button Grid.Row="0"
+                    Text="&#xf013;"
+                    FontSize="18"
+                    Command="{Binding NavigateToSettingsCommand}"
+                    FontFamily="fa-solid"
+                    HorizontalOptions="End" />
 
-                            <!-- Device ID -->
-                            <Label Grid.Row="0"
-                                   Grid.Column="1"
-                                   Grid.ColumnSpan="4"
-                                   Text="{Binding DeviceId}"
-                                   FontSize="14"
-                                   TextColor="White"
-                                   HorizontalTextAlignment="Center"/>
+            <!-- Main content area -->
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding Devices}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedDevice}"
+                            SelectionChangedCommand="{Binding NavigateToDeviceDetailCommand}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type azureshared:Twin}">
+                        <Frame BorderColor="Gray"
+                               CornerRadius="10"
+                               Margin="10"
+                               Padding="10"
+                               BackgroundColor="#1e1e1e"
+                               HeightRequest="140">
+                            <Grid ColumnDefinitions="Auto, *"
+                                  RowDefinitions="Auto, Auto, Auto"
+                                  Padding="5">
 
-                            <!-- Last Activity Time -->
-                            <Label Grid.Row="2"
-                                   Grid.Column="1"
-                                   Text="Last Activity:"
-                                   FontSize="Small"
-                                   TextColor="Gray"/>
-                            <Label Grid.Row="2"
-                                   Grid.Column="2"
-                                   Text="{Binding LastActivityTime}"
-                                   FontSize="Small"
-                                   TextColor="White"/>
+                                <!-- Device ID -->
+                                <Label Grid.Row="0"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
+                                       Text="{Binding DeviceId}"
+                                       FontSize="14"
+                                       TextColor="White"
+                                       HorizontalTextAlignment="Center" />
 
-                            <!-- Fan State -->
-                            <Label Grid.Row="3"
-                                   Grid.Column="1"
-                                   Text="Connection:"
-                                   FontSize="Small"
-                                   TextColor="Gray"/>
-                            <Label Grid.Row="3"
-                                   Grid.Column="2"
-                                   Text="{Binding ConnectionState}"
-                                   FontSize="Small"
-                                   TextColor="White"/>
+                                <!-- Fan Icon -->
+                                <Image Grid.Row="1"
+                                       Grid.RowSpan="2"
+                                       Grid.Column="0"
+                                       Source="fan_icon.png"
+                                       HeightRequest="80"
+                                       WidthRequest="80"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center" />
 
-                            <!-- Details Button -->
-                            <Button Grid.Row="4"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    Text="Details"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=NavigateToDeviceDetailCommand}"
-                                    CommandParameter="{Binding .}" />
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                <!-- Last Activity Time -->
+                                <StackLayout Grid.Row="1"
+                                             Grid.Column="1"
+                                             Padding="10,0,0,0"
+                                             VerticalOptions="Center">
+                                    <Label Text="Last Activity:"
+                                           FontSize="Small"
+                                           TextColor="Gray" />
+                                    <Label Text="{Binding LastActivityTime}"
+                                           FontSize="Small"
+                                           TextColor="White" />
+                                </StackLayout>
 
+                                <!-- Details Button -->
+                                <Button Grid.Row="1"
+                                        Grid.Column="2"
+                                        Text="Details"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=NavigateToDeviceDetailCommand}"
+                                        CommandParameter="{Binding .}"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
 
     </Grid>
 
