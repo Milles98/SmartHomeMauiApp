@@ -57,7 +57,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 			}
 			else
 			{
-				await Application.Current.MainPage.DisplayAlert(
+				await Application.Current!.MainPage!.DisplayAlert(
 					"Error",
 					"Failed to toggle fan state.",
 					"OK");
@@ -65,7 +65,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 		}
 		catch (Exception ex)
 		{
-			await Application.Current.MainPage.DisplayAlert(
+			await Application.Current!.MainPage!.DisplayAlert(
 				"Error",
 				$"Failed to toggle fan state: {ex.Message}",
 				"OK");
