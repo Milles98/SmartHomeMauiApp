@@ -21,6 +21,24 @@ public partial class MainViewModel : ObservableObject
 		Devices = new ObservableCollection<Twin>(await _deviceManager.GetDevicesAsync("SELECT * FROM devices"));
 	}
 
+	public string GetDeviceIcon(Twin twin)
+	{
+		if (twin.Properties.Reported.Contains("DeviceType"))
+		{
+			string deviceType = twin.Properties.Reported["DeviceType"].ToString();
+
+			return deviceType switch
+			{
+				"Fan" => "fan_icon.png",
+				"Lamp" => "maui_lamp.png",
+				"TemperatureSensor" => "maui_temperature.png",
+				_ => "dotnet_bot.png"
+			};
+		}
+
+		return "dotnet_bot.png";
+	}
+
 	[RelayCommand]
 	private async Task ToggleDeviceStateAsync()
 	{

@@ -52,11 +52,11 @@
                                        TextColor="White"
                                        HorizontalTextAlignment="Center" />
 
-                                <!-- Fan Icon -->
+                                <!-- Dynamic Icon -->
                                 <Image Grid.Row="1"
                                        Grid.RowSpan="2"
                                        Grid.Column="0"
-                                       Source="fan_icon.png"
+                                       Source="{Binding ., Converter={StaticResource DeviceIconConverter}}"
                                        HeightRequest="80"
                                        WidthRequest="80"
                                        VerticalOptions="Center"
