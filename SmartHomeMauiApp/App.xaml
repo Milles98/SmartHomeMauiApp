@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary>
                     <converters:BooleanToColorConverter x:Key="BooleanToColorConverter" />
+                    <converters:DeviceIconConverter x:Key="DeviceIconConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

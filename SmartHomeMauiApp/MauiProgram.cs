@@ -2,6 +2,7 @@
 using Shared.Library.Services;
 using SmartHomeMauiApp.MVVM.ViewModels;
 using SmartHomeMauiApp.MVVM.Views;
+using SmartHomeMauiApp.Resources.Converters;
 
 namespace SmartHomeMauiApp
 {
@@ -29,6 +30,8 @@ namespace SmartHomeMauiApp
 
 			builder.Services.AddSingleton<DeviceDetailViewModel>();
 			builder.Services.AddSingleton<DeviceDetailPage>();
+
+			builder.Services.AddTransient<DeviceIconConverter>();
 
 #if DEBUG
 			builder.Logging.AddDebug();
