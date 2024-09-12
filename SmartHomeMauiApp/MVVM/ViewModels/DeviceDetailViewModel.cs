@@ -133,7 +133,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 	{
 		try
 		{
-			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ToggleTemperature");
+			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "UpdateTemperature");
 
 			if (result != null && result.Status == 200)
 			{
