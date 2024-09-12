@@ -76,27 +76,9 @@ public partial class DeviceDetailViewModel : ObservableObject
 	{
 		try
 		{
-			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ConnectDevice");
-
-			if (result != null && result.Status == 200)
-			{
-				await LoadDeviceDetailsAsync(DeviceId);
-				ConnectionState = "Connected";
-			}
-			else if (result != null && result.Status != 200)
-			{
-				await Application.Current!.MainPage!.DisplayAlert(
-					"Error",
-					$"Failed to connect the device: {result.GetPayloadAsJson()}",
-					"OK");
-			}
-			else
-			{
-				await Application.Current!.MainPage!.DisplayAlert(
-					"Error",
-					"Failed to connect the device, have you started the WPF application?",
-					"OK");
-			}
+			await _deviceManager.SendCloudToDeviceMessageAsync(DeviceId, "{\"command\":\"connect\"}");
+			await LoadDeviceDetailsAsync(DeviceId);
+			ConnectionState = "Connected";
 		}
 		catch (Exception ex)
 		{
@@ -112,34 +94,9 @@ public partial class DeviceDetailViewModel : ObservableObject
 	{
 		try
 		{
-			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "DisconnectDevice");
-
-			if (result != null && result.Status == 200)
-			{
-				await LoadDeviceDetailsAsync(DeviceId);
-				ConnectionState = "Disconnected";
-			}
-			else if (result != null && result.Status != 200)
-			{
-				await Application.Current!.MainPage!.DisplayAlert(
-					"Error",
-					$"Failed to disconnect the device: {result.GetPayloadAsJson()}",
-					"OK");
-			}
-			else
-			{
-				await Application.Current!.MainPage!.DisplayAlert(
-					"Error",
-					"Failed to disconnect the device.",
-					"OK");
-			}
-		}
-		catch (DeviceNotFoundException)
-		{
-			await Application.Current!.MainPage!.DisplayAlert(
-				"Info",
-				"Device is already disconnected or not available.",
-				"OK");
+			await _deviceManager.SendCloudToDeviceMessageAsync(DeviceId, "{\"command\":\"disconnect\"}");
+			await LoadDeviceDetailsAsync(DeviceId);
+			ConnectionState = "Disconnected";
 		}
 		catch (Exception ex)
 		{
@@ -149,6 +106,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 				"OK");
 		}
 	}
+
 
 	[RelayCommand]
 	private async Task ToggleFanStateAsync()
