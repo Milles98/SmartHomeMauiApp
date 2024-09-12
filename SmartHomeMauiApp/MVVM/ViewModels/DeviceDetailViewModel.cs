@@ -29,6 +29,15 @@ public partial class DeviceDetailViewModel : ObservableObject
 	private string _fanState;
 
 	[ObservableProperty]
+	private string _lampState;
+
+	[ObservableProperty]
+	private string _temperatureValue;
+
+	[ObservableProperty]
+	private string _deviceType;
+
+	[ObservableProperty]
 	private string _emailAddress;
 
 	private System.Timers.Timer _updateTimer;
@@ -74,6 +83,13 @@ public partial class DeviceDetailViewModel : ObservableObject
 				await LoadDeviceDetailsAsync(DeviceId);
 				ConnectionState = "Connected";
 			}
+			else if (result != null && result.Status != 200)
+			{
+				await Application.Current!.MainPage!.DisplayAlert(
+					"Error",
+					$"Failed to connect the device: {result.GetPayloadAsJson()}",
+					"OK");
+			}
 			else
 			{
 				await Application.Current!.MainPage!.DisplayAlert(
@@ -102,6 +118,13 @@ public partial class DeviceDetailViewModel : ObservableObject
 			{
 				await LoadDeviceDetailsAsync(DeviceId);
 				ConnectionState = "Disconnected";
+			}
+			else if (result != null && result.Status != 200)
+			{
+				await Application.Current!.MainPage!.DisplayAlert(
+					"Error",
+					$"Failed to disconnect the device: {result.GetPayloadAsJson()}",
+					"OK");
 			}
 			else
 			{
@@ -156,6 +179,64 @@ public partial class DeviceDetailViewModel : ObservableObject
 	}
 
 	[RelayCommand]
+	private async Task ToggleLampStateAsync()
+	{
+		try
+		{
+			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ToggleLamp");
+
+			if (result != null && result.Status == 200)
+			{
+				await LoadDeviceDetailsAsync(DeviceId);
+			}
+			else
+			{
+				await Application.Current!.MainPage!.DisplayAlert(
+					"Error",
+					"Failed to toggle lamp state. Please check if the device is connected and running.",
+					"OK");
+			}
+		}
+		catch (Exception ex)
+		{
+			await Application.Current!.MainPage!.DisplayAlert(
+				"Error",
+				$"Failed to toggle lamp state: {ex.Message}",
+				"OK");
+		}
+	}
+
+	[RelayCommand]
+	private async Task ToggleTemperatureStateAsync()
+	{
+		try
+		{
+			var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "ToggleTemperature");
+
+			if (result != null && result.Status == 200)
+			{
+				await LoadDeviceDetailsAsync(DeviceId);
+			}
+			else
+			{
+				await Application.Current!.MainPage!.DisplayAlert(
+					"Error",
+					"Failed to toggle temperature state, have you started the WPF application?",
+					"OK");
+			}
+		}
+		catch (Exception ex)
+		{
+			await Application.Current!.MainPage!.DisplayAlert(
+				"Error",
+				$"Failed to toggle temperature state: {ex.Message}",
+				"OK");
+		}
+	}
+
+
+	//This one is only to refresh the device details
+	[RelayCommand]
 	private async Task LoadDeviceDetailsAsync()
 	{
 		await LoadDeviceDetailsAsync(DeviceId);
@@ -178,7 +259,37 @@ public partial class DeviceDetailViewModel : ObservableObject
 					? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
 					: "No Activity";
 
-				FanState = twin.Properties.Reported["fanState"]?.ToString();
+				DeviceType = twin.Properties.Reported.Contains("DeviceType")
+					? twin.Properties.Reported["DeviceType"].ToString()
+					: "Unknown";
+
+				switch (DeviceType)
+				{
+					case "Fan":
+						if (twin.Properties.Reported.Contains("fanState"))
+						{
+							FanState = twin.Properties.Reported["fanState"]?.ToString();
+						}
+						break;
+
+					case "Lamp":
+						if (twin.Properties.Reported.Contains("lampState"))
+						{
+							LampState = twin.Properties.Reported["lampState"]?.ToString();
+						}
+						break;
+
+					case "TemperatureSensor":
+						if (twin.Properties.Reported.Contains("temperature"))
+						{
+							TemperatureValue = twin.Properties.Reported["temperature"]?.ToString();
+						}
+						break;
+
+					default:
+						Console.WriteLine("Unknown Device Type");
+						break;
+				}
 			}
 		}
 		catch (Exception ex)

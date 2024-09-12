@@ -8,10 +8,8 @@
 
     <ScrollView>
 
-
         <Grid RowDefinitions="auto, auto"
               Margin="30">
-
 
             <Button Grid.Row="0"
                     Text="&#xf015;"
@@ -24,6 +22,7 @@
             <StackLayout Grid.Row="1"
                          Padding="20">
 
+                <!-- Device Information -->
                 <Label Text="Device ID:"
                        FontAttributes="Bold"
                        Margin="10,0,0,0" />
@@ -52,13 +51,178 @@
                        FontAttributes="Italic"
                        Margin="10, 0, 0, 10" />
 
-                <Label Text="Fan State:"
-                       FontAttributes="Bold"
-                       Margin="10,0,0,0" />
-                <Label Text="{Binding FanState}"
-                       FontAttributes="Italic"
-                       Margin="10, 0, 0, 10" />
+                <!-- Lamp Controls -->
+                <Label FontAttributes="Bold"
+                       Margin="10,0,0,0">
+                    <Label.Text>
+                        <MultiBinding StringFormat="Lamp State: {0}">
+                            <Binding Path="LampState" />
+                        </MultiBinding>
+                    </Label.Text>
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Lamp">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Fan">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="TemperatureSensor">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
 
+                <Button Text="Toggle Lamp State"
+                        Command="{Binding ToggleLampStateCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Margin="10, 20, 10, 0">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Lamp">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Fan">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="TemperatureSensor">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+
+                <!-- Fan Controls -->
+                <Label FontAttributes="Bold"
+                       Margin="10,0,0,0">
+                    <Label.Text>
+                        <MultiBinding StringFormat="Fan State: {0}">
+                            <Binding Path="FanState" />
+                        </MultiBinding>
+                    </Label.Text>
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Fan">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Lamp">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="TemperatureSensor">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Button Text="Toggle Fan State"
+                        Command="{Binding ToggleFanStateCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Margin="10, 20, 10, 0">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Fan">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Lamp">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="TemperatureSensor">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+
+                <!-- Temperature Sensor Controls -->
+                <Label FontAttributes="Bold"
+                       Margin="10,0,0,0">
+                    <Label.Text>
+                        <MultiBinding StringFormat="Current Temperature: {0}°">
+                            <Binding Path="TemperatureValue" />
+                        </MultiBinding>
+                    </Label.Text>
+                    <Label.Triggers>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="TemperatureSensor">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Lamp">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Label"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Fan">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+
+                <Button Text="Toggle Temperature State"
+                        Command="{Binding ToggleTemperatureStateCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Margin="10, 20, 10, 0">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="TemperatureSensor">
+                            <Setter Property="IsVisible"
+                                    Value="True" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Lamp">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button"
+                                     Binding="{Binding DeviceType}"
+                                     Value="Fan">
+                            <Setter Property="IsVisible"
+                                    Value="False" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+
+                <!-- Common Controls -->
                 <Button Text="Connect Device"
                         Command="{Binding ConnectDeviceCommand}"
                         BackgroundColor="Blue"
@@ -68,12 +232,6 @@
                 <Button Text="Disconnect Device"
                         Command="{Binding DisconnectDeviceCommand}"
                         BackgroundColor="DarkBlue"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0" />
-
-                <Button Text="Toggle Fan State"
-                        Command="{Binding ToggleFanStateCommand}"
-                        BackgroundColor="Green"
                         TextColor="White"
                         Margin="10, 20, 10, 0" />
 
@@ -93,9 +251,7 @@
                         Margin="10, 20, 10, 0" />
             </StackLayout>
 
-
         </Grid>
     </ScrollView>
-
 
 </ContentPage>
