@@ -51,6 +51,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 		_updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
 		_updateTimer.Start();
 	}
+
 	~DeviceDetailViewModel()
 	{
 		_updateTimer?.Stop();
@@ -70,43 +71,6 @@ public partial class DeviceDetailViewModel : ObservableObject
 			Task.Run(() => LoadDeviceDetailsAsync(value));
 		}
 	}
-
-	[RelayCommand]
-	private async Task ConnectDeviceAsync()
-	{
-		try
-		{
-			await _deviceManager.SendCloudToDeviceMessageAsync(DeviceId, "{\"command\":\"connect\"}");
-			await LoadDeviceDetailsAsync(DeviceId);
-			ConnectionState = "Connected";
-		}
-		catch (Exception ex)
-		{
-			await Application.Current!.MainPage!.DisplayAlert(
-				"Error",
-				$"Failed to connect the device: {ex.Message}",
-				"OK");
-		}
-	}
-
-	[RelayCommand]
-	private async Task DisconnectDeviceAsync()
-	{
-		try
-		{
-			await _deviceManager.SendCloudToDeviceMessageAsync(DeviceId, "{\"command\":\"disconnect\"}");
-			await LoadDeviceDetailsAsync(DeviceId);
-			ConnectionState = "Disconnected";
-		}
-		catch (Exception ex)
-		{
-			await Application.Current!.MainPage!.DisplayAlert(
-				"Error",
-				$"Failed to disconnect the device: {ex.Message}",
-				"OK");
-		}
-	}
-
 
 	[RelayCommand]
 	private async Task ToggleFanStateAsync()
@@ -191,15 +155,6 @@ public partial class DeviceDetailViewModel : ObservableObject
 				"OK");
 		}
 	}
-
-
-	//This one is only to refresh the device details
-	[RelayCommand]
-	private async Task LoadDeviceDetailsAsync()
-	{
-		await LoadDeviceDetailsAsync(DeviceId);
-	}
-
 
 	public async Task LoadDeviceDetailsAsync(string deviceId)
 	{
@@ -297,5 +252,4 @@ public partial class DeviceDetailViewModel : ObservableObject
 			}
 		}
 	}
-
 }
