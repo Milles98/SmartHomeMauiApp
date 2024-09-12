@@ -85,7 +85,6 @@ public class DeviceManager
 		catch (Exception ex)
 		{
 			Debug.WriteLine($"Error: {ex.Message}");
-
 		}
 
 		return null!;
@@ -131,9 +130,9 @@ public class DeviceManager
 			};
 
 			var emailRecipients = new EmailRecipients(new List<EmailAddress>
-		{
-			new EmailAddress(emailAddress)
-		});
+			{
+				new EmailAddress(emailAddress)
+			});
 
 			var emailMessage = new EmailMessage(
 				"DoNotReply@39798093-33ea-4abd-9e0d-401459f2e05a.azurecomm.net",
@@ -160,5 +159,4 @@ public class DeviceManager
 			return false;
 		}
 	}
-
 }

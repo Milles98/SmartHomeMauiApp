@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartHomeMauiApp.MVVM.Views.DeviceDetailPage"
@@ -7,7 +6,6 @@
              NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
-
         <Grid RowDefinitions="auto, auto"
               Margin="30">
 
@@ -223,35 +221,13 @@
                 </Button>
 
                 <!-- Common Controls -->
-                <Button Text="Connect Device"
-                        Command="{Binding ConnectDeviceCommand}"
-                        BackgroundColor="Blue"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0" />
-
-                <Button Text="Disconnect Device"
-                        Command="{Binding DisconnectDeviceCommand}"
-                        BackgroundColor="DarkBlue"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0" />
-
                 <Button Text="Remove Device"
                         Command="{Binding RemoveDeviceCommand}"
                         BackgroundColor="Red"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0" />
-
-                <Label Text="Currently buggy? Refresh below"
-                       Margin="10,0,0,0"
-                       HorizontalOptions="Center" />
-                <Button Text="Refresh Device Details"
-                        Command="{Binding LoadDeviceDetailsCommand}"
-                        BackgroundColor="Gray"
                         TextColor="White"
                         Margin="10, 20, 10, 0" />
             </StackLayout>
 
         </Grid>
     </ScrollView>
-
 </ContentPage>
