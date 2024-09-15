@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SmartHomeMauiApp.MVVM.Views.AddDevicePage"
+             xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
+             x:DataType="{x:Type viewModels:AddDeviceViewModel}">
+
+    <StackLayout Padding="20"
+                 Spacing="15">
+
+        <Label Text="Add New Device"
+               FontSize="Large"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <!-- Device Type Dropdown -->
+        <Picker Title="Select Device Type"
+                ItemsSource="{Binding AvailableDeviceTypes}"
+                SelectedItem="{Binding SelectedDeviceType}"
+                HorizontalOptions="FillAndExpand" />
+
+        <!-- Device ID Input -->
+        <Entry Placeholder="Enter Device ID"
+               Text="{Binding DeviceId}"
+               HorizontalOptions="FillAndExpand" />
+
+        <!-- Add Device Button -->
+        <Button Text="Add Device"
+                Command="{Binding AddDeviceCommand}"
+                BackgroundColor="Green"
+                TextColor="White" />
+
+    </StackLayout>
+</ContentPage>

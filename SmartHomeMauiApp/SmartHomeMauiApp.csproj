@@ -59,8 +59,10 @@
 	<ItemGroup>
 	  <None Remove="Resources\Fonts\fa-brands-400.ttf" />
 	  <None Remove="Resources\Fonts\fa-solid-900.ttf" />
+	  <None Remove="Resources\Images\ac_icon.png" />
 	  <None Remove="Resources\Images\maui_lamp.png" />
 	  <None Remove="Resources\Images\maui_temperature.png" />
+	  <None Remove="Resources\Images\microchip.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -77,6 +79,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="MVVM\Views\AddDevicePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="MVVM\Views\DeviceDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
