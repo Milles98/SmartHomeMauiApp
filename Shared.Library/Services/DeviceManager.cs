@@ -120,7 +120,7 @@ namespace Shared.Library.Services
 
                 var twin = new Twin
                 {
-                    Properties = { Reported = { ["deviceType"] = deviceType } }
+                    Properties = { Desired = { ["deviceType"] = deviceType } }
                 };
                 await _registryManager.UpdateTwinAsync(deviceId, twin, "*");
                 Console.WriteLine($"Device twin for {deviceId} updated with device type {deviceType}.");
