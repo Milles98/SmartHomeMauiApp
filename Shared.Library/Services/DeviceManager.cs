@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -106,6 +107,35 @@ namespace Shared.Library.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Error sending cloud-to-device message: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> AddDeviceAsync(string deviceId, string deviceType)
+        {
+            try
+            {
+                var device = new Device(deviceId);
+                await _registryManager.AddDeviceAsync(device);
+                Console.WriteLine($"Device {deviceId} added successfully.");
+
+                var twin = new Twin
+                {
+                    Properties = { Desired = { ["deviceType"] = deviceType } }
+                };
+                await _registryManager.UpdateTwinAsync(deviceId, twin, "*");
+                Console.WriteLine($"Device twin for {deviceId} updated with device type {deviceType}.");
+
+                return true;
+            }
+            catch (DeviceAlreadyExistsException)
+            {
+                Console.WriteLine($"Device {deviceId} already exists.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding device: {ex.Message}");
+                return false;
             }
         }
 

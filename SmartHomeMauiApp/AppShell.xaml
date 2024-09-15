@@ -40,8 +40,10 @@
                   Route="SettingsPage" />
 
     <ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
-                  Route="DeviceDetailPage"
-                  FlyoutItemIsVisible="False" />
+                  Route="DeviceDetailPage" />
+
+    <ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}"
+                  Route="AddDevicePage" />
     <!--FlyoutItemIsVisible="False"-->
 
 </Shell>
