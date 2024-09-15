@@ -19,10 +19,21 @@
                 SelectedItem="{Binding SelectedDeviceType}"
                 HorizontalOptions="FillAndExpand" />
 
-        <!-- Device ID Input -->
-        <Entry Placeholder="Enter Device ID"
-               Text="{Binding DeviceId}"
+        <!-- Device ID Display -->
+        <Label Text="Generated Device ID:"
+               FontSize="Medium"
+               FontAttributes="Bold" />
+        <Label Text="{Binding DeviceId}"
+               FontSize="Small"
+               TextColor="Gray"
                HorizontalOptions="FillAndExpand" />
+
+        <!-- Generate Device ID Button -->
+        <Button Text="Generate Device ID"
+                Command="{Binding GenerateDeviceIdCommand}"
+                BackgroundColor="DodgerBlue"
+                TextColor="White"
+                HorizontalOptions="Center" />
 
         <!-- Add Device Button -->
         <Button Text="Add Device"
