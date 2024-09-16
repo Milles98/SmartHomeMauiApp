@@ -3,32 +3,71 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartHomeMauiApp.MVVM.Views.AddDevicePage"
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
-             x:DataType="{x:Type viewModels:AddDeviceViewModel}">
+             x:DataType="{x:Type viewModels:AddDeviceViewModel}"
+             BackgroundColor="#0f0f0f">
 
-    <StackLayout Padding="20"
-                 Spacing="15">
+    <!-- Main Grid Layout -->
+    <Grid>
+        <!-- Background Image -->
+        <Image Source="maui_background.png"
+               Aspect="AspectFill"
+               Opacity="0.2" />
 
-        <Label Text="Add New Device"
-               FontSize="Large"
-               FontAttributes="Bold"
-               HorizontalOptions="Center" />
+        <!-- Main Content -->
+        <ScrollView>
+            <StackLayout Padding="30"
+                         Spacing="20"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="CenterAndExpand"
+                         BackgroundColor="Transparent">
 
-        <!-- Device Type Dropdown -->
-        <Picker Title="Select Device Type"
-                ItemsSource="{Binding AvailableDeviceTypes}"
-                SelectedItem="{Binding SelectedDeviceType}"
-                HorizontalOptions="FillAndExpand" />
+                <!-- Home Button -->
+                <Button Text="&#xf015;"
+                        FontSize="18"
+                        FontFamily="fa-solid"
+                        Margin="0,10,0,0"
+                        Command="{Binding NavigateHomeCommand}"
+                        HorizontalOptions="Start"/>
 
-        <!-- Device ID Input -->
-        <Entry Placeholder="Enter Device ID"
-               Text="{Binding DeviceId}"
-               HorizontalOptions="FillAndExpand" />
+                <!-- Title -->
+                <Label Text="Add New Device"
+                       FontSize="Large"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="White" />
 
-        <!-- Add Device Button -->
-        <Button Text="Add Device"
-                Command="{Binding AddDeviceCommand}"
-                BackgroundColor="Green"
-                TextColor="White" />
+                <!-- Device Type Dropdown -->
+                <Picker Title="Select Device Type"
+                        Background="#333"
+                        ItemsSource="{Binding AvailableDeviceTypes}"
+                        SelectedItem="{Binding SelectedDeviceType}"
+                        HorizontalOptions="FillAndExpand" />
 
-    </StackLayout>
+                <!-- Device ID Display -->
+                <Label Text="Generated Device ID:"
+                       FontSize="Medium"
+                       FontAttributes="Bold"
+                       TextColor="White" />
+                <Label Text="{Binding DeviceId}"
+                       FontSize="Small"
+                       TextColor="Gray"
+                       HorizontalOptions="FillAndExpand" />
+
+                <!-- Generate Device ID Button -->
+                <Button Text="Generate Device ID"
+                        Command="{Binding GenerateDeviceIdCommand}"
+                        BackgroundColor="DodgerBlue"
+                        TextColor="White"
+                        HorizontalOptions="Center" />
+
+                <!-- Add Device Button -->
+                <Button Text="Add Device"
+                        Command="{Binding AddDeviceCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand" />
+
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

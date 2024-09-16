@@ -6,83 +6,104 @@
              x:DataType="{x:Type viewModels:MainViewModel}"
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
              x:Class="SmartHomeMauiApp.MVVM.Views.MainPage"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#0f0f0f">
 
+    <!-- ScrollView to handle content overflow -->
     <ScrollView>
         <Grid>
+            <!-- Background Image -->
             <Image Source="maui_background.png"
                    Aspect="AspectFill"
-                   Opacity="0.4"
+                   Opacity="0.2"
                    IsEnabled="False" />
 
-            <Grid RowDefinitions="auto, auto"
-                  Margin="30">
-
+            <!-- Main Grid Layout -->
+            <Grid RowDefinitions="auto, *"
+                  Padding="30">
+                <!-- Settings Button -->
                 <Button Grid.Row="0"
                         Text="&#xf013;"
-                        FontSize="18"
+                        FontSize="24"
                         Command="{Binding NavigateToSettingsCommand}"
                         FontFamily="fa-solid"
-                        HorizontalOptions="End" />
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        HorizontalOptions="End"
+                        VerticalOptions="Start"
+                        Padding="0" />
 
-                <!-- Main content area -->
+                <!-- Devices CollectionView -->
                 <CollectionView Grid.Row="1"
                                 ItemsSource="{Binding Devices}"
                                 SelectionMode="Single"
                                 SelectedItem="{Binding SelectedDevice}"
-                                SelectionChangedCommand="{Binding NavigateToDeviceDetailCommand}">
+                                SelectionChangedCommand="{Binding NavigateToDeviceDetailCommand}"
+                                Margin="0,20,0,0">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type azureshared:Twin}">
-                            <Frame BorderColor="Gray"
-                                   CornerRadius="10"
+                            <Frame BorderColor="#333"
+                                   CornerRadius="15"
                                    Margin="10"
-                                   Padding="10"
-                                   BackgroundColor="#1e1e1e"
-                                   HeightRequest="140">
-                                <Grid ColumnDefinitions="Auto, *"
-                                      RowDefinitions="Auto, Auto, Auto"
-                                      Padding="5">
+                                   Padding="15"
+                                   BackgroundColor="{DynamicResource SemiTransparentGray}"
+                                   HasShadow="True"
+                                   HeightRequest="120">
+                                <Grid ColumnDefinitions="80, *, Auto"
+                                      RowDefinitions="Auto, Auto"
+                                      Padding="5"
+                                      VerticalOptions="CenterAndExpand">
 
-                                    <!-- Device ID -->
-                                    <Label Grid.Row="0"
-                                           Grid.Column="0"
-                                           Grid.ColumnSpan="2"
-                                           Text="{Binding DeviceId}"
-                                           FontSize="14"
-                                           TextColor="White"
-                                           HorizontalTextAlignment="Center" />
-
-                                    <!-- Dynamic Icon -->
-                                    <Image Grid.Row="1"
-                                           Grid.RowSpan="2"
+                                    <!-- Device Icon -->
+                                    <Image Grid.RowSpan="2"
                                            Grid.Column="0"
                                            Source="{Binding ., Converter={StaticResource DeviceTypeToImageConverter}}"
-                                           HeightRequest="80"
-                                           WidthRequest="80"
+                                           HeightRequest="60"
+                                           WidthRequest="60"
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center" />
 
-                                    <!-- Last Activity Time -->
-                                    <StackLayout Grid.Row="1"
+                                    <!-- Device Details -->
+                                    <StackLayout Grid.Row="0"
                                                  Grid.Column="1"
                                                  Padding="10,0,0,0"
                                                  VerticalOptions="Center">
+                                        <Label Text="{Binding DeviceId}"
+                                               FontSize="Medium"
+                                               TextColor="White"
+                                               FontAttributes="Bold"
+                                               LineBreakMode="TailTruncation" />
                                         <Label Text="Last Activity:"
                                                FontSize="Small"
-                                               TextColor="Gray" />
-                                        <Label Text="{Binding LastActivityTime}"
+                                               TextColor="Gray"
+                                               Margin="0,5,0,0" />
+                                        <Label Text="{Binding LastActivityTime, StringFormat='{}{0:MM/dd/yyyy hh:mm tt}'}"
                                                FontSize="Small"
                                                TextColor="White" />
                                     </StackLayout>
 
                                     <!-- Details Button -->
-                                    <Button Grid.Row="1"
+                                    <Button Grid.Row="0"
                                             Grid.Column="2"
                                             Text="Details"
+                                            FontSize="14"
+                                            FontAttributes="Bold"
+                                            BackgroundColor="#6f42c1"
+                                            TextColor="White"
+                                            CornerRadius="20"
+                                            WidthRequest="80"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=NavigateToDeviceDetailCommand}"
                                             CommandParameter="{Binding .}"
                                             HorizontalOptions="End"
-                                            VerticalOptions="Center" />
+                                            VerticalOptions="Center"
+                                            Margin="5">
+                                        <Button.Shadow>
+                                            <Shadow Brush="Black"
+                                                    Offset="2,2"
+                                                    Opacity="0.4" />
+                                        </Button.Shadow>
+                                    </Button>
+
                                 </Grid>
                             </Frame>
                         </DataTemplate>
@@ -90,22 +111,26 @@
                 </CollectionView>
             </Grid>
 
-            <!-- Add New Device Button -->
+            <!-- Floating Action Button for Adding New Device -->
             <Button Text="&#x2b;"
-                    FontSize="16"
+                    FontSize="24"
                     FontFamily="fa-solid"
                     Command="{Binding NavigateToAddDeviceCommand}"
-                    CornerRadius="25"
-                    BackgroundColor="Blue"
+                    CornerRadius="30"
+                    BackgroundColor="#007BFF"
                     TextColor="White"
-                    WidthRequest="150"
-                    HeightRequest="50"
+                    WidthRequest="60"
+                    HeightRequest="60"
                     HorizontalOptions="End"
                     VerticalOptions="End"
-                    Margin="20"
+                    Margin="30"
                     AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-                    AbsoluteLayout.LayoutFlags="PositionProportional" />
-
+                    AbsoluteLayout.LayoutFlags="PositionProportional">
+                <Button.Shadow>
+                    <Shadow Brush="Black"
+                            Opacity="0.6" />
+                </Button.Shadow>
+            </Button>
         </Grid>
     </ScrollView>
 </ContentPage>

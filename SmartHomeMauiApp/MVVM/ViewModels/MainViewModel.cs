@@ -64,7 +64,6 @@ public partial class MainViewModel : ObservableObject
         await Shell.Current.GoToAsync("///AddDevicePage");
     }
 
-
     public MainViewModel(DeviceManager deviceManager)
     {
         _deviceManager = deviceManager;

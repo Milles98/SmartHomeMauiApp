@@ -3,17 +3,21 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Azure.Devices.Shared;
 using System.Collections.ObjectModel;
 using Shared.Library.Services;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 public partial class AddDeviceViewModel : ObservableObject
 {
     private readonly DeviceManager _deviceManager;
+    private readonly MainViewModel _mainViewModel;
 
-    public AddDeviceViewModel(DeviceManager deviceManager)
+    public AddDeviceViewModel(DeviceManager deviceManager, MainViewModel viewModel)
     {
         _deviceManager = deviceManager;
-        AvailableDeviceTypes = new ObservableCollection<string> { "Fan", "Lamp", "TemperatureSensor" };
+        _mainViewModel = viewModel;
+
+        AvailableDeviceTypes = new ObservableCollection<string> { "Fan", "Lamp", "Ac" };
     }
 
     [ObservableProperty]
@@ -39,11 +43,26 @@ public partial class AddDeviceViewModel : ObservableObject
         if (success)
         {
             await Application.Current!.MainPage!.DisplayAlert("Success", "Device added successfully.", "OK");
-            await Shell.Current.GoToAsync("..");
+
+            await _mainViewModel.SetDevicesAsync();
+
+            await Shell.Current.GoToAsync("//MainPage");
         }
         else
         {
             await Application.Current!.MainPage!.DisplayAlert("Error", "Failed to add the device. It may already exist.", "OK");
         }
+    }
+
+    [RelayCommand]
+    private void GenerateDeviceId()
+    {
+        DeviceId = Guid.NewGuid().ToString();
+    }
+
+    [RelayCommand]
+    private async Task NavigateHomeAsync()
+    {
+        await Shell.Current.GoToAsync("//MainPage");
     }
 }

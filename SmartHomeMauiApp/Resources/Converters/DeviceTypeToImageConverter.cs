@@ -14,9 +14,9 @@ public class DeviceTypeToImageConverter : IValueConverter
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is Twin twin && twin.Properties.Reported.Contains("deviceType"))
+        if (value is Twin twin && twin.Properties.Desired.Contains("deviceType"))
         {
-            string deviceType = twin.Properties.Reported["deviceType"].ToString();
+            string deviceType = twin.Properties.Desired["deviceType"].ToString();
             return DeviceTypeToImageMap.TryGetValue(deviceType, out var imageName) ? imageName : "microchip.png";
         }
 
