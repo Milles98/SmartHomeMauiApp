@@ -7,14 +7,12 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="#0f0f0f">
 
-    <!-- Main Grid Layout -->
     <Grid>
-        <!-- Background Image -->
+
         <Image Source="maui_background.png"
                Aspect="AspectFill"
                Opacity="0.2" />
 
-        <!-- Main Content -->
         <ScrollView>
             <StackLayout Padding="30"
                          Spacing="20"
@@ -22,7 +20,6 @@
                          HorizontalOptions="CenterAndExpand"
                          BackgroundColor="Transparent">
 
-                <!-- Home Button -->
                 <Button Text="&#xf015;"
                         FontSize="18"
                         FontFamily="fa-solid"
@@ -38,14 +35,12 @@
                     </Button.Shadow>
                 </Button>
 
-                <!-- Title -->
                 <Label Text="Settings"
                        FontSize="Large"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        TextColor="White" />
 
-                <!-- Connection String -->
                 <Label Text="Connection String:"
                        FontSize="16"
                        TextColor="White"
@@ -56,7 +51,6 @@
                        Margin="0,5,0,15"
                        HeightRequest="40" />
 
-                <!-- Email Address -->
                 <Label Text="Email Address for Notifications:"
                        FontSize="16"
                        TextColor="White"
@@ -67,7 +61,6 @@
                        Margin="0,5,0,15"
                        HeightRequest="40" />
 
-                <!-- Save Settings Button -->
                 <Button Text="Save Settings"
                         Command="{Binding SaveSettingsCommand}"
                         BackgroundColor="DodgerBlue"
