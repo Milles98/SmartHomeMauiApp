@@ -16,6 +16,17 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private Twin _selectedDevice;
 
+    public string GetConnectionStateColor(Twin twin)
+    {
+        if (twin.Properties.Reported.Contains("connectionState"))
+        {
+            bool isConnected = (bool)twin.Properties.Reported["connectionState"];
+            return isConnected ? "Green" : "Red";
+        }
+
+        return "Gray";
+    }
+
     public async Task SetDevicesAsync()
     {
         Devices = new ObservableCollection<Twin>(await _deviceManager.GetDevicesAsync("SELECT * FROM devices"));

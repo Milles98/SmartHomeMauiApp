@@ -1,9 +1,6 @@
-﻿using Azure.Communication.Email;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Azure.Devices.Common.Exceptions;
 using Shared.Library.Services;
-using System.Threading.Tasks;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -31,6 +28,9 @@ public partial class DeviceDetailViewModel : ObservableObject
 
     [ObservableProperty]
     private string _deviceType;
+
+    [ObservableProperty]
+    private string _deviceName;
 
     [ObservableProperty]
     private string _emailAddress;
@@ -106,8 +106,11 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             if (twin != null)
             {
-                Status = twin.Status.ToString();
-                ConnectionState = twin.ConnectionState.ToString();
+                ConnectionState = twin.Properties.Reported.Contains("connectionState") ?
+                    twin.Properties.Reported["connectionState"].ToString() : "Unknown";
+
+                DeviceName = twin.Properties.Reported.Contains("deviceName") ?
+                    twin.Properties.Reported["deviceName"].ToString() : "Unknown";
 
                 LastActivityTime = twin.LastActivityTime.HasValue
                     ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
