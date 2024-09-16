@@ -83,15 +83,6 @@
                                                TextColor="White" />
                                     </StackLayout>
 
-                                    <Ellipse Grid.Row="0"
-                                             Grid.Column="2"
-                                             WidthRequest="20"
-                                             HeightRequest="20"
-                                             VerticalOptions="Center"
-                                             HorizontalOptions="Start"
-                                             Fill="{Binding ., Converter={StaticResource ConnectionStateToColorConverter}}"
-                                             Margin="5" />
-
                                     <Button Grid.Row="0"
                                             Grid.Column="1"
                                             Text="Details"

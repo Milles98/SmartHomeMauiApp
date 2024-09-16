@@ -35,7 +35,6 @@ namespace SmartHomeMauiApp
             builder.Services.AddSingleton<AddDevicePage>();
 
             builder.Services.AddTransient<DeviceTypeToImageConverter>();
-            builder.Services.AddSingleton<ConnectionStateToColorConverter>();
 
 #if DEBUG
             builder.Logging.AddDebug();
