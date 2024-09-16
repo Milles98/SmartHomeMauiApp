@@ -12,7 +12,6 @@
                 <ResourceDictionary>
                     <converters:BooleanToColorConverter x:Key="BooleanToColorConverter" />
                     <converters:DeviceTypeToImageConverter x:Key="DeviceTypeToImageConverter" />
-                    <converters:ConnectionStateToColorConverter x:Key="ConnectionStateToColorConverter" />
                     <Color x:Key="SemiTransparentGray">#E61E1E1E</Color>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
