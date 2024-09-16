@@ -59,4 +59,10 @@ public partial class AddDeviceViewModel : ObservableObject
     {
         DeviceId = Guid.NewGuid().ToString();
     }
+
+    [RelayCommand]
+    private async Task NavigateHomeAsync()
+    {
+        await Shell.Current.GoToAsync("//MainPage");
+    }
 }
