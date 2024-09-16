@@ -72,7 +72,6 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            // Determine the new state based on the current state
             var newState = DeviceState == "On" ? "stop" : "start";
 
             var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
@@ -118,7 +117,6 @@ public partial class DeviceDetailViewModel : ObservableObject
                     ? twin.Properties.Reported["deviceType"].ToString()
                     : "Unknown";
 
-                // Set DeviceState based on the reported property
                 DeviceState = twin.Properties.Reported.Contains("deviceState")
                     ? (bool)twin.Properties.Reported["deviceState"] ? "On" : "Off"
                     : "Unknown";

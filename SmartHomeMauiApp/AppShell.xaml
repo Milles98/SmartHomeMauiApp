@@ -6,33 +6,6 @@
        NavigationPage.HasNavigationBar="False"
        Shell.FlyoutBehavior="Disabled">
 
-    <!--Shell.FlyoutBehavior="Flyout"-->
-
-
-    <!--<FlyoutItem Title="SmartHome Control Panel">
-        <FlyoutItem.FlyoutIcon>
-            <FontImageSource Glyph="&#xf015;"
-                             FontFamily="fa-solid"
-                             Size="20"
-                             Color="Black" />
-        </FlyoutItem.FlyoutIcon>
-        <ShellContent Title="Home"
-                      ContentTemplate="{DataTemplate views:MainPage}"
-                      Route="MainPage" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Settings">
-        <FlyoutItem.FlyoutIcon>
-            <FontImageSource Glyph="&#xf013;"
-                             FontFamily="fa-solid"
-                             Size="20"
-                             Color="Black" />
-        </FlyoutItem.FlyoutIcon>
-        <ShellContent Title="Settings"
-                      ContentTemplate="{DataTemplate views:SettingsPage}"
-                      Route="SettingsPage" />
-    </FlyoutItem>-->
-
     <ShellContent ContentTemplate="{DataTemplate views:MainPage}"
                   Route="MainPage" />
 
@@ -44,6 +17,5 @@
 
     <ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}"
                   Route="AddDevicePage" />
-    <!--FlyoutItemIsVisible="False"-->
 
 </Shell>
