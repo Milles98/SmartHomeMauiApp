@@ -37,6 +37,11 @@ public partial class DeviceDetailViewModel : ObservableObject
 
     private System.Timers.Timer _updateTimer;
 
+    public bool IsRemoveDeviceVisible =>
+        DeviceId != "new-fan-bd437070-7751-45ca-8040-d484cedd6201" &&
+        DeviceId != "ac-3cea3c99-c45a-4f44-a8ea-1fb70b9d2dca" &&
+        DeviceId != "new-lamp-33c0d9c6-66f2-4aa6-bef5-c3d4417bc74c";
+
     public DeviceDetailViewModel(DeviceManager deviceManager, MainViewModel mainViewModel)
     {
         _deviceManager = deviceManager;
@@ -65,6 +70,8 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             Task.Run(() => LoadDeviceDetailsAsync(value));
         }
+
+        OnPropertyChanged(nameof(IsRemoveDeviceVisible));
     }
 
     [RelayCommand]

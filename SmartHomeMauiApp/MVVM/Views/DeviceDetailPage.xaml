@@ -80,7 +80,8 @@
                         Command="{Binding RemoveDeviceCommand}"
                         BackgroundColor="Red"
                         TextColor="White"
-                        Margin="10, 20, 10, 0" />
+                        Margin="10, 20, 10, 0"
+                        IsVisible="{Binding IsRemoveDeviceVisible}" />
             </StackLayout>
 
         </Grid>
