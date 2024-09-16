@@ -35,10 +35,17 @@
                        FontAttributes="Italic"
                        Margin="10, 0, 0, 10" />
 
-                <Label Text="Status:"
+                <Label Text="Device Name:"
                        FontAttributes="Bold"
                        Margin="10,0,0,0" />
-                <Label Text="{Binding Status}"
+                <Label Text="{Binding DeviceName}"
+                       FontAttributes="Italic"
+                       Margin="10, 0, 0, 10" />
+
+                <Label Text="Device Type:"
+                       FontAttributes="Bold"
+                       Margin="10,0,0,0" />
+                <Label Text="{Binding DeviceType}"
                        FontAttributes="Italic"
                        Margin="10, 0, 0, 10" />
 
@@ -56,14 +63,12 @@
                        FontAttributes="Italic"
                        Margin="10, 0, 0, 10" />
 
-                <Label FontAttributes="Bold"
-                       Margin="10,0,0,0">
-                    <Label.Text>
-                        <MultiBinding StringFormat="Device State: {0}">
-                            <Binding Path="DeviceState" />
-                        </MultiBinding>
-                    </Label.Text>
-                </Label>
+                <Label Text="Device State:"
+                       FontAttributes="Bold"
+                       Margin="10,0,0,0" />
+                <Label Text="{Binding DeviceState}"
+                       FontAttributes="Italic"
+                       Margin="10, 0, 0, 10" />
 
                 <Button Text="Toggle Device State"
                         Command="{Binding ToggleStateCommand}"
