@@ -27,11 +27,17 @@
                         FontSize="24"
                         Command="{Binding NavigateToSettingsCommand}"
                         FontFamily="fa-solid"
-                        BackgroundColor="Transparent"
+                        BackgroundColor="#6f42c1"
                         TextColor="White"
-                        HorizontalOptions="End"
+                        HorizontalOptions="Start"
                         VerticalOptions="Start"
-                        Padding="0" />
+                        Padding="0">
+                    <Button.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="2,2"
+                                Opacity="0.4" />
+                    </Button.Shadow>
+                </Button>
 
                 <!-- Devices CollectionView -->
                 <CollectionView Grid.Row="1"
@@ -117,18 +123,19 @@
                     FontFamily="fa-solid"
                     Command="{Binding NavigateToAddDeviceCommand}"
                     CornerRadius="30"
-                    BackgroundColor="#007BFF"
+                    BackgroundColor="#6f42c1"
                     TextColor="White"
                     WidthRequest="60"
                     HeightRequest="60"
-                    HorizontalOptions="End"
+                    HorizontalOptions="Start"
                     VerticalOptions="End"
                     Margin="30"
                     AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
                     AbsoluteLayout.LayoutFlags="PositionProportional">
                 <Button.Shadow>
                     <Shadow Brush="Black"
-                            Opacity="0.6" />
+                            Offset="2,2"
+                            Opacity="0.4" />
                 </Button.Shadow>
             </Button>
         </Grid>

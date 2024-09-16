@@ -28,7 +28,15 @@
                         FontFamily="fa-solid"
                         Margin="0,10,0,0"
                         Command="{Binding NavigateHomeCommand}"
-                        HorizontalOptions="Start"/>
+                        BackgroundColor="#6f42c1"
+                        TextColor="White"
+                        HorizontalOptions="Start">
+                    <Button.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="2,2"
+                                Opacity="0.4" />
+                    </Button.Shadow>
+                </Button>
 
                 <!-- Title -->
                 <Label Text="Settings"
@@ -65,7 +73,13 @@
                         BackgroundColor="DodgerBlue"
                         TextColor="White"
                         HorizontalOptions="FillAndExpand"
-                        CornerRadius="10" />
+                        CornerRadius="10">
+                    <Button.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="2,2"
+                                Opacity="0.4" />
+                    </Button.Shadow>
+                </Button>
             </StackLayout>
         </ScrollView>
     </Grid>

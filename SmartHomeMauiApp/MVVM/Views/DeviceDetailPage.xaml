@@ -14,8 +14,16 @@
                     FontSize="18"
                     FontFamily="fa-solid"
                     Margin="25,0,0,0"
+                    BackgroundColor="#6f42c1"
+                    TextColor="White"
                     Command="{Binding NavigateHomeCommand}"
-                    HorizontalOptions="Start" />
+                    HorizontalOptions="Start">
+                <Button.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="2,2"
+                            Opacity="0.4" />
+                </Button.Shadow>
+            </Button>
 
             <StackLayout Grid.Row="1"
                          Padding="20">
