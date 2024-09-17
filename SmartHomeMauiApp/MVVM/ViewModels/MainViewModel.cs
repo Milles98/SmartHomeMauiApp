@@ -18,7 +18,19 @@ public partial class MainViewModel : ObservableObject
 
     public async Task SetDevicesAsync()
     {
-        Devices = new ObservableCollection<Twin>(await _deviceManager.GetDevicesAsync("SELECT * FROM devices"));
+        var response = await _deviceManager.GetDevicesAsync("SELECT * FROM devices");
+
+        if (response.Succeeded && response.Content is IEnumerable<Twin> devices)
+        {
+            Devices = new ObservableCollection<Twin>(devices);
+        }
+        else
+        {
+            await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                response.Message ?? "Failed to retrieve devices.",
+                "OK");
+        }
     }
 
     private static readonly Dictionary<string, string> DeviceTypeToImageMap = new Dictionary<string, string>

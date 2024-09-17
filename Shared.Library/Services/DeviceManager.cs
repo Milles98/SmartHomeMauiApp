@@ -1,8 +1,10 @@
 ﻿using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Common.Exceptions;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
+using Shared.Library.Models;
 using System.Diagnostics;
 using System.Text;
 
@@ -35,34 +37,34 @@ public class DeviceManager
         }
     }
 
-    public async Task<IEnumerable<Twin>> GetDevicesAsync(string query)
+    public async Task<ResponseResult> GetDevicesAsync(string query)
     {
         try
         {
             var q = _registryManager.CreateQuery(query);
-            return await q.GetNextAsTwinAsync();
+            var devices = await q.GetNextAsTwinAsync();
+            return new ResponseResult { Succeeded = true, Content = devices };
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching devices: {ex.Message}");
-            return new List<Twin>();
+            return new ResponseResult { Succeeded = false, Message = $"Error fetching devices: {ex.Message}" };
         }
     }
 
-    public async Task<Twin> GetDeviceTwinAsync(string deviceId)
+    public async Task<ResponseResult> GetDeviceTwinAsync(string deviceId)
     {
         try
         {
-            return await _registryManager.GetTwinAsync(deviceId);
+            var twin = await _registryManager.GetTwinAsync(deviceId);
+            return new ResponseResult { Succeeded = true, Content = twin };
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching device twin: {ex.Message}");
-            return null!;
+            return new ResponseResult { Succeeded = false, Message = $"Error fetching device twin: {ex.Message}" };
         }
     }
 
-    public async Task<CloudToDeviceMethodResult> InvokeDirectMethodAsync(string deviceId, string methodName, object? payload = null, int responseTimeoutSeconds = 30)
+    public async Task<ResponseResult> InvokeDirectMethodAsync(string deviceId, string methodName, object? payload = null, int responseTimeoutSeconds = 30)
     {
         try
         {
@@ -77,83 +79,77 @@ public class DeviceManager
             }
 
             var result = await _serviceClient.InvokeDeviceMethodAsync(deviceId, cloudMethod);
-            if (result != null)
-            {
-                return result;
-            }
+            return new ResponseResult { Succeeded = true, Content = result };
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error: {ex.Message}");
-        }
-
-        return null!;
-    }
-
-    public async Task SendCloudToDeviceMessageAsync(string deviceId, string messageContent)
-    {
-        try
-        {
-            var message = new Message(Encoding.UTF8.GetBytes(messageContent))
-            {
-                ContentType = "application/json",
-                ContentEncoding = "utf-8"
-            };
-
-            await _serviceClient.SendAsync(deviceId, message);
-            Console.WriteLine($"Message sent to device {deviceId}: {messageContent}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error sending cloud-to-device message: {ex.Message}");
+            return new ResponseResult { Succeeded = false, Message = $"Error invoking direct method: {ex.Message}" };
         }
     }
 
-    public async Task<bool> AddDeviceAsync(string deviceId, string deviceType)
+    //public async Task<ResponseResult> SendCloudToDeviceMessageAsync(string deviceId, string messageContent)
+    //{
+    //    try
+    //    {
+    //        var message = new Message(Encoding.UTF8.GetBytes(messageContent))
+    //        {
+    //            ContentType = "application/json",
+    //            ContentEncoding = "utf-8"
+    //        };
+
+    //        await _serviceClient.SendAsync(deviceId, message);
+    //        return new ResponseResult { Succeeded = true, Message = $"Message sent to device {deviceId}: {messageContent}" };
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return new ResponseResult { Succeeded = false, Message = $"Error sending cloud-to-device message: {ex.Message}" };
+    //    }
+    //}
+
+    public async Task<ResponseResult> AddDeviceAsync(string deviceId, string deviceType)
     {
         try
         {
             var device = new Device(deviceId);
             await _registryManager.AddDeviceAsync(device);
-            Console.WriteLine($"Device {deviceId} added successfully.");
 
             var twin = new Twin
             {
                 Properties =
-                {
-                    Desired =
                     {
-                        ["deviceType"] = deviceType,
-                        ["connectionState"] = false,
-                        ["deviceName"] = $"IoT-{deviceType}",
-                        ["deviceState"] = false
+                        Desired =
+                        {
+                            ["deviceType"] = deviceType,
+                            ["connectionState"] = false,
+                            ["deviceName"] = $"IoT-{deviceType}",
+                            ["deviceState"] = false
+                        }
                     }
-                }
             };
             await _registryManager.UpdateTwinAsync(deviceId, twin, "*");
-            Console.WriteLine($"Device twin for {deviceId} updated with device type {deviceType}.");
 
-            return true;
+            return new ResponseResult { Succeeded = true, Message = $"Device {deviceId} added successfully with device type {deviceType}." };
+        }
+        catch (DeviceAlreadyExistsException)
+        {
+            return new ResponseResult { Succeeded = false, Message = $"Device {deviceId} already exists." };
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error adding device: {ex.Message}");
-            return false;
+            return new ResponseResult { Succeeded = false, Message = $"Error adding device: {ex.Message}" };
         }
     }
 
-    public async Task<bool> RemoveDeviceAsync(string deviceId, string emailAddress)
+    public async Task<ResponseResult> RemoveDeviceAsync(string deviceId, string emailAddress)
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
         {
-            Console.WriteLine("Email address cannot be empty.");
-            return false;
+            return new ResponseResult { Succeeded = false, Message = "Email address cannot be empty." };
         }
 
         try
         {
             await _registryManager.RemoveDeviceAsync(deviceId);
-            Console.WriteLine($"Device {deviceId} has been removed.");
 
             var emailClient = new EmailClient("endpoint=https://millesemailservice.europe.communication.azure.com/;accesskey=98Ku6INb6lIaWngj70BEnb2R0mB57HtsfdiqI2sfmNqPDhnBvLdKJQQJ99AIACULyCpq7IbPAAAAAZCSg1Jp");
 
@@ -163,9 +159,9 @@ public class DeviceManager
             };
 
             var emailRecipients = new EmailRecipients(new List<EmailAddress>
-            {
-                new EmailAddress(emailAddress)
-            });
+                {
+                    new EmailAddress(emailAddress)
+                });
 
             var emailMessage = new EmailMessage(
                 "DoNotReply@39798093-33ea-4abd-9e0d-401459f2e05a.azurecomm.net",
@@ -175,21 +171,17 @@ public class DeviceManager
 
             var response = await emailClient.SendAsync(WaitUntil.Completed, emailMessage);
 
-            if (response.Value.Status == EmailSendStatus.Succeeded)
+            return new ResponseResult
             {
-                Console.WriteLine("Confirmation email sent successfully.");
-            }
-            else
-            {
-                Console.WriteLine($"Failed to send confirmation email. Status: {response.Value.Status}");
-            }
-
-            return true;
+                Succeeded = response.Value.Status == EmailSendStatus.Succeeded,
+                Message = response.Value.Status == EmailSendStatus.Succeeded
+                    ? "Confirmation email sent successfully."
+                    : $"Failed to send confirmation email. Status: {response.Value.Status}"
+            };
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error removing device: {ex.Message}");
-            return false;
+            return new ResponseResult { Succeeded = false, Message = $"Error removing device: {ex.Message}" };
         }
     }
 }

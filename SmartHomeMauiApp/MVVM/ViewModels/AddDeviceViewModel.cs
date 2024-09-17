@@ -18,6 +18,7 @@ public partial class AddDeviceViewModel : ObservableObject
         _mainViewModel = viewModel;
 
         AvailableDeviceTypes = new ObservableCollection<string> { "Fan", "Lamp", "Ac" };
+        ResponseMessage = string.Empty;
     }
 
     [ObservableProperty]
@@ -29,28 +30,29 @@ public partial class AddDeviceViewModel : ObservableObject
     [ObservableProperty]
     private string _deviceId;
 
+    [ObservableProperty]
+    private string _responseMessage;
+
     [RelayCommand]
     private async Task AddDeviceAsync()
     {
         if (string.IsNullOrEmpty(DeviceId) || string.IsNullOrEmpty(SelectedDeviceType))
         {
-            await Application.Current!.MainPage!.DisplayAlert("Error", "Please fill in all fields.", "OK");
+            ResponseMessage = "Please select device type and generate id";
             return;
         }
 
-        var success = await _deviceManager.AddDeviceAsync(DeviceId, SelectedDeviceType);
+        var response = await _deviceManager.AddDeviceAsync(DeviceId, SelectedDeviceType);
 
-        if (success)
+        if (response.Succeeded)
         {
-            await Application.Current!.MainPage!.DisplayAlert("Success", "Device added successfully.", "OK");
-
+            ResponseMessage = response.Message ?? "Device added successfully.";
             await _mainViewModel.SetDevicesAsync();
-
             await Shell.Current.GoToAsync("//MainPage");
         }
         else
         {
-            await Application.Current!.MainPage!.DisplayAlert("Error", "Failed to add the device. It may already exist.", "OK");
+            ResponseMessage = response.Message ?? "Failed to add the device. It may already exist.";
         }
     }
 

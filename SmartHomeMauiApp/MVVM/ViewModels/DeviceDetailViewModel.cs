@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Shared;
 using Shared.Library.Services;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
@@ -79,31 +81,28 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            if (ConnectionState.ToLower() == "true")
-            {
-                var newState = DeviceState == "On" ? "stop" : "start";
-
-                var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
-
-                if (result != null && result.Status == 200)
-                {
-                    await LoadDeviceDetailsAsync(DeviceId);
-                }
-                else
-                {
-                    await Application.Current!.MainPage!.DisplayAlert(
-                        "Error",
-                        "Failed to toggle device state. Make sure the device is connected and running.",
-                        "OK");
-                }
-            }
-            else
+            if (ConnectionState.ToLower() != "true")
             {
                 await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                "Failed to toggle device state. Make sure the device is connected and running.",
-                "OK");
+                    "Error",
+                    "Failed to toggle device state. Make sure the device is connected and running.",
+                    "OK");
+                return;
             }
+
+            var newState = DeviceState == "On" ? "stop" : "start";
+            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
+
+            if (!response.Succeeded || response.Content is not CloudToDeviceMethodResult result || result.Status != 200)
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    response.Message ?? "Failed to toggle device state. Make sure the device is connected and running.",
+                    "OK");
+                return;
+            }
+
+            await LoadDeviceDetailsAsync(DeviceId);
         }
         catch (Exception ex)
         {
@@ -119,9 +118,9 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "connect");
+            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "connect");
 
-            if (result != null && result.Status == 200)
+            if (response.Succeeded && response.Content is CloudToDeviceMethodResult result && result.Status == 200)
             {
                 await LoadDeviceDetailsAsync(DeviceId);
             }
@@ -129,7 +128,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             {
                 await Application.Current!.MainPage!.DisplayAlert(
                     "Error",
-                    "Failed to connect the device. Make sure the device is reachable.",
+                    response.Message ?? "Failed to connect the device. Make sure the device is reachable.",
                     "OK");
             }
         }
@@ -147,9 +146,9 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
+            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
 
-            if (result != null && result.Status == 200)
+            if (response.Succeeded && response.Content is CloudToDeviceMethodResult result && result.Status == 200)
             {
                 await LoadDeviceDetailsAsync(DeviceId);
             }
@@ -157,7 +156,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             {
                 await Application.Current!.MainPage!.DisplayAlert(
                     "Error",
-                    "Failed to disconnect the device. Make sure the device is reachable.",
+                    response.Message ?? "Failed to disconnect the device. Make sure the device is reachable.",
                     "OK");
             }
         }
@@ -175,9 +174,9 @@ public partial class DeviceDetailViewModel : ObservableObject
         DeviceId = deviceId;
         try
         {
-            var twin = await _deviceManager.GetDeviceTwinAsync(DeviceId);
+            var response = await _deviceManager.GetDeviceTwinAsync(DeviceId);
 
-            if (twin != null)
+            if (response.Succeeded && response.Content is Twin twin)
             {
                 ConnectionState = twin.Properties.Reported.Contains("connectionState") ?
                     twin.Properties.Reported["connectionState"].ToString() : "Unknown";
@@ -197,10 +196,20 @@ public partial class DeviceDetailViewModel : ObservableObject
                     ? (bool)twin.Properties.Reported["deviceState"] ? "On" : "Off"
                     : "Unknown";
             }
+            else
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    response.Message ?? "Failed to load device details.",
+                    "OK");
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching device details: {ex.Message}");
+            await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                $"Error fetching device details: {ex.Message}",
+                "OK");
         }
     }
 
@@ -224,12 +233,13 @@ public partial class DeviceDetailViewModel : ObservableObject
 
         if (confirmed)
         {
-            bool result = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
-            if (result)
+            var response = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
+
+            if (response.Succeeded)
             {
                 await Application.Current.MainPage.DisplayAlert(
                     "Success",
-                    $"Device {DeviceId} removed successfully.",
+                    response.Message ?? $"Device {DeviceId} removed successfully.",
                     "OK");
 
                 await _mainViewModel.SetDevicesAsync();
@@ -240,7 +250,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             {
                 await Application.Current.MainPage.DisplayAlert(
                     "Error",
-                    $"Failed to remove device {DeviceId}.",
+                    response.Message ?? $"Failed to remove device {DeviceId}.",
                     "OK");
             }
         }
