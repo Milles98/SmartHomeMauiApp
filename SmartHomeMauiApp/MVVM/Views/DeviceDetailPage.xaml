@@ -72,13 +72,26 @@
 
                 <Button Text="Toggle Device State"
                         Command="{Binding ToggleStateCommand}"
-                        BackgroundColor="Green"
+                        BackgroundColor="#6f42c1"
                         TextColor="White"
                         Margin="10, 20, 10, 0" />
 
+                <Button Text="Connect"
+                        Command="{Binding ConnectCommand}"
+                        BackgroundColor="#3365b5"
+                        TextColor="White"
+                        Margin="10, 20, 10, 0" />
+
+                <Button Text="Disconnect"
+                        Command="{Binding DisconnectCommand}"
+                        BackgroundColor="#FF6347"
+                        TextColor="White"
+                        Margin="10, 20, 10, 0" />
+
+
                 <Button Text="Remove Device"
                         Command="{Binding RemoveDeviceCommand}"
-                        BackgroundColor="Red"
+                        BackgroundColor="#541818"
                         TextColor="White"
                         Margin="10, 20, 10, 0"
                         IsVisible="{Binding IsRemoveDeviceVisible}" />

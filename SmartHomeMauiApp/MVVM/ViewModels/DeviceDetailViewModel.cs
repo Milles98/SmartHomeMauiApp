@@ -79,7 +79,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            if (ConnectionState == "true")
+            if (ConnectionState.ToLower() == "true")
             {
                 var newState = DeviceState == "On" ? "stop" : "start";
 
@@ -110,6 +110,62 @@ public partial class DeviceDetailViewModel : ObservableObject
             await Application.Current!.MainPage!.DisplayAlert(
                 "Error",
                 $"Failed to toggle device state: {ex.Message}",
+                "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task ConnectAsync()
+    {
+        try
+        {
+            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "connect");
+
+            if (result != null && result.Status == 200)
+            {
+                await LoadDeviceDetailsAsync(DeviceId);
+            }
+            else
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    "Failed to connect the device. Make sure the device is reachable.",
+                    "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                $"Failed to connect the device: {ex.Message}",
+                "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DisconnectAsync()
+    {
+        try
+        {
+            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
+
+            if (result != null && result.Status == 200)
+            {
+                await LoadDeviceDetailsAsync(DeviceId);
+            }
+            else
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    "Failed to disconnect the device. Make sure the device is reachable.",
+                    "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                $"Failed to disconnect the device: {ex.Message}",
                 "OK");
         }
     }
