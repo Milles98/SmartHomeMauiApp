@@ -12,30 +12,6 @@ SmartHomeMauiApp is a cross-platform application built using .NET MAUI. It suppo
 - .NET 8.0 SDK
 - Visual Studio 2022 (or later) with .NET MAUI workload installed
 
-## Getting Started
-
-1. **Clone the repository**:
-
-- git clone https://github.com/your-repo/SmartHomeMauiApp.git
-- cd SmartHomeMauiApp
-
-2. **Restore NuGet packages**:
-
-- dotnet restore
-
-3. **Build the solution**:
-
-- dotnet build
-
-4. **Run the application**:
-    - For Android:
-
-- dotnet build -t:Run -f net8.0-android
-
-    - For Windows:
- 
-- dotnet build -t:Run -f net8.0-windows10.0.19041.0
-
 ## Project Configuration
 
 ### SmartHomeMauiApp.csproj
