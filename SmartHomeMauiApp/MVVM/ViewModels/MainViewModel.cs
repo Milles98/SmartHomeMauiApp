@@ -1,14 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Azure.Devices.Shared;
+using Shared.Library.Models;
 using Shared.Library.Services;
+using SmartHomeMauiApp.Database;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
     private readonly DeviceManager _deviceManager;
+    private readonly DbContext _dbContext;
 
     [ObservableProperty]
     private ObservableCollection<Twin> _devices = [];
@@ -16,9 +20,45 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private Twin _selectedDevice;
 
+    [ObservableProperty]
+    private string _responseMessage;
+
+    public MainViewModel(DeviceManager deviceManager, DbContext dbContext)
+    {
+        _deviceManager = deviceManager;
+        _dbContext = dbContext;
+
+        ResponseMessage = string.Empty;
+
+        Task.Run(SetDevicesAsync);
+    }
+
     public async Task SetDevicesAsync()
     {
-        Devices = new ObservableCollection<Twin>(await _deviceManager.GetDevicesAsync("SELECT * FROM devices"));
+        var response = await _deviceManager.GetDevicesAsync("SELECT * FROM devices");
+
+        if (response.Succeeded && response.Content is IEnumerable<Twin> devices)
+        {
+            Devices = new ObservableCollection<Twin>(devices);
+
+            foreach (var device in devices)
+            {
+                var deviceSettings = new DeviceSettings
+                {
+                    DeviceId = device.DeviceId,
+                    DeviceType = device.Properties.Reported.Contains("deviceType") ? device.Properties.Reported["deviceType"].ToString() : "Unknown",
+                    DeviceName = device.Properties.Reported.Contains("deviceName") ? device.Properties.Reported["deviceName"].ToString() : "Unknown",
+                    IsConnected = device.Properties.Reported.Contains("connectionState") ? device.Properties.Reported["connectionState"].ToString() : "Unknown",
+                };
+
+                await _dbContext.SaveDeviceSettingsAsync(deviceSettings);
+            }
+        }
+        else
+        {
+            ResponseMessage = "Failed to retrieve devices.";
+            Debug.WriteLine($"Error in SetDevicesAsync: {response.Message}");
+        }
     }
 
     private static readonly Dictionary<string, string> DeviceTypeToImageMap = new Dictionary<string, string>
@@ -47,7 +87,8 @@ public partial class MainViewModel : ObservableObject
             return;
 
 
-        var emailAddress = Preferences.Get("EmailAddress", string.Empty);
+        var userSettings = await _dbContext.GetUserSettingsAsync();
+        var emailAddress = userSettings?.EmailAddress ?? string.Empty;
 
         await Shell.Current.GoToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}&emailAddress={emailAddress}");
     }
@@ -64,10 +105,10 @@ public partial class MainViewModel : ObservableObject
         await Shell.Current.GoToAsync("///AddDevicePage");
     }
 
-    public MainViewModel(DeviceManager deviceManager)
+    [RelayCommand]
+    private async Task NavigateToHistoryAsync()
     {
-        _deviceManager = deviceManager;
-
-        Task.Run(SetDevicesAsync);
+        await Shell.Current.GoToAsync("///HistoryPage");
     }
+
 }

@@ -73,6 +73,15 @@
                                 Opacity="0.4" />
                     </Button.Shadow>
                 </Button>
+
+                <Label Text="{Binding ResponseMessage}"
+                       FontSize="Medium"
+                       TextColor="Red"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Margin="0,20,0,0"
+                       IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+
             </StackLayout>
         </ScrollView>
     </Grid>

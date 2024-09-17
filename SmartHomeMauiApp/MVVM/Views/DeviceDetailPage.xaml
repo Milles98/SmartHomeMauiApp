@@ -88,13 +88,21 @@
                         TextColor="White"
                         Margin="10, 20, 10, 0" />
 
-
                 <Button Text="Remove Device"
                         Command="{Binding RemoveDeviceCommand}"
                         BackgroundColor="#541818"
                         TextColor="White"
                         Margin="10, 20, 10, 0"
                         IsVisible="{Binding IsRemoveDeviceVisible}" />
+
+                <Label Text="{Binding ResponseMessage}"
+                       FontSize="Medium"
+                       TextColor="Red"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Margin="0,20,0,0"
+                       IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+
             </StackLayout>
 
         </Grid>

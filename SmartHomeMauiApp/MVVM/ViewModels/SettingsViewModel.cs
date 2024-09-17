@@ -1,12 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Shared.Library.Models;
 using Shared.Library.Services;
+using SmartHomeMauiApp.Database;
+using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
     private readonly DeviceManager _deviceManager;
+    private readonly DbContext _dbContext;
 
     [ObservableProperty]
     private string _connectionString;
@@ -14,11 +18,25 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _emailAddress;
 
-    public SettingsViewModel(DeviceManager deviceManager)
+    [ObservableProperty]
+    private string _responseMessage;
+
+    public SettingsViewModel(DeviceManager deviceManager, DbContext dbContext)
     {
         _deviceManager = deviceManager;
-        ConnectionString = "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="; // Sätt en standard connection string om det behövs
-        EmailAddress = "mille.elfver98@gmail.com";
+        _dbContext = dbContext;
+        ResponseMessage = string.Empty;
+
+        LoadSettings();
+    }
+
+    private async void LoadSettings()
+    {
+        var userSettings = await _dbContext.GetUserSettingsAsync();
+        EmailAddress = userSettings?.EmailAddress ?? string.Empty;
+
+        var iotHubSettings = await _dbContext.GetIoTHubSettingsAsync();
+        ConnectionString = iotHubSettings?.ConnectionString ?? string.Empty;
     }
 
     [RelayCommand]
@@ -30,23 +48,30 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private async Task SaveSettingsAsync()
     {
-        if (string.IsNullOrWhiteSpace(ConnectionString))
+        try
         {
-            await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    "Connection String cannot be empty.",
-                    "OK");
-            return;
+            if (string.IsNullOrWhiteSpace(ConnectionString))
+            {
+                ResponseMessage = "Connection String cannot be empty.";
+                return;
+            }
+
+            _deviceManager.UpdateConnectionString(ConnectionString);
+
+            var userSettings = new UserSettings { EmailAddress = EmailAddress };
+            await _dbContext.SaveUserSettingsAsync(userSettings);
+
+            var iotHubSettings = new IoTHubSettings { ConnectionString = ConnectionString };
+            await _dbContext.SaveIoTHubSettingsAsync(iotHubSettings);
+
+            ResponseMessage = "Settings have been saved, and IoT Hub connection has been updated.";
+            Preferences.Set("EmailAddress", EmailAddress);
         }
-
-        _deviceManager.UpdateConnectionString(ConnectionString);
-
-        await Application.Current!.MainPage!.DisplayAlert(
-                    "Success",
-                    "Settings have been saved and IoT Hub connection has been updated.",
-                    "OK");
-
-        Preferences.Set("EmailAddress", EmailAddress);
+        catch (Exception ex)
+        {
+            ResponseMessage = "An error occurred while saving settings. Please try again.";
+            Debug.WriteLine($"Error in SaveSettingsAsync: {ex.Message}");
+        }
 
         await Task.CompletedTask;
     }
