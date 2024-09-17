@@ -139,6 +139,30 @@
                             Opacity="0.4" />
                 </Button.Shadow>
             </Button>
+
+            <Button Text="&#xf15c;"
+                    FontSize="24"
+                    FontFamily="fa-solid"
+                    Command="{Binding NavigateToHistoryCommand}"
+                    CornerRadius="30"
+                    BackgroundColor="#6f42c1"
+                    TextColor="White"
+                    WidthRequest="60"
+                    HeightRequest="60"
+                    HorizontalOptions="End"
+                    VerticalOptions="End"
+                    Margin="30"
+                    AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
+                    AbsoluteLayout.LayoutFlags="PositionProportional">
+                <Button.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="2,2"
+                            Opacity="0.4" />
+                </Button.Shadow>
+            </Button>
+
         </Grid>
+
     </ScrollView>
+
 </ContentPage>

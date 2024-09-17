@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
+             xmlns:models="clr-namespace:Shared.Library.Models;assembly=Shared.Library"
+             x:Class="SmartHomeMauiApp.MVVM.Views.HistoryPage"
+             x:DataType="{x:Type viewModels:HistoryViewModel}"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#0f0f0f">
+
+    <ScrollView>
+        <Grid>
+
+            <Image Source="maui_background.png"
+                   Aspect="AspectFill"
+                   Opacity="0.2"
+                   IsEnabled="False" />
+
+            <Grid RowDefinitions="auto, *"
+                  Padding="30">
+
+                <Button Grid.Row="0"
+                        Text="&#xf015;"
+                        FontSize="18"
+                        FontFamily="fa-solid"
+                        Margin="25,0,0,0"
+                        BackgroundColor="#6f42c1"
+                        TextColor="White"
+                        Command="{Binding NavigateHomeCommand}"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Start">
+                    <Button.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="2,2"
+                                Opacity="0.4" />
+                    </Button.Shadow>
+                </Button>
+
+                <Grid Grid.Row="1"
+                      ColumnDefinitions="*,*,*"
+                      Margin="0,30,0,0"
+                      VerticalOptions="StartAndExpand"
+                      HorizontalOptions="CenterAndExpand">
+
+                    <StackLayout Grid.Column="0"
+                                 Padding="10">
+                        <Label Text="Devices in database (information fetched from device twins)"
+                               FontAttributes="Bold"
+                               FontSize="Large"
+                               HorizontalOptions="Center"
+                               TextColor="White" />
+
+                        <CollectionView ItemsSource="{Binding DeviceSettings}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="{x:Type models:DeviceSettings}">
+                                    <Frame BorderColor="#333"
+                                           CornerRadius="15"
+                                           Margin="5"
+                                           Padding="10"
+                                           BackgroundColor="{DynamicResource SemiTransparentGray}"
+                                           HasShadow="True">
+                                        <StackLayout>
+                                            <Label Text="{Binding DeviceId}"
+                                                   FontSize="Medium"
+                                                   TextColor="White"
+                                                   FontAttributes="Bold" />
+                                            <Label Text="{Binding DeviceType}"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                            <Label Text="{Binding DeviceName}"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                            <Label Text="{Binding LastActivityTime}"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                            <Label Text="{Binding DeviceState}"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="1"
+                                 Padding="10">
+                        <Label Text="IoT Hub Setting in database"
+                               FontAttributes="Bold"
+                               FontSize="Large"
+                               HorizontalOptions="Center"
+                               TextColor="White" />
+
+                        <CollectionView ItemsSource="{Binding IoTHubSettings}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="{x:Type models:IoTHubSettings}">
+                                    <Frame BorderColor="#333"
+                                           CornerRadius="15"
+                                           Margin="5"
+                                           Padding="10"
+                                           BackgroundColor="{DynamicResource SemiTransparentGray}"
+                                           HasShadow="True">
+                                        <StackLayout>
+                                            <Label Text="Connection String:"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                            <Label Text="{Binding ConnectionString}"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="2"
+                                 Padding="10">
+                        <Label Text="User Setting in database"
+                               FontAttributes="Bold"
+                               FontSize="Large"
+                               HorizontalOptions="Center"
+                               TextColor="White" />
+
+                        <CollectionView ItemsSource="{Binding UserSettings}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="{x:Type models:UserSettings}">
+                                    <Frame BorderColor="#333"
+                                           CornerRadius="15"
+                                           Margin="5"
+                                           Padding="10"
+                                           BackgroundColor="{DynamicResource SemiTransparentGray}"
+                                           HasShadow="True">
+                                        <StackLayout>
+                                            <Label Text="Email:"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                            <Label Text="{Binding EmailAddress}"
+                                                   FontSize="Small"
+                                                   TextColor="White" />
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</ContentPage>

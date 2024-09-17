@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Shared;
+using Shared.Library.Models;
 using Shared.Library.Services;
+using SmartHomeMauiApp.Database;
 using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
@@ -13,6 +15,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 {
     private readonly DeviceManager _deviceManager;
     private readonly MainViewModel _mainViewModel;
+    private readonly DbContext _dbContext;
 
     [ObservableProperty]
     private string _deviceId;
@@ -48,12 +51,15 @@ public partial class DeviceDetailViewModel : ObservableObject
         DeviceId != "ac-3cea3c99-c45a-4f44-a8ea-1fb70b9d2dca" &&
         DeviceId != "new-lamp-33c0d9c6-66f2-4aa6-bef5-c3d4417bc74c";
 
-    public DeviceDetailViewModel(DeviceManager deviceManager, MainViewModel mainViewModel)
+    public DeviceDetailViewModel(DeviceManager deviceManager, MainViewModel mainViewModel, DbContext dbContext)
     {
         _deviceManager = deviceManager;
         _mainViewModel = mainViewModel;
+        _dbContext = dbContext;
 
         ResponseMessage = string.Empty;
+
+        LoadUserSettings();
 
         _updateTimer = new System.Timers.Timer(5000);
         _updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
@@ -64,6 +70,12 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         _updateTimer?.Stop();
         _updateTimer?.Dispose();
+    }
+
+    private async void LoadUserSettings()
+    {
+        var userSettings = await _dbContext.GetUserSettingsAsync();
+        EmailAddress = userSettings?.EmailAddress ?? string.Empty;
     }
 
     [RelayCommand]
@@ -186,6 +198,8 @@ public partial class DeviceDetailViewModel : ObservableObject
                 DeviceState = twin.Properties.Reported.Contains("deviceState")
                     ? (bool)twin.Properties.Reported["deviceState"] ? "On" : "Off"
                     : "Unknown";
+
+                SaveDeviceSettingsToDatabase(twin);
             }
             else
             {
@@ -197,6 +211,31 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             ResponseMessage = $"Unable to load the device details. Please check if the device is online and try again.";
             Debug.WriteLine($"Error in LoadDeviceDetailsAsync: {ex.Message}");
+        }
+    }
+
+    private async void SaveDeviceSettingsToDatabase(Twin twin)
+    {
+        var deviceSettings = await _dbContext.GetDeviceSettingsAsync(DeviceId);
+        if (deviceSettings == null)
+        {
+            deviceSettings = new DeviceSettings
+            {
+                DeviceId = DeviceId,
+                DeviceType = twin.Properties.Reported["deviceType"]?.ToString(),
+                DeviceName = twin.Properties.Reported["deviceName"]?.ToString(),
+                LastActivityTime = twin.LastActivityTime.HasValue ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : null,
+                DeviceState = twin.Properties.Reported.Contains("deviceState") && (bool)twin.Properties.Reported["deviceState"]
+            };
+            await _dbContext.SaveDeviceSettingsAsync(deviceSettings);
+        }
+        else
+        {
+            deviceSettings.DeviceType = twin.Properties.Reported["deviceType"]?.ToString();
+            deviceSettings.DeviceName = twin.Properties.Reported["deviceName"]?.ToString();
+            deviceSettings.LastActivityTime = twin.LastActivityTime.HasValue ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : null;
+            deviceSettings.DeviceState = twin.Properties.Reported.Contains("deviceState") && (bool)twin.Properties.Reported["deviceState"];
+            await _dbContext.SaveDeviceSettingsAsync(deviceSettings);
         }
     }
 

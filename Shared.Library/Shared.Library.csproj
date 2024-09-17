@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="azure.communication.email" Version="1.0.1" />
     <PackageReference Include="microsoft.azure.devices" Version="1.39.1" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
   </ItemGroup>
 
 </Project>

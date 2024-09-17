@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Azure.Devices.Shared;
-using System.Collections.ObjectModel;
 using Shared.Library.Services;
-using CommunityToolkit.Mvvm.Messaging;
+using System.Collections.ObjectModel;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
