@@ -120,17 +120,21 @@ namespace Shared.Library.Services
 
                 var twin = new Twin
                 {
-                    Properties = { Desired = { ["deviceType"] = deviceType } }
+                    Properties =
+                    {
+                        Desired =
+                        {
+                            ["deviceType"] = deviceType,
+                            ["connectionState"] = false,
+                            ["deviceName"] = $"IoT-{deviceType}",
+                            ["deviceState"] = false
+                        }
+                    }
                 };
                 await _registryManager.UpdateTwinAsync(deviceId, twin, "*");
                 Console.WriteLine($"Device twin for {deviceId} updated with device type {deviceType}.");
 
                 return true;
-            }
-            catch (DeviceAlreadyExistsException)
-            {
-                Console.WriteLine($"Device {deviceId} already exists.");
-                return false;
             }
             catch (Exception ex)
             {
