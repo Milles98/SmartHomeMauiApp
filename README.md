@@ -56,15 +56,11 @@ The project file for the shared library. It includes common services and utiliti
 - `Microsoft.Extensions.Logging.Debug` (v8.0.0)
 - `sqlite-net-pcl` (v1.9.172)
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any changes.
+Contributions are not welcome (yet)! This is a school assignment.
 
 ## Contact
 
-For any questions or feedback, please contact [your-email@example.com](mailto:your-email@example.com).
+For any questions or feedback, please contact [mille.elfver98@gmail.com](mailto:mille.elfver98@gmail.com).
     
