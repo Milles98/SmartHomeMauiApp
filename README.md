@@ -1,71 +1,70 @@
-SmartHome Maui App
-SmartHome Maui App is a cross-platform mobile application designed to manage and control smart home IoT devices using Azure IoT services. Built with .NET MAUI, this app provides a seamless experience across iOS, Android, Windows, and macOS platforms.
+# SmartHomeMauiApp
 
-Table of Contents
-Features
-Project Structure
-Dependencies
-Getting Started
-Usage
-Contributing
-License
-Features
-Device Management: Manage and control various IoT devices connected to Azure IoT Hub.
-MVVM Architecture: Implements the Model-View-ViewModel pattern for maintainable and testable code.
-Azure IoT Integration: Provides secure and reliable communication with Azure IoT Hub for device management.
-SQLite Database: Uses SQLite for local data storage, including user settings, IoT Hub configurations, and device data.
-Cross-Platform: Built with .NET MAUI to support iOS, Android, Windows, and macOS from a single codebase.
-User Notifications: Sends and receives notifications for device status changes and errors.
-Project Structure
-The project is organized into several folders:
+SmartHomeMauiApp is a cross-platform application built using .NET MAUI. It supports Android, iOS, MacCatalyst, and Windows platforms. The app is designed to manage smart home devices and integrates with Azure IoT Hub.
 
-MVVM: Contains the Models, Views, and ViewModels for the application.
-Models: Defines the data models such as UserSettings, IoTHubSettings, and DeviceSettings.
-Views: XAML files defining the user interface of the application (e.g., MainPage, DeviceDetailPage, SettingsPage, HistoryPage).
-ViewModels: Classes that handle the binding of data models to views (e.g., MainViewModel, DeviceDetailViewModel, SettingsViewModel, HistoryViewModel).
-Database: Contains the SQLite database context and data access methods.
-DbContext.cs: Manages the SQLite connection and provides methods for CRUD operations.
-Services: Contains service classes for managing business logic and communication with Azure IoT Hub.
-DeviceManager.cs: Handles device-related operations such as connecting, disconnecting, and invoking methods on IoT devices.
-Resources: Contains application resources such as fonts, images, and styles.
-Dependencies
-The project relies on the following NuGet packages:
+## Project Structure
 
-CommunityToolkit.Mvvm - Provides MVVM utilities for .NET applications.
-Microsoft.Maui.Essentials - Provides cross-platform APIs for native device features.
-Microsoft.Data.Sqlite - A lightweight SQLite database engine for local data storage.
-Microsoft.Azure.Devices.Client - Azure IoT Hub client library for secure device communication.
-Getting Started
-Prerequisites
-.NET 8.0 SDK or later
-Visual Studio 2022 with the .NET MAUI workload installed
-An Azure IoT Hub instance
-Installation
-Clone the repository:
-git clone https://github.com/your-username/SmartHomeMauiApp.git
-cd SmartHomeMauiApp
-Open the solution: Open SmartHomeMauiApp.sln in Visual Studio.
+- **SmartHomeMauiApp**: The main project containing the application code.
+- **Shared.Library**: A shared library project containing common services and utilities used by the main application.
 
-Restore NuGet packages: Visual Studio will automatically restore all NuGet packages on build.
+## Prerequisites
 
-Configure Azure IoT Hub: Update the IoT Hub connection string in MauiProgram.cs or set it dynamically through the app's settings page.
+- .NET 8.0 SDK
+- Visual Studio 2022 (or later) with .NET MAUI workload installed
 
-Usage
-To run the application, start the project from Visual Studio. The application will initialize, connect to the IoT Hub, and display the main page.
+## Getting Started
 
-Main Components
-MainPage.xaml: Displays the list of devices and allows navigation to the device detail, settings, or history pages.
-DeviceDetailPage.xaml: Shows detailed information about a selected device and allows for controlling its state.
-SettingsPage.xaml: Allows the user to update and save IoT Hub connection settings and user information.
-HistoryPage.xaml: Displays the history of device interactions, settings changes, and IoT Hub activity.
-Contributing
-Contributions are welcome! Please follow these steps:
+1. **Clone the repository**:
 
-Fork the repository.
-Create a new feature branch (git checkout -b feature/your-feature).
-Commit your changes (git commit -m 'Add some feature').
-Push to the branch (git push origin feature/your-feature).
-Open a pull request.
-License
-Distributed under the MIT License. See LICENSE for more information.
+- git clone https://github.com/your-repo/SmartHomeMauiApp.git
+- cd SmartHomeMauiApp
 
+2. **Restore NuGet packages**:
+
+- dotnet restore
+
+3. **Build the solution**:
+
+- dotnet build
+
+4. **Run the application**:
+    - For Android:
+
+- dotnet build -t:Run -f net8.0-android
+
+    - For Windows:
+ 
+- dotnet build -t:Run -f net8.0-windows10.0.19041.0
+
+## Project Configuration
+
+### SmartHomeMauiApp.csproj
+
+The main project file for the SmartHomeMauiApp. It includes configurations for different target frameworks, package references, and other project settings.
+
+### Shared.Library.csproj
+
+The project file for the shared library. It includes common services and utilities used by the main application.
+
+## Dependencies
+
+- `azure.communication.email` (v1.0.1)
+- `CommunityToolkit.Mvvm` (v8.2.2)
+- `Microsoft.Azure.Devices.Shared` (v1.30.4)
+- `Microsoft.Maui.Controls`
+- `Microsoft.Maui.Controls.Compatibility`
+- `Microsoft.Extensions.Logging.Debug` (v8.0.0)
+- `sqlite-net-pcl` (v1.9.172)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any changes.
+
+## Contact
+
+For any questions or feedback, please contact [your-email@example.com](mailto:your-email@example.com).
+    
