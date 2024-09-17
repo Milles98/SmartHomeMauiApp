@@ -37,6 +37,15 @@
                     </Button.Shadow>
                 </Button>
 
+                <Label Text="{Binding ResponseMessage}"
+                       FontSize="Medium"
+                       TextColor="Red"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       Margin="0,10,0,10"
+                       IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+
+
                 <CollectionView Grid.Row="1"
                                 ItemsSource="{Binding Devices}"
                                 SelectionMode="Single"

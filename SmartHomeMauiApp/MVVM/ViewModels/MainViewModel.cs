@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Azure.Devices.Shared;
 using Shared.Library.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -16,6 +17,18 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private Twin _selectedDevice;
 
+    [ObservableProperty]
+    private string _responseMessage;
+
+    public MainViewModel(DeviceManager deviceManager)
+    {
+        _deviceManager = deviceManager;
+
+        ResponseMessage = string.Empty;
+
+        Task.Run(SetDevicesAsync);
+    }
+
     public async Task SetDevicesAsync()
     {
         var response = await _deviceManager.GetDevicesAsync("SELECT * FROM devices");
@@ -26,10 +39,8 @@ public partial class MainViewModel : ObservableObject
         }
         else
         {
-            await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                response.Message ?? "Failed to retrieve devices.",
-                "OK");
+            ResponseMessage = "Failed to retrieve devices.";
+            Debug.WriteLine($"Error in SetDevicesAsync: {response.Message}");
         }
     }
 
@@ -74,12 +85,5 @@ public partial class MainViewModel : ObservableObject
     private async Task NavigateToAddDeviceAsync()
     {
         await Shell.Current.GoToAsync("///AddDevicePage");
-    }
-
-    public MainViewModel(DeviceManager deviceManager)
-    {
-        _deviceManager = deviceManager;
-
-        Task.Run(SetDevicesAsync);
     }
 }

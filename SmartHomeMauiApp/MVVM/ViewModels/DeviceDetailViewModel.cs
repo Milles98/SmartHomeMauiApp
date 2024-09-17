@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Shared;
 using Shared.Library.Services;
+using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -37,6 +38,9 @@ public partial class DeviceDetailViewModel : ObservableObject
     [ObservableProperty]
     private string _emailAddress;
 
+    [ObservableProperty]
+    private string _responseMessage;
+
     private System.Timers.Timer _updateTimer;
 
     public bool IsRemoveDeviceVisible =>
@@ -48,6 +52,8 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         _deviceManager = deviceManager;
         _mainViewModel = mainViewModel;
+
+        ResponseMessage = string.Empty;
 
         _updateTimer = new System.Timers.Timer(5000);
         _updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
@@ -83,10 +89,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             if (ConnectionState.ToLower() != "true")
             {
-                await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    "Failed to toggle device state. Make sure the device is connected and running.",
-                    "OK");
+                ResponseMessage = "Failed to toggle device state. Make sure the device is connected and running.";
                 return;
             }
 
@@ -95,10 +98,8 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             if (!response.Succeeded || response.Content is not CloudToDeviceMethodResult result || result.Status != 200)
             {
-                await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    response.Message ?? "Failed to toggle device state. Make sure the device is connected and running.",
-                    "OK");
+                ResponseMessage = "Failed to toggle device state. Make sure the device is connected and running.";
+                Debug.WriteLine($"Error in ToggleStateAsync: {response.Message}");
                 return;
             }
 
@@ -106,10 +107,8 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                $"Failed to toggle device state: {ex.Message}",
-                "OK");
+            ResponseMessage = "Unable to toggle the device state. Please check if the device is online and try again.";
+            Debug.WriteLine($"Error in ToggleStateAsync: {ex.Message}");
         }
     }
 
@@ -126,18 +125,14 @@ public partial class DeviceDetailViewModel : ObservableObject
             }
             else
             {
-                await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    response.Message ?? "Failed to connect the device. Make sure the device is reachable.",
-                    "OK");
+                ResponseMessage = "Failed to connect the device. Make sure the device is reachable.";
+                Debug.WriteLine($"Error in ConnectAsync: {response.Message}");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                $"Failed to connect the device: {ex.Message}",
-                "OK");
+            ResponseMessage = "Unable to connect to the device. Please check if the device is online and try again.";
+            Debug.WriteLine($"Error in ConnectAsync: {ex.Message}");
         }
     }
 
@@ -154,18 +149,14 @@ public partial class DeviceDetailViewModel : ObservableObject
             }
             else
             {
-                await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    response.Message ?? "Failed to disconnect the device. Make sure the device is reachable.",
-                    "OK");
+                ResponseMessage = "Failed to disconnect the device. Make sure the device is reachable.";
+                Debug.WriteLine($"Error in DisconnectAsync: {response.Message}");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                $"Failed to disconnect the device: {ex.Message}",
-                "OK");
+            ResponseMessage = "Unable to disconnect the device. Please check if the device is online and try again.";
+            Debug.WriteLine($"Error in DisconnectAsync: {ex.Message}");
         }
     }
 
@@ -198,61 +189,57 @@ public partial class DeviceDetailViewModel : ObservableObject
             }
             else
             {
-                await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    response.Message ?? "Failed to load device details.",
-                    "OK");
+                ResponseMessage = "Failed to load device details.";
+                Debug.WriteLine($"Error in LoadDeviceDetailsAsync: {response.Message}");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                $"Error fetching device details: {ex.Message}",
-                "OK");
+            ResponseMessage = $"Unable to load the device details. Please check if the device is online and try again.";
+            Debug.WriteLine($"Error in LoadDeviceDetailsAsync: {ex.Message}");
         }
     }
 
     [RelayCommand]
     private async Task RemoveDeviceAsync()
     {
-        if (string.IsNullOrWhiteSpace(EmailAddress))
+        try
         {
-            await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                "No email address registered. Cannot remove device.",
-                "OK");
-            return;
-        }
+            if (string.IsNullOrWhiteSpace(EmailAddress))
+            {
+                ResponseMessage = "No email address registered. Cannot remove device.";
+                return;
+            }
 
-        var confirmed = await Application.Current!.MainPage!.DisplayAlert(
-            "Confirm",
-            "Are you sure you want to remove this device?",
-            "Yes",
-            "No");
+            var confirmed = await Application.Current!.MainPage!.DisplayAlert(
+                "Confirm",
+                "Are you sure you want to remove this device?",
+                "Yes",
+                "No");
 
-        if (confirmed)
-        {
+            if (!confirmed)
+            {
+                return;
+            }
+
             var response = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
 
-            if (response.Succeeded)
+            if (!response.Succeeded)
             {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Success",
-                    response.Message ?? $"Device {DeviceId} removed successfully.",
-                    "OK");
-
-                await _mainViewModel.SetDevicesAsync();
-
-                await Shell.Current.GoToAsync($"///MainPage");
+                ResponseMessage = $"Failed to remove device {DeviceId}.";
+                Debug.WriteLine($"Error in RemoveDeviceAsync: {response.Message}");
+                return;
             }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    response.Message ?? $"Failed to remove device {DeviceId}.",
-                    "OK");
-            }
+
+            ResponseMessage = response.Message ?? $"Device {DeviceId} removed successfully.";
+            await _mainViewModel.SetDevicesAsync();
+            await Shell.Current.GoToAsync($"///MainPage");
+        }
+        catch (Exception ex)
+        {
+            ResponseMessage = "Unable to remove the device. Please check the device status and try again.";
+            Debug.WriteLine($"Error in RemoveDeviceAsync: {ex.Message}");
         }
     }
+
 }
