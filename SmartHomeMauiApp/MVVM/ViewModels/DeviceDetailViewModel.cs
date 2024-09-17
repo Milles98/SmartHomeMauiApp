@@ -79,9 +79,47 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var newState = DeviceState == "On" ? "stop" : "start";
+            if (ConnectionState.ToLower() == "true")
+            {
+                var newState = DeviceState == "On" ? "stop" : "start";
 
-            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
+                var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
+
+                if (result != null && result.Status == 200)
+                {
+                    await LoadDeviceDetailsAsync(DeviceId);
+                }
+                else
+                {
+                    await Application.Current!.MainPage!.DisplayAlert(
+                        "Error",
+                        "Failed to toggle device state. Make sure the device is connected and running.",
+                        "OK");
+                }
+            }
+            else
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                "Failed to toggle device state. Make sure the device is connected and running.",
+                "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                $"Failed to toggle device state: {ex.Message}",
+                "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task ConnectAsync()
+    {
+        try
+        {
+            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "connect");
 
             if (result != null && result.Status == 200)
             {
@@ -91,7 +129,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             {
                 await Application.Current!.MainPage!.DisplayAlert(
                     "Error",
-                    "Failed to toggle device state. Make sure the device is connected and running.",
+                    "Failed to connect the device. Make sure the device is reachable.",
                     "OK");
             }
         }
@@ -99,7 +137,35 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             await Application.Current!.MainPage!.DisplayAlert(
                 "Error",
-                $"Failed to toggle device state: {ex.Message}",
+                $"Failed to connect the device: {ex.Message}",
+                "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DisconnectAsync()
+    {
+        try
+        {
+            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
+
+            if (result != null && result.Status == 200)
+            {
+                await LoadDeviceDetailsAsync(DeviceId);
+            }
+            else
+            {
+                await Application.Current!.MainPage!.DisplayAlert(
+                    "Error",
+                    "Failed to disconnect the device. Make sure the device is reachable.",
+                    "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                $"Failed to disconnect the device: {ex.Message}",
                 "OK");
         }
     }
