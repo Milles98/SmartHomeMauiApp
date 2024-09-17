@@ -79,20 +79,30 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var newState = DeviceState == "On" ? "stop" : "start";
-
-            var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
-
-            if (result != null && result.Status == 200)
+            if (ConnectionState == "true")
             {
-                await LoadDeviceDetailsAsync(DeviceId);
+                var newState = DeviceState == "On" ? "stop" : "start";
+
+                var result = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
+
+                if (result != null && result.Status == 200)
+                {
+                    await LoadDeviceDetailsAsync(DeviceId);
+                }
+                else
+                {
+                    await Application.Current!.MainPage!.DisplayAlert(
+                        "Error",
+                        "Failed to toggle device state. Make sure the device is connected and running.",
+                        "OK");
+                }
             }
             else
             {
                 await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    "Failed to toggle device state. Make sure the device is connected and running.",
-                    "OK");
+                "Error",
+                "Failed to toggle device state. Make sure the device is connected and running.",
+                "OK");
             }
         }
         catch (Exception ex)
