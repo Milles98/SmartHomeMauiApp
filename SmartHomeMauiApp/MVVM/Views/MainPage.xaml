@@ -94,8 +94,9 @@
 
                                     <Button Grid.Row="0"
                                             Grid.Column="1"
-                                            Text="Details"
-                                            FontSize="14"
+                                            Text="&#xf05a;"
+                                            FontFamily="fa-solid"
+                                            FontSize="18"
                                             FontAttributes="Bold"
                                             BackgroundColor="#6f42c1"
                                             TextColor="White"
