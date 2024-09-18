@@ -48,7 +48,7 @@ public partial class AddDeviceViewModel : ObservableObject
             if (response.Succeeded)
             {
                 ResponseMessage = response.Message ?? "Device added successfully.";
-                await _mainViewModel.SetDevicesAsync();
+                await _mainViewModel.LoadDevicesAsync();
                 await Shell.Current.GoToAsync("//MainPage");
             }
             else

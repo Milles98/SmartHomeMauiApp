@@ -30,10 +30,10 @@ public partial class MainViewModel : ObservableObject
 
         ResponseMessage = string.Empty;
 
-        Task.Run(SetDevicesAsync);
+        Task.Run(LoadDevicesAsync);
     }
 
-    public async Task SetDevicesAsync()
+    public async Task LoadDevicesAsync()
     {
         var response = await _deviceManager.GetDevicesAsync("SELECT * FROM devices");
 
