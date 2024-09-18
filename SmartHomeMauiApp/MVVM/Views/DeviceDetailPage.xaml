@@ -3,108 +3,116 @@
              x:Class="SmartHomeMauiApp.MVVM.Views.DeviceDetailPage"
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
              x:DataType="{x:Type viewModels:DeviceDetailViewModel}"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="Transparent">
 
-    <ScrollView>
-        <Grid RowDefinitions="auto, auto"
-              Margin="30">
+    <Grid RowDefinitions="auto, *">
 
-            <Button Grid.Row="0"
-                    Text="&#xf015;"
-                    FontSize="18"
-                    FontFamily="fa-solid"
-                    Margin="25,0,0,0"
-                    BackgroundColor="#6f42c1"
-                    TextColor="White"
-                    Command="{Binding NavigateHomeCommand}"
-                    HorizontalOptions="Start">
-                <Button.Shadow>
-                    <Shadow Brush="Black"
-                            Offset="2,2"
-                            Opacity="0.4" />
-                </Button.Shadow>
-            </Button>
+        <Image Grid.Row="0"
+               Grid.RowSpan="2"
+               Source="maui_background.png"
+               Aspect="AspectFill"
+               Opacity="0.2"
+               IsEnabled="False" />
 
-            <StackLayout Grid.Row="1"
-                         Padding="20">
+        <Button Grid.Row="0"
+                Text="&#xf015;"
+                FontSize="18"
+                FontFamily="fa-solid"
+                Margin="40,40,0,0"
+                BackgroundColor="#6f42c1"
+                TextColor="White"
+                Command="{Binding NavigateHomeCommand}"
+                HorizontalOptions="Start"
+                VerticalOptions="Start">
+            <Button.Shadow>
+                <Shadow Brush="Black"
+                        Offset="2,2"
+                        Opacity="0.4" />
+            </Button.Shadow>
+        </Button>
 
-                <Label Text="Device ID:"
-                       FontAttributes="Bold"
-                       Margin="10,0,0,0" />
-                <Label Text="{Binding DeviceId}"
-                       FontAttributes="Italic"
-                       Margin="10, 0, 0, 10" />
+        <ScrollView Grid.Row="1">
+            <Grid Padding="20">
+                <StackLayout Padding="20">
 
-                <Label Text="Device Name:"
-                       FontAttributes="Bold"
-                       Margin="10,0,0,0" />
-                <Label Text="{Binding DeviceName}"
-                       FontAttributes="Italic"
-                       Margin="10, 0, 0, 10" />
+                    <Label Text="Device ID:"
+                           FontAttributes="Bold"
+                           Margin="10,0,0,0" />
+                    <Label Text="{Binding DeviceId}"
+                           FontAttributes="Italic"
+                           Margin="10, 0, 0, 10" />
 
-                <Label Text="Device Type:"
-                       FontAttributes="Bold"
-                       Margin="10,0,0,0" />
-                <Label Text="{Binding DeviceType}"
-                       FontAttributes="Italic"
-                       Margin="10, 0, 0, 10" />
+                    <Label Text="Device Name:"
+                           FontAttributes="Bold"
+                           Margin="10,0,0,0" />
+                    <Label Text="{Binding DeviceName}"
+                           FontAttributes="Italic"
+                           Margin="10, 0, 0, 10" />
 
-                <Label Text="Connection State:"
-                       FontAttributes="Bold"
-                       Margin="10,0,0,0" />
-                <Label Text="{Binding ConnectionState}"
-                       FontAttributes="Italic"
-                       Margin="10, 0, 0, 10" />
+                    <Label Text="Device Type:"
+                           FontAttributes="Bold"
+                           Margin="10,0,0,0" />
+                    <Label Text="{Binding DeviceType}"
+                           FontAttributes="Italic"
+                           Margin="10, 0, 0, 10" />
 
-                <Label Text="Last Activity Time:"
-                       FontAttributes="Bold"
-                       Margin="10,0,0,0" />
-                <Label Text="{Binding LastActivityTime}"
-                       FontAttributes="Italic"
-                       Margin="10, 0, 0, 10" />
+                    <Label Text="Connection State:"
+                           FontAttributes="Bold"
+                           Margin="10,0,0,0" />
+                    <Label Text="{Binding ConnectionState}"
+                           FontAttributes="Italic"
+                           Margin="10, 0, 0, 10" />
 
-                <Label Text="Device State:"
-                       FontAttributes="Bold"
-                       Margin="10,0,0,0" />
-                <Label Text="{Binding DeviceState}"
-                       FontAttributes="Italic"
-                       Margin="10, 0, 0, 10" />
+                    <Label Text="Last Activity Time:"
+                           FontAttributes="Bold"
+                           Margin="10,0,0,0" />
+                    <Label Text="{Binding LastActivityTime}"
+                           FontAttributes="Italic"
+                           Margin="10, 0, 0, 10" />
 
-                <Button Text="Toggle Device State"
-                        Command="{Binding ToggleStateCommand}"
-                        BackgroundColor="#6f42c1"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0" />
+                    <Label Text="Device State:"
+                           FontAttributes="Bold"
+                           Margin="10,0,0,0" />
+                    <Label Text="{Binding DeviceState}"
+                           FontAttributes="Italic"
+                           Margin="10, 0, 0, 10" />
 
-                <Button Text="Connect"
-                        Command="{Binding ConnectCommand}"
-                        BackgroundColor="#3365b5"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0" />
+                    <Button Text="Toggle Device State"
+                            Command="{Binding ToggleStateCommand}"
+                            BackgroundColor="#6f42c1"
+                            TextColor="White"
+                            Margin="10, 20, 10, 0" />
 
-                <Button Text="Disconnect"
-                        Command="{Binding DisconnectCommand}"
-                        BackgroundColor="#FF6347"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0" />
+                    <Button Text="Connect"
+                            Command="{Binding ConnectCommand}"
+                            BackgroundColor="#3365b5"
+                            TextColor="White"
+                            Margin="10, 20, 10, 0" />
 
-                <Button Text="Remove Device"
-                        Command="{Binding RemoveDeviceCommand}"
-                        BackgroundColor="#541818"
-                        TextColor="White"
-                        Margin="10, 20, 10, 0"
-                        IsVisible="{Binding IsRemoveDeviceVisible}" />
+                    <Button Text="Disconnect"
+                            Command="{Binding DisconnectCommand}"
+                            BackgroundColor="#FF6347"
+                            TextColor="White"
+                            Margin="10, 20, 10, 0" />
 
-                <Label Text="{Binding ResponseMessage}"
-                       FontSize="Medium"
-                       TextColor="Red"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       Margin="0,20,0,0"
-                       IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+                    <Button Text="Remove Device"
+                            Command="{Binding RemoveDeviceCommand}"
+                            BackgroundColor="#541818"
+                            TextColor="White"
+                            Margin="10, 20, 10, 0"
+                            IsVisible="{Binding IsRemoveDeviceVisible}" />
 
-            </StackLayout>
+                    <Label Text="{Binding ResponseMessage}"
+                           FontSize="Medium"
+                           TextColor="Red"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="0,20,0,0"
+                           IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
 
-        </Grid>
-    </ScrollView>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </Grid>
 </ContentPage>
