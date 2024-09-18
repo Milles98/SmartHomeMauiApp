@@ -7,7 +7,6 @@ public class DeviceSettings
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    [Unique]
     public string? DeviceId { get; set; }
     public string? DeviceType { get; set; }
     public string? DeviceName { get; set; }

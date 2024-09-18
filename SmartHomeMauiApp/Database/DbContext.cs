@@ -44,9 +44,15 @@ public class DbContext
 
     public Task<int> SaveIoTHubSettingsAsync(IoTHubSettings ioTHubSettings)
     {
-        return ioTHubSettings.Id != 0 ?
-            _database.UpdateAsync(ioTHubSettings) :
-            _database.InsertAsync(ioTHubSettings);
+        var existingIoTHubSettings = _database.Table<IoTHubSettings>().FirstOrDefaultAsync().Result;
+
+        if (existingIoTHubSettings != null)
+        {
+            ioTHubSettings.Id = existingIoTHubSettings.Id;
+            return _database.UpdateAsync(ioTHubSettings);
+        }
+
+        return _database.InsertAsync(ioTHubSettings);
     }
 
     public Task<DeviceSettings> GetDeviceSettingsAsync(string deviceId)
@@ -59,11 +65,19 @@ public class DbContext
         return _database.Table<DeviceSettings>().ToListAsync();
     }
 
-    public Task<int> SaveDeviceSettingsAsync(DeviceSettings deviceSettings)
+    public async Task<int> SaveDeviceSettingsAsync(DeviceSettings deviceSettings)
     {
-        return deviceSettings.Id != 0 ?
-            _database.UpdateAsync(deviceSettings) :
-            _database.InsertAsync(deviceSettings);
+        var existingDevice = await _database.Table<DeviceSettings>()
+                                        .Where(d => d.DeviceId == deviceSettings.DeviceId)
+                                        .FirstOrDefaultAsync();
+
+        if (existingDevice != null)
+        {
+            deviceSettings.Id = existingDevice.Id;
+            return await _database.UpdateAsync(deviceSettings);
+        }
+
+        return await _database.InsertAsync(deviceSettings);
     }
 
     public async Task SeedDataAsync(string defaultEmail, string defaultConnectionString)
