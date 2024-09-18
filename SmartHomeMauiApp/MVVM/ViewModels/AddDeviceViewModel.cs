@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Shared.Library.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -40,17 +41,25 @@ public partial class AddDeviceViewModel : ObservableObject
             return;
         }
 
-        var response = await _deviceManager.AddDeviceAsync(DeviceId, SelectedDeviceType);
+        try
+        {
+            var response = await _deviceManager.AddDeviceAsync(DeviceId, SelectedDeviceType);
 
-        if (response.Succeeded)
-        {
-            ResponseMessage = response.Message ?? "Device added successfully.";
-            await _mainViewModel.SetDevicesAsync();
-            await Shell.Current.GoToAsync("//MainPage");
+            if (response.Succeeded)
+            {
+                ResponseMessage = response.Message ?? "Device added successfully.";
+                await _mainViewModel.SetDevicesAsync();
+                await Shell.Current.GoToAsync("//MainPage");
+            }
+            else
+            {
+                ResponseMessage = "Failed to add the device. It may already exist.";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            ResponseMessage = response.Message ?? "Failed to add the device. It may already exist.";
+            ResponseMessage = $"An error occurred: {ex.Message}";
+            Debug.WriteLine($"Error in AddDeviceAsync: {ex}");
         }
     }
 
