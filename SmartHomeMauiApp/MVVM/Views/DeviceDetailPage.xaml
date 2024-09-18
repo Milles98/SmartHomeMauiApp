@@ -4,7 +4,7 @@
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
              x:DataType="{x:Type viewModels:DeviceDetailViewModel}"
              NavigationPage.HasNavigationBar="False"
-             BackgroundColor="Transparent">
+             BackgroundColor="#0f0f0f">
 
     <Grid RowDefinitions="auto, *">
 

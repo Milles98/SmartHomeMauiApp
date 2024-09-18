@@ -181,11 +181,13 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             if (response.Succeeded && response.Content is Twin twin)
             {
-                ConnectionState = twin.Properties.Reported.Contains("connectionState") ?
-                    twin.Properties.Reported["connectionState"].ToString() : "Unknown";
+                ConnectionState = twin.Properties.Reported.Contains("connectionState")
+                ? twin.Properties.Reported["connectionState"].ToString()
+                : "Unknown";
 
-                DeviceName = twin.Properties.Reported.Contains("deviceName") ?
-                    twin.Properties.Reported["deviceName"].ToString() : "Unknown";
+                DeviceName = twin.Properties.Reported.Contains("deviceName")
+                    ? twin.Properties.Reported["deviceName"].ToString()
+                    : "Unknown";
 
                 LastActivityTime = twin.LastActivityTime.HasValue
                     ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
@@ -222,8 +224,8 @@ public partial class DeviceDetailViewModel : ObservableObject
             deviceSettings = new DeviceSettings
             {
                 DeviceId = DeviceId,
-                DeviceType = twin.Properties.Reported["deviceType"]?.ToString(),
-                DeviceName = twin.Properties.Reported["deviceName"]?.ToString(),
+                DeviceType = twin.Properties.Reported.Contains("deviceType") ? twin.Properties.Reported["deviceType"]?.ToString() : "Unknown",
+                DeviceName = twin.Properties.Reported.Contains("deviceName") ? twin.Properties.Reported["deviceName"]?.ToString() : "Unknown",
                 LastActivityTime = twin.LastActivityTime.HasValue ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : null,
                 DeviceState = twin.Properties.Reported.Contains("deviceState") && (bool)twin.Properties.Reported["deviceState"]
             };
@@ -231,8 +233,8 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
         else
         {
-            deviceSettings.DeviceType = twin.Properties.Reported["deviceType"]?.ToString();
-            deviceSettings.DeviceName = twin.Properties.Reported["deviceName"]?.ToString();
+            deviceSettings.DeviceType = twin.Properties.Reported.Contains("deviceType") ? twin.Properties.Reported["deviceType"]?.ToString() : "Unknown";
+            deviceSettings.DeviceName = twin.Properties.Reported.Contains("deviceName") ? twin.Properties.Reported["deviceName"]?.ToString() : "Unknown";
             deviceSettings.LastActivityTime = twin.LastActivityTime.HasValue ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : null;
             deviceSettings.DeviceState = twin.Properties.Reported.Contains("deviceState") && (bool)twin.Properties.Reported["deviceState"];
             await _dbContext.SaveDeviceSettingsAsync(deviceSettings);
