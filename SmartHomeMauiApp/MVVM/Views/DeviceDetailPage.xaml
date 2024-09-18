@@ -34,9 +34,11 @@
 
         <ScrollView Grid.Row="1">
             <Grid Padding="20">
-                <StackLayout Padding="20">
+                <StackLayout Padding="20"
+                             HorizontalOptions="Center">
 
                     <Label Text="Device ID:"
+                           FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceId}"
@@ -44,6 +46,7 @@
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Device Name:"
+                           FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceName}"
@@ -51,6 +54,7 @@
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Device Type:"
+                           FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceType}"
@@ -58,6 +62,7 @@
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Connection State:"
+                           FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding ConnectionState}"
@@ -65,6 +70,7 @@
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Last Activity Time:"
+                           FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding LastActivityTime}"
@@ -72,6 +78,7 @@
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Device State:"
+                           FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceState}"
@@ -82,7 +89,6 @@
                             Command="{Binding ToggleStateCommand}"
                             BackgroundColor="#6f42c1"
                             MinimumWidthRequest="200"
-                            HorizontalOptions="Start"
                             TextColor="White"
                             Margin="10, 20, 10, 0" />
 
@@ -90,7 +96,6 @@
                             Command="{Binding ConnectCommand}"
                             BackgroundColor="#3365b5"
                             MinimumWidthRequest="200"
-                            HorizontalOptions="Start"
                             TextColor="White"
                             Margin="10, 20, 10, 0" />
 
@@ -98,7 +103,6 @@
                             Command="{Binding DisconnectCommand}"
                             BackgroundColor="#FF6347"
                             MinimumWidthRequest="200"
-                            HorizontalOptions="Start"
                             TextColor="White"
                             Margin="10, 20, 10, 0" />
 
@@ -106,7 +110,6 @@
                             Command="{Binding RemoveDeviceCommand}"
                             BackgroundColor="#541818"
                             MinimumWidthRequest="200"
-                            HorizontalOptions="Start"
                             TextColor="White"
                             Margin="10, 20, 10, 0"
                             IsVisible="{Binding IsRemoveDeviceVisible}" />
