@@ -1,46 +1,104 @@
 ﻿using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Devices;
-using Microsoft.Azure.Devices.Common.Exceptions;
-using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
 using Shared.Library.Models;
+using Shared.Library.Models.IotResources;
 using System.Diagnostics;
 
 namespace Shared.Library.Services;
 
 public class DeviceManager
 {
-    private RegistryManager _registryManager;
-    private ServiceClient _serviceClient;
-    private string _connectionString;
+    private readonly string? _connectionString;
+    private RegistryManager? _registryManager;
+    private ServiceClient? _serviceClient;
 
-    public DeviceManager(string connectionString)
+    public DeviceManager(string? connectionString)
     {
-        UpdateConnectionString(connectionString);
+        _connectionString = connectionString;
+        UpdateConnectionString(_connectionString!);
     }
+
+
+    //Hans kod under
+    public bool Disconnect()
+    {
+        try
+        {
+            _registryManager!.Dispose();
+            _serviceClient!.Dispose();
+
+            if (_registryManager == null && _serviceClient == null)
+                return true;
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error disconnecting: {ex.Message}");
+            return false;
+        }
+    }
+
+    public async Task<DeviceInstance> RegisterDeviceAsync(string deviceId, string deviceName)
+    {
+        if (string.IsNullOrEmpty(deviceId))
+            return null!;
+
+        var deviceInstance = new DeviceInstance
+        {
+            Device = await _registryManager!.GetDeviceAsync(deviceId) ?? await _registryManager.AddDeviceAsync(new Device(deviceId))
+        };
+
+        await UpdateDesiredPropertyAsync(deviceInstance.Device, nameof(deviceName), deviceName);
+
+        deviceInstance.ConnectionString = GetDeviceConnectionString(deviceInstance.Device);
+        deviceInstance.Twin = (await _registryManager.GetTwinAsync(deviceInstance.Device.Id));
+
+        return deviceInstance;
+    }
+
+    public string GetDeviceConnectionString(Device device)
+    {
+        var deviceConnectionString = $"{_connectionString!.Split(";")[0]};DeviceId={device.Id};SharedAccessKey={device.Authentication.SymmetricKey.PrimaryKey}";
+        return deviceConnectionString ?? null!;
+    }
+
+    public async Task<bool> UpdateDesiredPropertyAsync(Device device, string key, string value)
+    {
+        try
+        {
+            var twin = await _registryManager!.GetTwinAsync(device.Id);
+            twin.Properties.Desired[key] = value;
+
+            await _registryManager.UpdateTwinAsync(device.Id, twin, twin.ETag);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error updating desired property: {ex.Message}");
+            return false;
+        }
+    }
+    //Hans kod ovantill
 
     public void UpdateConnectionString(string connectionString)
     {
-        _connectionString = connectionString;
         _registryManager = RegistryManager.CreateFromConnectionString(connectionString);
         _serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
 
         if (_serviceClient == null || _registryManager == null)
-        {
             Debug.WriteLine("Error: ServiceClient or RegistryManager is not initialized.");
-        }
         else
-        {
             Debug.WriteLine("ServiceClient and RegistryManager are initialized successfully.");
-        }
     }
 
     public async Task<ResponseResult> GetDevicesAsync(string query)
     {
         try
         {
-            var q = _registryManager.CreateQuery(query);
+            var q = _registryManager?.CreateQuery(query);
             var devices = await q.GetNextAsTwinAsync();
             return new ResponseResult { Succeeded = true, Content = devices };
         }
@@ -54,7 +112,7 @@ public class DeviceManager
     {
         try
         {
-            var twin = await _registryManager.GetTwinAsync(deviceId);
+            var twin = await _registryManager!.GetTwinAsync(deviceId);
             return new ResponseResult { Succeeded = true, Content = twin };
         }
         catch (Exception ex)
@@ -77,7 +135,7 @@ public class DeviceManager
                 cloudMethod.SetPayloadJson(JsonConvert.SerializeObject(payload));
             }
 
-            var result = await _serviceClient.InvokeDeviceMethodAsync(deviceId, cloudMethod);
+            var result = await _serviceClient!.InvokeDeviceMethodAsync(deviceId, cloudMethod);
             return new ResponseResult { Succeeded = true, Content = result };
         }
         catch (Exception ex)
@@ -86,69 +144,48 @@ public class DeviceManager
         }
     }
 
-    //public async Task<ResponseResult> SendCloudToDeviceMessageAsync(string deviceId, string messageContent)
+    //public async Task<ResponseResult> AddDeviceAsync(string deviceId, string deviceType)
     //{
     //    try
     //    {
-    //        var message = new Message(Encoding.UTF8.GetBytes(messageContent))
-    //        {
-    //            ContentType = "application/json",
-    //            ContentEncoding = "utf-8"
-    //        };
+    //        var device = new Device(deviceId);
+    //        await _registryManager!.AddDeviceAsync(device);
 
-    //        await _serviceClient.SendAsync(deviceId, message);
-    //        return new ResponseResult { Succeeded = true, Message = $"Message sent to device {deviceId}: {messageContent}" };
+    //        var twin = new Twin
+    //        {
+    //            Properties =
+    //                {
+    //                    Desired =
+    //                    {
+    //                        ["deviceType"] = deviceType,
+    //                        ["connectionState"] = false,
+    //                        ["deviceName"] = $"IoT-{deviceType}",
+    //                        ["deviceState"] = false
+    //                    }
+    //                }
+    //        };
+    //        await _registryManager.UpdateTwinAsync(deviceId, twin, "*");
+
+    //        return new ResponseResult { Succeeded = true, Message = $"Device {deviceId} added successfully with device type {deviceType}." };
+    //    }
+    //    catch (DeviceAlreadyExistsException)
+    //    {
+    //        return new ResponseResult { Succeeded = false, Message = $"Device {deviceId} already exists." };
     //    }
     //    catch (Exception ex)
     //    {
-    //        return new ResponseResult { Succeeded = false, Message = $"Error sending cloud-to-device message: {ex.Message}" };
+    //        return new ResponseResult { Succeeded = false, Message = $"Error adding device: {ex.Message}" };
     //    }
     //}
-
-    public async Task<ResponseResult> AddDeviceAsync(string deviceId, string deviceType)
-    {
-        try
-        {
-            var device = new Device(deviceId);
-            await _registryManager.AddDeviceAsync(device);
-
-            var twin = new Twin
-            {
-                Properties =
-                    {
-                        Desired =
-                        {
-                            ["deviceType"] = deviceType,
-                            ["connectionState"] = false,
-                            ["deviceName"] = $"IoT-{deviceType}",
-                            ["deviceState"] = false
-                        }
-                    }
-            };
-            await _registryManager.UpdateTwinAsync(deviceId, twin, "*");
-
-            return new ResponseResult { Succeeded = true, Message = $"Device {deviceId} added successfully with device type {deviceType}." };
-        }
-        catch (DeviceAlreadyExistsException)
-        {
-            return new ResponseResult { Succeeded = false, Message = $"Device {deviceId} already exists." };
-        }
-        catch (Exception ex)
-        {
-            return new ResponseResult { Succeeded = false, Message = $"Error adding device: {ex.Message}" };
-        }
-    }
 
     public async Task<ResponseResult> RemoveDeviceAsync(string deviceId, string emailAddress)
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
-        {
             return new ResponseResult { Succeeded = false, Message = "Email address cannot be empty." };
-        }
 
         try
         {
-            await _registryManager.RemoveDeviceAsync(deviceId);
+            await _registryManager!.RemoveDeviceAsync(deviceId);
 
             var emailClient = new EmailClient("endpoint=https://millesemailservice.europe.communication.azure.com/;accesskey=98Ku6INb6lIaWngj70BEnb2R0mB57HtsfdiqI2sfmNqPDhnBvLdKJQQJ99AIACULyCpq7IbPAAAAAZCSg1Jp");
 
@@ -184,3 +221,23 @@ public class DeviceManager
         }
     }
 }
+
+
+//public async Task<ResponseResult> SendCloudToDeviceMessageAsync(string deviceId, string messageContent)
+//{
+//    try
+//    {
+//        var message = new Message(Encoding.UTF8.GetBytes(messageContent))
+//        {
+//            ContentType = "application/json",
+//            ContentEncoding = "utf-8"
+//        };
+
+//        await _serviceClient.SendAsync(deviceId, message);
+//        return new ResponseResult { Succeeded = true, Message = $"Message sent to device {deviceId}: {messageContent}" };
+//    }
+//    catch (Exception ex)
+//    {
+//        return new ResponseResult { Succeeded = false, Message = $"Error sending cloud-to-device message: {ex.Message}" };
+//    }
+//}

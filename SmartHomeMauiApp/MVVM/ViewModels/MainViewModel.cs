@@ -43,12 +43,15 @@ public partial class MainViewModel : ObservableObject
 
             foreach (var device in devices)
             {
+
+                bool.TryParse(device.Properties.Reported.Contains("connectionState").ToString(), out var connectionState);
+
                 var deviceSettings = new DeviceSettings
                 {
                     DeviceId = device.DeviceId,
                     DeviceType = device.Properties.Reported.Contains("deviceType") ? device.Properties.Reported["deviceType"].ToString() : "Unknown",
                     DeviceName = device.Properties.Reported.Contains("deviceName") ? device.Properties.Reported["deviceName"].ToString() : "Unknown",
-                    IsConnected = device.Properties.Reported.Contains("connectionState") ? device.Properties.Reported["connectionState"].ToString() : "Unknown",
+                    IsConnected = connectionState,
                 };
 
                 await _dbContext.SaveDeviceSettingsAsync(deviceSettings);

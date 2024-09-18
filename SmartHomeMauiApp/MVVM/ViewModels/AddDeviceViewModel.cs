@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
+using Shared.Library.Models.IotResources;
 using Shared.Library.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net.Http.Json;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -43,20 +46,41 @@ public partial class AddDeviceViewModel : ObservableObject
 
         try
         {
-            var response = await _deviceManager.AddDeviceAsync(DeviceId, SelectedDeviceType);
+            //Tredje försök
+            var drr = new DeviceRegistrationRequest
+            {
+                DeviceId = DeviceId,
+                DeviceName = SelectedDeviceType
+            };
 
-            if (response.Succeeded)
-            {
-                ResponseMessage = response.Message ?? "Device added successfully.";
-                await _mainViewModel.LoadDevicesAsync();
-                await Shell.Current.GoToAsync("//MainPage");
-            }
-            else
-            {
-                ResponseMessage = "Failed to add the device. It may already exist.";
-            }
+            using var http = new HttpClient();
+            var result = await http.PostAsJsonAsync("https://mille-azure-function.azurewebsites.net/api/DeviceRegistration?code=2kQ4cfP0Og_O7tqe60ZJJ7yS63aP0ocoNen0fpeW5AvoAzFuR6vgEg%3D%3D", drr);
+            await _mainViewModel.LoadDevicesAsync();
+            await Shell.Current.GoToAsync("//MainPage");
+
+            //Andra försök
+            //var deviceInstance = await _deviceManager.RegisterDeviceAsync(DeviceId, SelectedDeviceType);
+            //await _mainViewModel.LoadDevicesAsync();
+            //await Shell.Current.GoToAsync("//MainPage");
+
+
+            //Första försök
+            //var response = await _deviceManager.AddDeviceAsync(DeviceId, SelectedDeviceType);
+
+            //if (response.Succeeded)
+            //{
+            //    ResponseMessage = response.Message ?? "Device added successfully.";
+            //    await _mainViewModel.LoadDevicesAsync();
+            //    await Shell.Current.GoToAsync("//MainPage");
+            //}
+            //else
+            //{
+            //    ResponseMessage = "Failed to add the device. It may already exist.";
+            //}
         }
         catch (Exception ex)
+
+
         {
             ResponseMessage = $"An error occurred: {ex.Message}";
             Debug.WriteLine($"Error in AddDeviceAsync: {ex}");
