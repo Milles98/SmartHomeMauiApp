@@ -6,7 +6,6 @@ using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
 using Shared.Library.Models;
 using System.Diagnostics;
-using System.Text;
 
 namespace Shared.Library.Services;
 
