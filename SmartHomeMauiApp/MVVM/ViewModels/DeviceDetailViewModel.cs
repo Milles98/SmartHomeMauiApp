@@ -272,7 +272,7 @@ public partial class DeviceDetailViewModel : ObservableObject
                 return;
             }
 
-            ResponseMessage = response.Message ?? $"Device {DeviceId} removed successfully.";
+            ResponseMessage = $"Device {DeviceId} removed successfully. Confirmation email has been sent";
             await _mainViewModel.LoadDevicesAsync();
             await Shell.Current.GoToAsync($"///MainPage");
         }
