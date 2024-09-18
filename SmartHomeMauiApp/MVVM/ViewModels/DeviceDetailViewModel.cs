@@ -273,7 +273,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             }
 
             ResponseMessage = response.Message ?? $"Device {DeviceId} removed successfully.";
-            await _mainViewModel.SetDevicesAsync();
+            await _mainViewModel.LoadDevicesAsync();
             await Shell.Current.GoToAsync($"///MainPage");
         }
         catch (Exception ex)
