@@ -62,14 +62,10 @@
 		<None Remove="Resources\Images\ac_icon.png" />
 		<None Remove="Resources\Images\add.png" />
 		<None Remove="Resources\Images\file.png" />
-		<None Remove="Resources\Images\file_solid.svg" />
-		<None Remove="Resources\Images\gear_solid.svg" />
 		<None Remove="Resources\Images\maui_lamp.png" />
 		<None Remove="Resources\Images\maui_temperature.png" />
 		<None Remove="Resources\Images\microchip.png" />
-		<None Remove="Resources\Images\microchip_solid.svg" />
 		<None Remove="Resources\Images\setting.png" />
-		<None Remove="Resources\Images\square_plus_solid.svg" />
 	</ItemGroup>
 
 	<ItemGroup>

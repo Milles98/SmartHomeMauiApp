@@ -3,8 +3,8 @@
              x:Class="SmartHomeMauiApp.MVVM.Views.DeviceDetailPage"
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
              x:DataType="{x:Type viewModels:DeviceDetailViewModel}"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="#0f0f0f">
+             BackgroundColor="#0f0f0f"
+             Shell.TabBarIsVisible="True">
 
     <Grid RowDefinitions="auto, *">
 
@@ -14,23 +14,6 @@
                Aspect="AspectFill"
                Opacity="0.2"
                IsEnabled="False" />
-
-        <Button Grid.Row="0"
-                Text="&#xf015;"
-                FontSize="18"
-                FontFamily="fa-solid"
-                Margin="40,40,0,0"
-                BackgroundColor="#6f42c1"
-                TextColor="White"
-                Command="{Binding NavigateHomeCommand}"
-                HorizontalOptions="Start"
-                VerticalOptions="Start">
-            <Button.Shadow>
-                <Shadow Brush="Black"
-                        Offset="2,2"
-                        Opacity="0.4" />
-            </Button.Shadow>
-        </Button>
 
         <ScrollView Grid.Row="1">
             <Grid Padding="20">
@@ -116,7 +99,7 @@
 
                     <Label Text="{Binding ResponseMessage}"
                            FontSize="Medium"
-                           TextColor="Red"
+                           TextColor="{Binding ResponseMessageColor}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
                            Margin="0,20,0,0"

@@ -22,21 +22,23 @@
              Icon="file.png">
             <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
         </Tab>
+        <ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
+                      Route="DeviceDetailPage" />
     </TabBar>
 
-    <ShellContent ContentTemplate="{DataTemplate views:MainPage}"
+    <!--<ShellContent ContentTemplate="{DataTemplate views:MainPage}"
                   Route="MainPage" />
 
     <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}"
-                  Route="SettingsPage" />
+                  Route="SettingsPage" />-->
 
-    <ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
-                  Route="DeviceDetailPage" />
+    <!--<ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
+                  Route="DeviceDetailPage" />-->
 
-    <ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}"
+    <!--<ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}"
                   Route="AddDevicePage" />
 
     <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}"
-                  Route="HistoryPage" />
+                  Route="HistoryPage" />-->
 
 </Shell>

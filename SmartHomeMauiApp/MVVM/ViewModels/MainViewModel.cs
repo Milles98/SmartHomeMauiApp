@@ -103,23 +103,4 @@ public partial class MainViewModel : ObservableObject
 
         await Shell.Current.GoToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}&emailAddress={emailAddress}");
     }
-
-    [RelayCommand]
-    private async Task NavigateToSettingsAsync()
-    {
-        await Shell.Current.GoToAsync("///SettingsPage");
-    }
-
-    [RelayCommand]
-    private async Task NavigateToAddDeviceAsync()
-    {
-        await Shell.Current.GoToAsync("///AddDevicePage");
-    }
-
-    [RelayCommand]
-    private async Task NavigateToHistoryAsync()
-    {
-        await Shell.Current.GoToAsync("///HistoryPage");
-    }
-
 }

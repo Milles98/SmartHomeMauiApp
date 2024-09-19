@@ -40,12 +40,6 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task NavigateHomeAsync()
-    {
-        await Shell.Current.GoToAsync("//MainPage");
-    }
-
-    [RelayCommand]
     private async Task SaveSettingsAsync()
     {
         try

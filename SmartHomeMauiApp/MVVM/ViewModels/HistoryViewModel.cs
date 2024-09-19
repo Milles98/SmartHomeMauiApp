@@ -48,10 +48,4 @@ public partial class HistoryViewModel : ObservableObject
             Debug.WriteLine($"Error in LoadSettingsAsync: {ex.Message}");
         }
     }
-
-    [RelayCommand]
-    private async Task NavigateHomeAsync()
-    {
-        await Shell.Current.GoToAsync("//MainPage");
-    }
 }

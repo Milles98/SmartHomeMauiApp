@@ -5,6 +5,7 @@ using Microsoft.Azure.Devices.Shared;
 using Shared.Library.Models;
 using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
+using SmartHomeMauiApp.MVVM.Views;
 using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
@@ -44,6 +45,9 @@ public partial class DeviceDetailViewModel : ObservableObject
     [ObservableProperty]
     private string _responseMessage;
 
+    [ObservableProperty]
+    private string _responseMessageColor = "Red";
+
     private System.Timers.Timer _updateTimer;
 
     public bool IsRemoveDeviceVisible =>
@@ -76,12 +80,6 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
-    }
-
-    [RelayCommand]
-    private async Task NavigateHomeAsync()
-    {
-        await Shell.Current.GoToAsync("//MainPage");
     }
 
     partial void OnDeviceIdChanged(string value)
@@ -257,6 +255,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             if (string.IsNullOrWhiteSpace(EmailAddress))
             {
                 ResponseMessage = "No email address registered. Cannot remove device.";
+                ResponseMessageColor = "Red";
                 return;
             }
 
@@ -276,19 +275,21 @@ public partial class DeviceDetailViewModel : ObservableObject
             if (!response.Succeeded)
             {
                 ResponseMessage = $"Failed to remove device {DeviceId}.";
-                Debug.WriteLine($"Error in RemoveDeviceAsync: {response.Message}");
+                ResponseMessageColor = response.ResponseMessageColor;
                 return;
             }
 
-            ResponseMessage = $"Device {DeviceId} removed successfully. Confirmation email has been sent";
+            ResponseMessage = $"Device {DeviceId} removed successfully. Confirmation email has been sent.";
+            ResponseMessageColor = "Green";
             await _mainViewModel.LoadDevicesAsync();
-            await Shell.Current.GoToAsync($"///MainPage");
         }
         catch (Exception ex)
         {
             ResponseMessage = "Unable to remove the device. Please check the device status and try again.";
+            ResponseMessageColor = "Red";
             Debug.WriteLine($"Error in RemoveDeviceAsync: {ex.Message}");
         }
     }
+
 
 }
