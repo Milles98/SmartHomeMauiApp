@@ -40,17 +40,22 @@
 
                 <Entry Placeholder="Enter Desired Device Name"
                        Text="{Binding DeviceName}"
-                       BackgroundColor="White"
-                       TextColor="Black"
-                       FontSize="Medium"
-                       HorizontalOptions="FillAndExpand" />
+                       BackgroundColor="#333"
+                       TextColor="White"
+                       PlaceholderColor="Gray"
+                       FontSize="14"
+                       HeightRequest="20"
+                       HorizontalOptions="FillAndExpand"
+                       Margin="0,0,0,0" />
 
                 <Label Text="Generated Device ID:"
-                       FontSize="Medium"
+                       FontSize="16"
                        FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
                        TextColor="White" />
                 <Label Text="{Binding DeviceId}"
                        FontSize="Small"
+                       HorizontalTextAlignment="Center"
                        TextColor="Gray"
                        HorizontalOptions="FillAndExpand" />
 
