@@ -13,6 +13,7 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly DeviceManager _deviceManager;
     private readonly DbContext _dbContext;
+    public Action OnDeviceAdded { get; set; }
 
     [ObservableProperty]
     private ObservableCollection<Twin> _devices = [];
@@ -30,7 +31,14 @@ public partial class MainViewModel : ObservableObject
 
         ResponseMessage = string.Empty;
 
-        Task.Run(LoadDevicesAsync);
+        OnDeviceAdded = async () => await LoadDevicesAsync();
+
+        Task.Run(InitializeAsync);
+    }
+
+    private async Task InitializeAsync()
+    {
+        await LoadDevicesAsync();
     }
 
     public async Task LoadDevicesAsync()

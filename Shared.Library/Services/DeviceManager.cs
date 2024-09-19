@@ -41,7 +41,7 @@ public class DeviceManager
         }
     }
 
-    public async Task<DeviceInstance> RegisterDeviceAsync(string deviceId, string deviceName)
+    public async Task<DeviceInstance> RegisterDeviceAsync(string deviceId, string deviceName, string deviceType)
     {
         if (string.IsNullOrEmpty(deviceId))
             return null!;
@@ -51,13 +51,26 @@ public class DeviceManager
             Device = await _registryManager!.GetDeviceAsync(deviceId) ?? await _registryManager.AddDeviceAsync(new Device(deviceId))
         };
 
-        await UpdateDesiredPropertyAsync(deviceInstance.Device, nameof(deviceName), deviceName);
+        // Prepare a dictionary of desired properties
+        var desiredProperties = new Dictionary<string, string>
+        {
+            { "deviceName", deviceName },
+            { "deviceType", deviceType },
+            { "connectionState", "false" },
+            { "deviceState", "false" }
+        };
+
+        Debug.WriteLine($"Updating twin for {deviceId} with deviceType: {deviceType}");
+
+        // Update all desired properties at once
+        await UpdateDesiredPropertiesAsync(deviceInstance.Device, desiredProperties);
 
         deviceInstance.ConnectionString = GetDeviceConnectionString(deviceInstance.Device);
-        deviceInstance.Twin = (await _registryManager.GetTwinAsync(deviceInstance.Device.Id));
+        deviceInstance.Twin = await _registryManager.GetTwinAsync(deviceInstance.Device.Id);
 
         return deviceInstance;
     }
+
 
     public string GetDeviceConnectionString(Device device)
     {
@@ -65,22 +78,30 @@ public class DeviceManager
         return deviceConnectionString ?? null!;
     }
 
-    public async Task<bool> UpdateDesiredPropertyAsync(Device device, string key, string value)
+    public async Task<bool> UpdateDesiredPropertiesAsync(Device device, Dictionary<string, string> desiredProperties)
     {
         try
         {
+            // Fetch the current twin for the device
             var twin = await _registryManager!.GetTwinAsync(device.Id);
-            twin.Properties.Desired[key] = value;
 
+            // Update the twin's desired properties based on the provided dictionary
+            foreach (var property in desiredProperties)
+            {
+                twin.Properties.Desired[property.Key] = property.Value;
+            }
+
+            // Update the twin in IoT Hub
             await _registryManager.UpdateTwinAsync(device.Id, twin, twin.ETag);
             return true;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error updating desired property: {ex.Message}");
+            Debug.WriteLine($"Error updating desired properties: {ex.Message}");
             return false;
         }
     }
+
     //Hans kod ovantill
 
     public void UpdateConnectionString(string connectionString)

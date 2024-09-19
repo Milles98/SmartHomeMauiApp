@@ -182,24 +182,32 @@ public partial class DeviceDetailViewModel : ObservableObject
             if (response.Succeeded && response.Content is Twin twin)
             {
                 ConnectionState = twin.Properties.Reported.Contains("connectionState")
-                ? twin.Properties.Reported["connectionState"].ToString()
-                : "Unknown";
+                    ? twin.Properties.Reported["connectionState"].ToString()
+                    : (twin.Properties.Desired.Contains("connectionState")
+                        ? twin.Properties.Desired["connectionState"].ToString()
+                        : "Unknown");
 
                 DeviceName = twin.Properties.Reported.Contains("deviceName")
                     ? twin.Properties.Reported["deviceName"].ToString()
-                    : "Unknown";
+                    : (twin.Properties.Desired.Contains("deviceName")
+                        ? twin.Properties.Desired["deviceName"].ToString()
+                        : "Unknown");
+
+                DeviceType = twin.Properties.Reported.Contains("deviceType")
+                    ? twin.Properties.Reported["deviceType"].ToString()
+                    : (twin.Properties.Desired.Contains("deviceType")
+                        ? twin.Properties.Desired["deviceType"].ToString()
+                        : "Unknown");
+
+                DeviceState = twin.Properties.Reported.Contains("deviceState")
+                    ? (bool)twin.Properties.Reported["deviceState"] ? "On" : "Off"
+                    : (twin.Properties.Desired.Contains("deviceState")
+                        ? (bool)twin.Properties.Desired["deviceState"] ? "On" : "Off"
+                        : "Unknown");
 
                 LastActivityTime = twin.LastActivityTime.HasValue
                     ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
                     : "No Activity";
-
-                DeviceType = twin.Properties.Reported.Contains("deviceType")
-                    ? twin.Properties.Reported["deviceType"].ToString()
-                    : "Unknown";
-
-                DeviceState = twin.Properties.Reported.Contains("deviceState")
-                    ? (bool)twin.Properties.Reported["deviceState"] ? "On" : "Off"
-                    : "Unknown";
 
                 SaveDeviceSettingsToDatabase(twin);
             }
