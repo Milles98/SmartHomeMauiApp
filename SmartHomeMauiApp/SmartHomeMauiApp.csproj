@@ -57,12 +57,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Fonts\fa-brands-400.ttf" />
-	  <None Remove="Resources\Fonts\fa-solid-900.ttf" />
-	  <None Remove="Resources\Images\ac_icon.png" />
-	  <None Remove="Resources\Images\maui_lamp.png" />
-	  <None Remove="Resources\Images\maui_temperature.png" />
-	  <None Remove="Resources\Images\microchip.png" />
+		<None Remove="Resources\Fonts\fa-brands-400.ttf" />
+		<None Remove="Resources\Fonts\fa-solid-900.ttf" />
+		<None Remove="Resources\Images\ac_icon.png" />
+		<None Remove="Resources\Images\add.png" />
+		<None Remove="Resources\Images\file.png" />
+		<None Remove="Resources\Images\file_solid.svg" />
+		<None Remove="Resources\Images\gear_solid.svg" />
+		<None Remove="Resources\Images\maui_lamp.png" />
+		<None Remove="Resources\Images\maui_temperature.png" />
+		<None Remove="Resources\Images\microchip.png" />
+		<None Remove="Resources\Images\microchip_solid.svg" />
+		<None Remove="Resources\Images\setting.png" />
+		<None Remove="Resources\Images\square_plus_solid.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -76,22 +83,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Shared.Library\Shared.Library.csproj" />
+		<ProjectReference Include="..\Shared.Library\Shared.Library.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="MVVM\Views\AddDevicePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\DeviceDetailPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\HistoryPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="MVVM\Views\SettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="MVVM\Views\AddDevicePage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="MVVM\Views\DeviceDetailPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="MVVM\Views\HistoryPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="MVVM\Views\SettingsPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>

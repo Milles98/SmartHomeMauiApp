@@ -127,6 +127,11 @@ public partial class AddDeviceViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateHomeAsync()
     {
+        DeviceName = string.Empty;
+        DeviceId = string.Empty;
+        SelectedDeviceType = null!;
+        ResponseMessage = string.Empty;
+
         await Shell.Current.GoToAsync("//MainPage");
     }
 }

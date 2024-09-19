@@ -3,8 +3,26 @@
        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:SmartHomeMauiApp.MVVM.Views"
-       NavigationPage.HasNavigationBar="False"
        Shell.FlyoutBehavior="Disabled">
+
+    <TabBar>
+        <Tab Title="DEVICES"
+             Icon="microchip.png">
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
+        </Tab>
+        <Tab Title="SETTINGS"
+             Icon="setting.png">
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
+        </Tab>
+        <Tab Title="ADD DEVICE"
+             Icon="add.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}" />
+        </Tab>
+        <Tab Title="HISTORY"
+             Icon="file.png">
+            <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
+        </Tab>
+    </TabBar>
 
     <ShellContent ContentTemplate="{DataTemplate views:MainPage}"
                   Route="MainPage" />
