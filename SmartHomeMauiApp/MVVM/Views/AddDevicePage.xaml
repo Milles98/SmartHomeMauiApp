@@ -38,6 +38,13 @@
                         SelectedItem="{Binding SelectedDeviceType}"
                         HorizontalOptions="FillAndExpand" />
 
+                <Entry Placeholder="Enter Desired Device Name"
+                       Text="{Binding DeviceName}"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       FontSize="Medium"
+                       HorizontalOptions="FillAndExpand" />
+
                 <Label Text="Generated Device ID:"
                        FontSize="Medium"
                        FontAttributes="Bold"

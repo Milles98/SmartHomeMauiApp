@@ -33,28 +33,59 @@ public partial class AddDeviceViewModel : ObservableObject
     private string _deviceId;
 
     [ObservableProperty]
+    private string _deviceName;
+
+    [ObservableProperty]
     private string _responseMessage;
 
     [RelayCommand]
     private async Task AddDeviceAsync()
     {
-        if (string.IsNullOrEmpty(DeviceId) || string.IsNullOrEmpty(SelectedDeviceType))
+        if (string.IsNullOrEmpty(DeviceId) || string.IsNullOrEmpty(DeviceName) || string.IsNullOrEmpty(SelectedDeviceType))
         {
-            ResponseMessage = "Please select device type and generate id";
+            ResponseMessage = "Please enter device name, select device type, and generate id";
             return;
         }
 
         try
         {
-            //Tredje försök
             var drr = new DeviceRegistrationRequest
             {
                 DeviceId = DeviceId,
-                DeviceName = SelectedDeviceType
+                DeviceName = DeviceName,
+                DeviceType = SelectedDeviceType
             };
 
-            using var http = new HttpClient();
+            using var http = new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(60)
+            };
             var result = await http.PostAsJsonAsync("https://mille-azure-function.azurewebsites.net/api/DeviceRegistration?code=2kQ4cfP0Og_O7tqe60ZJJ7yS63aP0ocoNen0fpeW5AvoAzFuR6vgEg%3D%3D", drr);
+
+            if (result.IsSuccessStatusCode)
+            {
+                var content = await result.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<DeviceRegistrationResponse>(content);
+
+                if (response == null)
+                {
+                    Debug.WriteLine("Deserialization failed or response is null.");
+                }
+                else
+                {
+                    Debug.WriteLine(response.ConnectionString ?? "ConnectionString is null");
+                    Debug.WriteLine(response.DeviceName ?? "DeviceName is null");
+                }
+            }
+            else
+            {
+                Debug.WriteLine($"Failed to register device. Status Code: {result.StatusCode}");
+                ResponseMessage = $"Failed to register device. Status Code: {result.StatusCode}";
+            }
+
+
+            _mainViewModel.OnDeviceAdded?.Invoke();
+
             await _mainViewModel.LoadDevicesAsync();
             await Shell.Current.GoToAsync("//MainPage");
 
