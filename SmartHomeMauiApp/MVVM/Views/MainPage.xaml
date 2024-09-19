@@ -6,7 +6,6 @@
              x:DataType="{x:Type viewModels:MainViewModel}"
              xmlns:azureshared="clr-namespace:Microsoft.Azure.Devices.Shared;assembly=Microsoft.Azure.Devices.Shared"
              x:Class="SmartHomeMauiApp.MVVM.Views.MainPage"
-             NavigationPage.HasNavigationBar="False"
              BackgroundColor="#0f0f0f">
 
     <ScrollView>
@@ -19,23 +18,6 @@
 
             <Grid RowDefinitions="auto, *"
                   Padding="30">
-
-                <Button Grid.Row="0"
-                        Text="&#xf013;"
-                        FontSize="24"
-                        Command="{Binding NavigateToSettingsCommand}"
-                        FontFamily="fa-solid"
-                        BackgroundColor="#6f42c1"
-                        TextColor="White"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Start"
-                        Padding="0">
-                    <Button.Shadow>
-                        <Shadow Brush="Black"
-                                Offset="2,2"
-                                Opacity="0.4" />
-                    </Button.Shadow>
-                </Button>
 
                 <Label Text="{Binding ResponseMessage}"
                        FontSize="Medium"
@@ -119,49 +101,6 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Grid>
-
-            <Button Text="&#x2b;"
-                    FontSize="24"
-                    FontFamily="fa-solid"
-                    Command="{Binding NavigateToAddDeviceCommand}"
-                    CornerRadius="30"
-                    BackgroundColor="#6f42c1"
-                    TextColor="White"
-                    WidthRequest="60"
-                    HeightRequest="60"
-                    HorizontalOptions="Start"
-                    VerticalOptions="End"
-                    Margin="30"
-                    AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-                    AbsoluteLayout.LayoutFlags="PositionProportional">
-                <Button.Shadow>
-                    <Shadow Brush="Black"
-                            Offset="2,2"
-                            Opacity="0.4" />
-                </Button.Shadow>
-            </Button>
-
-            <Button Text="&#xf15c;"
-                    FontSize="24"
-                    FontFamily="fa-solid"
-                    Command="{Binding NavigateToHistoryCommand}"
-                    CornerRadius="30"
-                    BackgroundColor="#6f42c1"
-                    TextColor="White"
-                    WidthRequest="60"
-                    HeightRequest="60"
-                    HorizontalOptions="End"
-                    VerticalOptions="End"
-                    Margin="30"
-                    AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-                    AbsoluteLayout.LayoutFlags="PositionProportional">
-                <Button.Shadow>
-                    <Shadow Brush="Black"
-                            Offset="2,2"
-                            Opacity="0.4" />
-                </Button.Shadow>
-            </Button>
-
         </Grid>
 
     </ScrollView>

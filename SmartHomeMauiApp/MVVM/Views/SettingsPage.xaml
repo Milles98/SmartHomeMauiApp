@@ -4,7 +4,6 @@
              x:Class="SmartHomeMauiApp.MVVM.Views.SettingsPage"
              xmlns:viewModels="clr-namespace:SmartHomeMauiApp.MVVM.ViewModels"
              x:DataType="{x:Type viewModels:SettingsViewModel}"
-             NavigationPage.HasNavigationBar="False"
              BackgroundColor="#0f0f0f">
 
     <Grid>
@@ -19,21 +18,6 @@
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand"
                          BackgroundColor="Transparent">
-
-                <Button Text="&#xf015;"
-                        FontSize="18"
-                        FontFamily="fa-solid"
-                        Margin="0,10,0,0"
-                        Command="{Binding NavigateHomeCommand}"
-                        BackgroundColor="#6f42c1"
-                        TextColor="White"
-                        HorizontalOptions="Start">
-                    <Button.Shadow>
-                        <Shadow Brush="Black"
-                                Offset="2,2"
-                                Opacity="0.4" />
-                    </Button.Shadow>
-                </Button>
 
                 <Label Text="Settings"
                        FontSize="Large"

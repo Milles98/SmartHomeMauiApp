@@ -3,22 +3,42 @@
        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:SmartHomeMauiApp.MVVM.Views"
-       NavigationPage.HasNavigationBar="False"
        Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent ContentTemplate="{DataTemplate views:MainPage}"
+    <TabBar>
+        <Tab Title="DEVICES"
+             Icon="microchip.png">
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
+        </Tab>
+        <Tab Title="SETTINGS"
+             Icon="setting.png">
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
+        </Tab>
+        <Tab Title="ADD DEVICE"
+             Icon="add.png">
+            <ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}" />
+        </Tab>
+        <Tab Title="HISTORY"
+             Icon="file.png">
+            <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
+        </Tab>
+        <ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
+                      Route="DeviceDetailPage" />
+    </TabBar>
+
+    <!--<ShellContent ContentTemplate="{DataTemplate views:MainPage}"
                   Route="MainPage" />
 
     <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}"
-                  Route="SettingsPage" />
+                  Route="SettingsPage" />-->
 
-    <ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
-                  Route="DeviceDetailPage" />
+    <!--<ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
+                  Route="DeviceDetailPage" />-->
 
-    <ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}"
+    <!--<ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}"
                   Route="AddDevicePage" />
 
     <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}"
-                  Route="HistoryPage" />
+                  Route="HistoryPage" />-->
 
 </Shell>

@@ -38,6 +38,9 @@ public partial class AddDeviceViewModel : ObservableObject
     [ObservableProperty]
     private string _responseMessage;
 
+    [ObservableProperty]
+    private string _responseMessageColor = "Red";
+
     [RelayCommand]
     private async Task AddDeviceAsync()
     {
@@ -64,57 +67,26 @@ public partial class AddDeviceViewModel : ObservableObject
 
             if (result.IsSuccessStatusCode)
             {
-                var content = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<DeviceRegistrationResponse>(content);
+                _mainViewModel.OnDeviceAdded?.Invoke();
+                await _mainViewModel.LoadDevicesAsync();
 
-                if (response == null)
-                {
-                    Debug.WriteLine("Deserialization failed or response is null.");
-                }
-                else
-                {
-                    Debug.WriteLine(response.ConnectionString ?? "ConnectionString is null");
-                    Debug.WriteLine(response.DeviceName ?? "DeviceName is null");
-                }
+                DeviceName = string.Empty;
+                DeviceId = string.Empty;
+                SelectedDeviceType = null!;
+
+                ResponseMessage = "Device added successfully!";
+                ResponseMessageColor = "Green";
             }
             else
             {
-                Debug.WriteLine($"Failed to register device. Status Code: {result.StatusCode}");
                 ResponseMessage = $"Failed to register device. Status Code: {result.StatusCode}";
+                ResponseMessageColor = "Red";
             }
-
-
-            _mainViewModel.OnDeviceAdded?.Invoke();
-
-            await _mainViewModel.LoadDevicesAsync();
-            await Shell.Current.GoToAsync("//MainPage");
-
-            //Andra försök
-            //var deviceInstance = await _deviceManager.RegisterDeviceAsync(DeviceId, SelectedDeviceType);
-            //await _mainViewModel.LoadDevicesAsync();
-            //await Shell.Current.GoToAsync("//MainPage");
-
-
-            //Första försök
-            //var response = await _deviceManager.AddDeviceAsync(DeviceId, SelectedDeviceType);
-
-            //if (response.Succeeded)
-            //{
-            //    ResponseMessage = response.Message ?? "Device added successfully.";
-            //    await _mainViewModel.LoadDevicesAsync();
-            //    await Shell.Current.GoToAsync("//MainPage");
-            //}
-            //else
-            //{
-            //    ResponseMessage = "Failed to add the device. It may already exist.";
-            //}
         }
         catch (Exception ex)
-
-
         {
             ResponseMessage = $"An error occurred: {ex.Message}";
-            Debug.WriteLine($"Error in AddDeviceAsync: {ex}");
+            ResponseMessageColor = "Red";
         }
     }
 
@@ -122,11 +94,5 @@ public partial class AddDeviceViewModel : ObservableObject
     private void GenerateDeviceId()
     {
         DeviceId = Guid.NewGuid().ToString();
-    }
-
-    [RelayCommand]
-    private async Task NavigateHomeAsync()
-    {
-        await Shell.Current.GoToAsync("//MainPage");
     }
 }

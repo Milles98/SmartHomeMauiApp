@@ -5,7 +5,6 @@
              xmlns:models="clr-namespace:Shared.Library.Models;assembly=Shared.Library"
              x:Class="SmartHomeMauiApp.MVVM.Views.HistoryPage"
              x:DataType="{x:Type viewModels:HistoryViewModel}"
-             NavigationPage.HasNavigationBar="False"
              BackgroundColor="#0f0f0f">
 
     <ScrollView>
@@ -18,23 +17,6 @@
 
             <Grid RowDefinitions="auto, *"
                   Padding="30">
-
-                <Button Grid.Row="0"
-                        Text="&#xf015;"
-                        FontSize="18"
-                        FontFamily="fa-solid"
-                        Margin="25,0,0,0"
-                        BackgroundColor="#6f42c1"
-                        TextColor="White"
-                        Command="{Binding NavigateHomeCommand}"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Start">
-                    <Button.Shadow>
-                        <Shadow Brush="Black"
-                                Offset="2,2"
-                                Opacity="0.4" />
-                    </Button.Shadow>
-                </Button>
 
                 <Grid Grid.Row="1"
                       ColumnDefinitions="*,*,*"
