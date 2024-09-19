@@ -80,6 +80,4 @@ public class DeviceRegistration
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
-
-    //Lägg till function för att radera en enhet också o koppla in den
 }
