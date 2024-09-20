@@ -65,6 +65,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
         LoadUserSettings();
 
+        //FIXA VID BORTTAGNING OM EN ENHET INTE LÄNGRE EXISTERAR, BUG
         _updateTimer = new System.Timers.Timer(5000);
         _updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
         _updateTimer.Start();
