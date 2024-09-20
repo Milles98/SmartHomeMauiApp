@@ -272,21 +272,14 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             var response = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
 
-            if (!response.Succeeded)
-            {
-                ResponseMessage = $"Failed to remove device {DeviceId}.";
-                ResponseMessageColor = response.ResponseMessageColor;
-                return;
-            }
-
-            ResponseMessage = $"Device {DeviceId} removed successfully. Confirmation email has been sent.";
             ResponseMessageColor = "Green";
+            ResponseMessage = $"Device {DeviceId} removed successfully. Confirmation email has been sent.";
             await _mainViewModel.LoadDevicesAsync();
         }
         catch (Exception ex)
         {
-            ResponseMessage = "Unable to remove the device. Please check the device status and try again.";
             ResponseMessageColor = "Red";
+            ResponseMessage = "Unable to remove the device. Please check the device status and try again.";
             Debug.WriteLine($"Error in RemoveDeviceAsync: {ex.Message}");
         }
     }
