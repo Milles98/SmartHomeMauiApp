@@ -63,7 +63,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
         ResponseMessage = string.Empty;
 
-        LoadUserSettings();
+        LoadUserSettings().ConfigureAwait(false);
 
         //FIXA VID BORTTAGNING OM EN ENHET INTE LÄNGRE EXISTERAR, BUG
         _updateTimer = new System.Timers.Timer(5000);
@@ -77,7 +77,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         _updateTimer?.Dispose();
     }
 
-    private async void LoadUserSettings()
+    private async Task LoadUserSettings()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
@@ -152,14 +152,6 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var stopResponse = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "stop");
-            if (!stopResponse.Succeeded || stopResponse.Content is not CloudToDeviceMethodResult stopResult || stopResult.Status != 200)
-            {
-                ResponseMessage = "Failed to stop the device before disconnecting.";
-                Debug.WriteLine($"Error in DisconnectAsync: {stopResponse.Message}");
-                return;
-            }
-
             var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
 
             if (response.Succeeded && response.Content is CloudToDeviceMethodResult result && result.Status == 200)
@@ -216,7 +208,7 @@ public partial class DeviceDetailViewModel : ObservableObject
                     ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
                     : "No Activity";
 
-                SaveDeviceSettingsToDatabase(twin);
+                await SaveDeviceSettingsToDatabase(twin);
             }
             else
             {
@@ -231,7 +223,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
     }
 
-    private async void SaveDeviceSettingsToDatabase(Twin twin)
+    private async Task SaveDeviceSettingsToDatabase(Twin twin)
     {
         var deviceSettings = await _dbContext.GetDeviceSettingsAsync(DeviceId);
         if (deviceSettings == null)

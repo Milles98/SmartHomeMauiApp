@@ -19,7 +19,7 @@ public partial class MainViewModel : ObservableObject
     private ObservableCollection<Twin> _devices = [];
 
     [ObservableProperty]
-    private Twin _selectedDevice;
+    private Twin? _selectedDevice;
 
     [ObservableProperty]
     private string _responseMessage;
