@@ -152,6 +152,14 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
+            var stopResponse = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "stop");
+            if (!stopResponse.Succeeded || stopResponse.Content is not CloudToDeviceMethodResult stopResult || stopResult.Status != 200)
+            {
+                ResponseMessage = "Failed to stop the device before disconnecting.";
+                Debug.WriteLine($"Error in DisconnectAsync: {stopResponse.Message}");
+                return;
+            }
+
             var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
 
             if (response.Succeeded && response.Content is CloudToDeviceMethodResult result && result.Status == 200)
