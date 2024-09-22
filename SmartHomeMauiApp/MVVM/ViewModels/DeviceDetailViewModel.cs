@@ -17,6 +17,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     private readonly DeviceManager _deviceManager;
     private readonly MainViewModel _mainViewModel;
     private readonly DbContext _dbContext;
+    private bool _isRemovingDevice;
 
     [ObservableProperty]
     private string _deviceId;
@@ -173,6 +174,11 @@ public partial class DeviceDetailViewModel : ObservableObject
 
     public async Task LoadDeviceDetailsAsync(string deviceId)
     {
+        if (_isRemovingDevice)
+        {
+            return;
+        }
+
         DeviceId = deviceId;
         try
         {
@@ -273,6 +279,8 @@ public partial class DeviceDetailViewModel : ObservableObject
                 return;
             }
 
+            _isRemovingDevice = true;
+
             var response = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
 
             await Application.Current!.MainPage!.DisplayAlert(
@@ -282,11 +290,14 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             await _mainViewModel.LoadDevicesAsync();
 
+            _isRemovingDevice = false;
+
             await Shell.Current.GoToAsync("///MainPage");
 
         }
         catch (Exception ex)
         {
+            _isRemovingDevice = false;
             await Application.Current!.MainPage!.DisplayAlert(
             "Error",
             "Unable to remove the device. Please check the device status and try again.",
