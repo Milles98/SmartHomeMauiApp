@@ -285,7 +285,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             await Application.Current!.MainPage!.DisplayAlert(
             "Success",
-            $"Device {DeviceId} removed successfully.",
+            $"Device {DeviceId} removed successfully and email confirmation has been sent.",
             "Ok");
 
             await _mainViewModel.LoadDevicesAsync();
