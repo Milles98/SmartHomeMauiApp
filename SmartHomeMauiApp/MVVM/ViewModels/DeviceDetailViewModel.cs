@@ -255,8 +255,10 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             if (string.IsNullOrWhiteSpace(EmailAddress))
             {
-                ResponseMessage = "No email address registered. Cannot remove device.";
-                ResponseMessageColor = "Red";
+                await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                "No email address registered. Cannot remove device.",
+                "Ok");
                 return;
             }
 
@@ -273,17 +275,23 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             var response = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
 
-            ResponseMessageColor = "Green";
-            ResponseMessage = $"Device {DeviceId} removed successfully. Confirmation email has been sent.";
+            await Application.Current!.MainPage!.DisplayAlert(
+            "Success",
+            $"Device {DeviceId} removed successfully.",
+            "Ok");
+
             await _mainViewModel.LoadDevicesAsync();
+
+            await Shell.Current.GoToAsync("///MainPage");
+
         }
         catch (Exception ex)
         {
-            ResponseMessageColor = "Red";
-            ResponseMessage = "Unable to remove the device. Please check the device status and try again.";
+            await Application.Current!.MainPage!.DisplayAlert(
+            "Error",
+            "Unable to remove the device. Please check the device status and try again.",
+            "Ok");
             Debug.WriteLine($"Error in RemoveDeviceAsync: {ex.Message}");
         }
     }
-
-
 }

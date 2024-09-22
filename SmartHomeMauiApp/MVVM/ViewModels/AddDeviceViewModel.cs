@@ -72,15 +72,14 @@ public partial class AddDeviceViewModel : ObservableObject
 
             if (result.IsSuccessStatusCode)
             {
-                _mainViewModel.OnDeviceAdded?.Invoke();
-                await _mainViewModel.LoadDevicesAsync();
-
-                DeviceName = string.Empty;
-                DeviceId = string.Empty;
-                SelectedDeviceType = null!;
-
                 ResponseMessage = "Device added successfully!";
                 ResponseMessageColor = "Green";
+
+                await _mainViewModel.LoadDevicesAsync();
+
+                await Task.Delay(2000);
+
+                await Shell.Current.GoToAsync("///MainPage");
             }
             else
             {
