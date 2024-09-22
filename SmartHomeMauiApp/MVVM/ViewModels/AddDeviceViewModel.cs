@@ -41,6 +41,9 @@ public partial class AddDeviceViewModel : ObservableObject
     [ObservableProperty]
     private string _responseMessageColor = "Red";
 
+    [ObservableProperty]
+    private bool _isBusy;
+
     [RelayCommand]
     private async Task AddDeviceAsync()
     {
@@ -52,6 +55,8 @@ public partial class AddDeviceViewModel : ObservableObject
 
         try
         {
+            IsBusy = true;
+
             var drr = new DeviceRegistrationRequest
             {
                 DeviceId = DeviceId,
@@ -87,6 +92,10 @@ public partial class AddDeviceViewModel : ObservableObject
         {
             ResponseMessage = $"An error occurred: {ex.Message}";
             ResponseMessageColor = "Red";
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 
