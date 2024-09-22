@@ -63,7 +63,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
         ResponseMessage = string.Empty;
 
-        LoadUserSettings();
+        LoadUserSettings().ConfigureAwait(false);
 
         //FIXA VID BORTTAGNING OM EN ENHET INTE LÄNGRE EXISTERAR, BUG
         _updateTimer = new System.Timers.Timer(5000);
@@ -77,7 +77,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         _updateTimer?.Dispose();
     }
 
-    private async void LoadUserSettings()
+    private async Task LoadUserSettings()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
@@ -152,14 +152,6 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var stopResponse = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "stop");
-            if (!stopResponse.Succeeded || stopResponse.Content is not CloudToDeviceMethodResult stopResult || stopResult.Status != 200)
-            {
-                ResponseMessage = "Failed to stop the device before disconnecting.";
-                Debug.WriteLine($"Error in DisconnectAsync: {stopResponse.Message}");
-                return;
-            }
-
             var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
 
             if (response.Succeeded && response.Content is CloudToDeviceMethodResult result && result.Status == 200)
@@ -216,7 +208,7 @@ public partial class DeviceDetailViewModel : ObservableObject
                     ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
                     : "No Activity";
 
-                SaveDeviceSettingsToDatabase(twin);
+                await SaveDeviceSettingsToDatabase(twin);
             }
             else
             {
@@ -231,7 +223,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
     }
 
-    private async void SaveDeviceSettingsToDatabase(Twin twin)
+    private async Task SaveDeviceSettingsToDatabase(Twin twin)
     {
         var deviceSettings = await _dbContext.GetDeviceSettingsAsync(DeviceId);
         if (deviceSettings == null)
@@ -263,8 +255,10 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             if (string.IsNullOrWhiteSpace(EmailAddress))
             {
-                ResponseMessage = "No email address registered. Cannot remove device.";
-                ResponseMessageColor = "Red";
+                await Application.Current!.MainPage!.DisplayAlert(
+                "Error",
+                "No email address registered. Cannot remove device.",
+                "Ok");
                 return;
             }
 
@@ -281,17 +275,23 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             var response = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
 
-            ResponseMessageColor = "Green";
-            ResponseMessage = $"Device {DeviceId} removed successfully. Confirmation email has been sent.";
+            await Application.Current!.MainPage!.DisplayAlert(
+            "Success",
+            $"Device {DeviceId} removed successfully.",
+            "Ok");
+
             await _mainViewModel.LoadDevicesAsync();
+
+            await Shell.Current.GoToAsync("///MainPage");
+
         }
         catch (Exception ex)
         {
-            ResponseMessageColor = "Red";
-            ResponseMessage = "Unable to remove the device. Please check the device status and try again.";
+            await Application.Current!.MainPage!.DisplayAlert(
+            "Error",
+            "Unable to remove the device. Please check the device status and try again.",
+            "Ok");
             Debug.WriteLine($"Error in RemoveDeviceAsync: {ex.Message}");
         }
     }
-
-
 }

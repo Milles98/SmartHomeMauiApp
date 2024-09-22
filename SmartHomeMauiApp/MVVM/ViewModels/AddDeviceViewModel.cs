@@ -41,6 +41,9 @@ public partial class AddDeviceViewModel : ObservableObject
     [ObservableProperty]
     private string _responseMessageColor = "Red";
 
+    [ObservableProperty]
+    private bool _isBusy;
+
     [RelayCommand]
     private async Task AddDeviceAsync()
     {
@@ -52,6 +55,8 @@ public partial class AddDeviceViewModel : ObservableObject
 
         try
         {
+            IsBusy = true;
+
             var drr = new DeviceRegistrationRequest
             {
                 DeviceId = DeviceId,
@@ -67,15 +72,14 @@ public partial class AddDeviceViewModel : ObservableObject
 
             if (result.IsSuccessStatusCode)
             {
-                _mainViewModel.OnDeviceAdded?.Invoke();
-                await _mainViewModel.LoadDevicesAsync();
-
-                DeviceName = string.Empty;
-                DeviceId = string.Empty;
-                SelectedDeviceType = null!;
-
                 ResponseMessage = "Device added successfully!";
                 ResponseMessageColor = "Green";
+
+                await _mainViewModel.LoadDevicesAsync();
+
+                await Task.Delay(2000);
+
+                await Shell.Current.GoToAsync("///MainPage");
             }
             else
             {
@@ -87,6 +91,10 @@ public partial class AddDeviceViewModel : ObservableObject
         {
             ResponseMessage = $"An error occurred: {ex.Message}";
             ResponseMessageColor = "Red";
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 

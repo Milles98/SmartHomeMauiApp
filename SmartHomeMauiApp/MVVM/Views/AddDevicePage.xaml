@@ -71,6 +71,11 @@
                        VerticalOptions="Center"
                        IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
 
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   IsVisible="{Binding IsBusy}"
+                                   Color="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
 
             </StackLayout>
         </ScrollView>

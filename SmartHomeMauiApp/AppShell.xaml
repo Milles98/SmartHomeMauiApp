@@ -8,7 +8,8 @@
     <TabBar>
         <Tab Title="DEVICES"
              Icon="microchip.png">
-            <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
+            <ShellContent ContentTemplate="{DataTemplate views:MainPage}"
+                          Route="MainPage" />
         </Tab>
         <Tab Title="SETTINGS"
              Icon="setting.png">
@@ -25,20 +26,5 @@
         <ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
                       Route="DeviceDetailPage" />
     </TabBar>
-
-    <!--<ShellContent ContentTemplate="{DataTemplate views:MainPage}"
-                  Route="MainPage" />
-
-    <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}"
-                  Route="SettingsPage" />-->
-
-    <!--<ShellContent ContentTemplate="{DataTemplate views:DeviceDetailPage}"
-                  Route="DeviceDetailPage" />-->
-
-    <!--<ShellContent ContentTemplate="{DataTemplate views:AddDevicePage}"
-                  Route="AddDevicePage" />
-
-    <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}"
-                  Route="HistoryPage" />-->
 
 </Shell>
