@@ -1,11 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Azure.Devices.Shared;
+using Newtonsoft.Json;
 using Shared.Library.Models;
+using Shared.Library.Models.WeatherApi;
 using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Timers;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -18,10 +21,24 @@ public partial class MainViewModel : ObservableObject
     private ObservableCollection<Twin> _devices = [];
 
     [ObservableProperty]
+    private string _time;
+
+    [ObservableProperty]
     private Twin? _selectedDevice;
 
     [ObservableProperty]
     private string _responseMessage;
+
+    [ObservableProperty]
+    private string weatherIcon;
+
+    [ObservableProperty]
+    private string temperature;
+
+    [ObservableProperty]
+    private string conditionText;
+
+    private System.Timers.Timer _timer;
 
     public MainViewModel(DeviceManager deviceManager, DbContext dbContext)
     {
@@ -31,6 +48,38 @@ public partial class MainViewModel : ObservableObject
         ResponseMessage = string.Empty;
 
         LoadDevicesAsync().ConfigureAwait(false);
+        LoadWeatherDataAsync().ConfigureAwait(false);
+        Time = DateTime.Now.ToString("HH:mm");
+
+        _timer = new System.Timers.Timer(10000);
+        _timer.Elapsed += UpdateTime!;
+        _timer.Start();
+    }
+
+    private void UpdateTime(object sender, ElapsedEventArgs e)
+    {
+        Time = DateTime.Now.ToString("HH:mm");
+    }
+
+    private async Task LoadWeatherDataAsync()
+    {
+        try
+        {
+            using var client = new HttpClient();
+            string url = "http://api.weatherapi.com/v1/current.json?key=abe8320defb74b72adf111532242504&q=Stockholm&aqi=no";
+            var response = await client.GetStringAsync(url);
+
+            var weatherData = JsonConvert.DeserializeObject<WeatherResponse>(response);
+
+            WeatherIcon = $"https:{weatherData!.Current!.Condition!.Icon}";
+            Temperature = $"{weatherData.Current.TempC}°C";
+            ConditionText = weatherData.Current.Condition.Text!;
+        }
+        catch (Exception ex)
+        {
+            ResponseMessage = "Unable to display weather";
+            Debug.WriteLine($"Error {ex.Message}");
+        }
     }
 
     public async Task LoadDevicesAsync()

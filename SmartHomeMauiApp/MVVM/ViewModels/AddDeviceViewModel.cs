@@ -74,6 +74,9 @@ public partial class AddDeviceViewModel : ObservableObject
             {
                 ResponseMessage = "Device added successfully!";
                 ResponseMessageColor = "Green";
+                DeviceId = string.Empty;
+                DeviceName = string.Empty;
+                SelectedDeviceType = string.Empty;
 
                 await _mainViewModel.LoadDevicesAsync();
 
