@@ -8,7 +8,7 @@ using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text.Json;
+using System.Timers;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -19,6 +19,9 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<Twin> _devices = [];
+
+    [ObservableProperty]
+    private string _time;
 
     [ObservableProperty]
     private Twin? _selectedDevice;
@@ -35,6 +38,8 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string conditionText;
 
+    private System.Timers.Timer _timer;
+
     public MainViewModel(DeviceManager deviceManager, DbContext dbContext)
     {
         _deviceManager = deviceManager;
@@ -44,6 +49,16 @@ public partial class MainViewModel : ObservableObject
 
         LoadDevicesAsync().ConfigureAwait(false);
         LoadWeatherDataAsync().ConfigureAwait(false);
+        Time = DateTime.Now.ToString("HH:mm");
+
+        _timer = new System.Timers.Timer(10000);
+        _timer.Elapsed += UpdateTime!;
+        _timer.Start();
+    }
+
+    private void UpdateTime(object sender, ElapsedEventArgs e)
+    {
+        Time = DateTime.Now.ToString("HH:mm");
     }
 
     private async Task LoadWeatherDataAsync()
