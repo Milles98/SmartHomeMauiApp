@@ -27,18 +27,18 @@ public partial class MainViewModel : ObservableObject
     private Twin? _selectedDevice;
 
     [ObservableProperty]
-    private string _responseMessage;
+    private string? _responseMessage;
 
     [ObservableProperty]
-    private string weatherIcon;
+    private string? _weatherIcon;
 
     [ObservableProperty]
-    private string temperature;
+    private string? _temperature;
 
     [ObservableProperty]
-    private string conditionText;
+    private string? _conditionText;
 
-    private System.Timers.Timer _timer;
+    private readonly System.Timers.Timer _timer;
 
     public MainViewModel(DeviceManager deviceManager, DbContext dbContext)
     {
