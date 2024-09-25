@@ -74,7 +74,7 @@
                                    Padding="15"
                                    BackgroundColor="{DynamicResource SemiTransparentGray}"
                                    HasShadow="True"
-                                   HeightRequest="120">
+                                   HeightRequest="140">
                                 <Grid ColumnDefinitions="80, *, Auto"
                                       RowDefinitions="Auto, Auto"
                                       Padding="5"
@@ -92,17 +92,21 @@
                                                  Grid.Column="1"
                                                  Padding="10,0,0,0"
                                                  VerticalOptions="Center">
+                                        <Label Text="Device Id:"
+                                               FontSize="16"
+                                               TextColor="Gray"
+                                               Margin="0,5,0,0" />
                                         <Label Text="{Binding DeviceId}"
-                                               FontSize="Medium"
+                                               FontSize="18"
                                                TextColor="White"
                                                FontAttributes="Bold"
                                                LineBreakMode="TailTruncation" />
                                         <Label Text="Last Activity:"
-                                               FontSize="Small"
+                                               FontSize="16"
                                                TextColor="Gray"
                                                Margin="0,5,0,0" />
-                                        <Label Text="{Binding LastActivityTime, StringFormat='{}{0:MM/dd/yyyy hh:mm tt}'}"
-                                               FontSize="Small"
+                                        <Label Text="{Binding LastActivityTime, StringFormat='{}{0:MM/dd/yyyy hh:mm}'}"
+                                               FontSize="14"
                                                TextColor="White" />
                                     </StackLayout>
 
