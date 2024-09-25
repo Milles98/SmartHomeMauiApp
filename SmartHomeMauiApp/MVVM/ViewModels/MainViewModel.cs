@@ -72,7 +72,7 @@ public partial class MainViewModel : ObservableObject
             var weatherData = JsonConvert.DeserializeObject<WeatherResponse>(response);
 
             WeatherIcon = $"https:{weatherData!.Current!.Condition!.Icon}";
-            Temperature = $"{weatherData.Current.TempC}°C";
+            Temperature = $"{(int)weatherData.Current.TempC}°C";
             ConditionText = weatherData.Current.Condition.Text!;
         }
         catch (Exception ex)
