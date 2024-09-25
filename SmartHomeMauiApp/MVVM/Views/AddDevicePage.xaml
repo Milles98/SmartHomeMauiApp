@@ -20,7 +20,7 @@
                          BackgroundColor="Transparent">
 
                 <Label Text="Add New Device"
-                       FontSize="Large"
+                       FontSize="26"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        TextColor="White" />
