@@ -20,8 +20,6 @@ public class DeviceManager
         UpdateConnectionString(_connectionString!);
     }
 
-
-    //Hans kod under
     public bool Disconnect()
     {
         try
@@ -51,7 +49,6 @@ public class DeviceManager
             Device = await _registryManager!.GetDeviceAsync(deviceId) ?? await _registryManager.AddDeviceAsync(new Device(deviceId))
         };
 
-        // Prepare a dictionary of desired properties
         var desiredProperties = new Dictionary<string, string>
         {
             { "deviceName", deviceName },
@@ -62,7 +59,6 @@ public class DeviceManager
 
         Debug.WriteLine($"Updating twin for {deviceId} with deviceType: {deviceType}");
 
-        // Update all desired properties at once
         await UpdateDesiredPropertiesAsync(deviceInstance.Device, desiredProperties);
 
         deviceInstance.ConnectionString = GetDeviceConnectionString(deviceInstance.Device);
@@ -82,16 +78,13 @@ public class DeviceManager
     {
         try
         {
-            // Fetch the current twin for the device
             var twin = await _registryManager!.GetTwinAsync(device.Id);
 
-            // Update the twin's desired properties based on the provided dictionary
             foreach (var property in desiredProperties)
             {
                 twin.Properties.Desired[property.Key] = property.Value;
             }
 
-            // Update the twin in IoT Hub
             await _registryManager.UpdateTwinAsync(device.Id, twin, twin.ETag);
             return true;
         }
@@ -101,8 +94,6 @@ public class DeviceManager
             return false;
         }
     }
-
-    //Hans kod ovantill
 
     public void UpdateConnectionString(string connectionString)
     {
@@ -165,40 +156,6 @@ public class DeviceManager
         }
     }
 
-    //public async Task<ResponseResult> AddDeviceAsync(string deviceId, string deviceType)
-    //{
-    //    try
-    //    {
-    //        var device = new Device(deviceId);
-    //        await _registryManager!.AddDeviceAsync(device);
-
-    //        var twin = new Twin
-    //        {
-    //            Properties =
-    //                {
-    //                    Desired =
-    //                    {
-    //                        ["deviceType"] = deviceType,
-    //                        ["connectionState"] = false,
-    //                        ["deviceName"] = $"IoT-{deviceType}",
-    //                        ["deviceState"] = false
-    //                    }
-    //                }
-    //        };
-    //        await _registryManager.UpdateTwinAsync(deviceId, twin, "*");
-
-    //        return new ResponseResult { Succeeded = true, Message = $"Device {deviceId} added successfully with device type {deviceType}." };
-    //    }
-    //    catch (DeviceAlreadyExistsException)
-    //    {
-    //        return new ResponseResult { Succeeded = false, Message = $"Device {deviceId} already exists." };
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return new ResponseResult { Succeeded = false, Message = $"Error adding device: {ex.Message}" };
-    //    }
-    //}
-
     public async Task<ResponseResult> RemoveDeviceAsync(string deviceId, string emailAddress)
     {
         if (string.IsNullOrWhiteSpace(emailAddress))
@@ -242,23 +199,3 @@ public class DeviceManager
         }
     }
 }
-
-
-//public async Task<ResponseResult> SendCloudToDeviceMessageAsync(string deviceId, string messageContent)
-//{
-//    try
-//    {
-//        var message = new Message(Encoding.UTF8.GetBytes(messageContent))
-//        {
-//            ContentType = "application/json",
-//            ContentEncoding = "utf-8"
-//        };
-
-//        await _serviceClient.SendAsync(deviceId, message);
-//        return new ResponseResult { Succeeded = true, Message = $"Message sent to device {deviceId}: {messageContent}" };
-//    }
-//    catch (Exception ex)
-//    {
-//        return new ResponseResult { Succeeded = false, Message = $"Error sending cloud-to-device message: {ex.Message}" };
-//    }
-//}
