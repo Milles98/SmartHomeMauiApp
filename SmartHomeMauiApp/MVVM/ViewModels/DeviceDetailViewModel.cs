@@ -281,7 +281,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             _isRemovingDevice = true;
 
-            var response = await _deviceManager.RemoveDeviceAsync(DeviceId, EmailAddress);
+            var response = await _deviceManager.DeviceRemovalSendEmailAsync(DeviceId, EmailAddress);
 
             await Application.Current!.MainPage!.DisplayAlert(
             "Success",
