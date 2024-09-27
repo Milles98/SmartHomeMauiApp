@@ -156,7 +156,7 @@ public class DeviceManager
         }
     }
 
-    public async Task<ResponseResult> RemoveDeviceAsync(string deviceId, string emailAddress)
+    public async Task<ResponseResult> DeviceRemovalSendEmailAsync(string deviceId, string emailAddress)
     {
         if (string.IsNullOrWhiteSpace(emailAddress) || string.IsNullOrEmpty(deviceId))
             return new ResponseResult { Succeeded = false, Message = "Email address and device id cannot be empty." };
