@@ -158,8 +158,8 @@ public class DeviceManager
 
     public async Task<ResponseResult> RemoveDeviceAsync(string deviceId, string emailAddress)
     {
-        if (string.IsNullOrWhiteSpace(emailAddress))
-            return new ResponseResult { Succeeded = false, Message = "Email address cannot be empty." };
+        if (string.IsNullOrWhiteSpace(emailAddress) || string.IsNullOrEmpty(deviceId))
+            return new ResponseResult { Succeeded = false, Message = "Email address and device id cannot be empty." };
 
         try
         {
