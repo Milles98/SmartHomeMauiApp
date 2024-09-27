@@ -13,13 +13,13 @@ public partial class SettingsViewModel : ObservableObject
     private readonly DbContext _dbContext;
 
     [ObservableProperty]
-    private string _connectionString;
+    private string? _connectionString;
 
     [ObservableProperty]
-    private string _emailAddress;
+    private string? _emailAddress;
 
     [ObservableProperty]
-    private string _responseMessage;
+    private string? _responseMessage;
 
     public SettingsViewModel(DeviceManager deviceManager, DbContext dbContext)
     {
