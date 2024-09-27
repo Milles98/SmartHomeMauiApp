@@ -167,9 +167,9 @@ public class DeviceManager
 
             var emailClient = new EmailClient("endpoint=https://millesemailservice.europe.communication.azure.com/;accesskey=98Ku6INb6lIaWngj70BEnb2R0mB57HtsfdiqI2sfmNqPDhnBvLdKJQQJ99AIACULyCpq7IbPAAAAAZCSg1Jp");
 
-            var emailContent = new EmailContent("Device Removal Confirmation")
+            var emailContent = new EmailContent("Iot Device Removal Confirmation")
             {
-                PlainText = $"The device with ID {deviceId} has been successfully removed from Azure IoT Hub.",
+                PlainText = $"The Iot device with ID {deviceId} has been successfully removed from Azure IoT Hub.",
             };
 
             var emailRecipients = new EmailRecipients(new List<EmailAddress>
