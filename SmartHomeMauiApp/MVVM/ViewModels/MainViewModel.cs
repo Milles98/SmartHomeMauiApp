@@ -56,12 +56,12 @@ public partial class MainViewModel : ObservableObject
         _timer.Start();
     }
 
-    private void UpdateTime(object sender, ElapsedEventArgs e)
+    public void UpdateTime(object sender, ElapsedEventArgs e)
     {
         Time = DateTime.Now.ToString("HH:mm");
     }
 
-    private async Task LoadWeatherDataAsync()
+    public async Task LoadWeatherDataAsync()
     {
         try
         {
@@ -114,7 +114,7 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    private static readonly Dictionary<string, string> DeviceTypeToImageMap = new Dictionary<string, string>
+    public static readonly Dictionary<string, string> DeviceTypeToImageMap = new Dictionary<string, string>
     {
         { "Fan", "fan_icon.png" },
         { "Lamp", "maui_lamp.png" },
@@ -134,7 +134,7 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task NavigateToDeviceDetailAsync(Twin device)
+    public async Task NavigateToDeviceDetailAsync(Twin device)
     {
         if (device == null)
             return;

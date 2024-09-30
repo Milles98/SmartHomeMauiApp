@@ -12,7 +12,7 @@ public class DeviceTypeToImageConverter : IValueConverter
         { "Ac", "ac_icon.png" },
     };
 
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type? targetType, object? parameter, CultureInfo culture)
     {
         if (value is Twin twin && twin.Properties.Desired.Contains("deviceType"))
         {
@@ -23,7 +23,7 @@ public class DeviceTypeToImageConverter : IValueConverter
         return "microchip.png";
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type? targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

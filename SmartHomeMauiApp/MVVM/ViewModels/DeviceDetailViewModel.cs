@@ -70,7 +70,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         _updateTimer?.Dispose();
     }
 
-    private async Task LoadUserSettings()
+    public async Task LoadUserSettings()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
@@ -87,7 +87,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ToggleStateAsync()
+    public async Task ToggleStateAsync()
     {
         try
         {
@@ -122,7 +122,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ConnectAsync()
+    public async Task ConnectAsync()
     {
         try
         {
@@ -149,7 +149,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task DisconnectAsync()
+    public async Task DisconnectAsync()
     {
         try
         {
@@ -240,7 +240,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
     }
 
-    private async Task SaveDeviceSettingsToDatabase(Twin twin)
+    public async Task SaveDeviceSettingsToDatabase(Twin twin)
     {
         var deviceSettings = await _dbContext.GetDeviceSettingsAsync(DeviceId!);
         if (deviceSettings == null)
@@ -266,7 +266,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task RemoveDeviceAsync()
+    public async Task RemoveDeviceAsync()
     {
         try
         {
