@@ -1,12 +1,11 @@
-﻿namespace SmartHomeMauiApp
-{
-	public partial class App : Application
-	{
-		public App()
-		{
-			InitializeComponent();
+﻿namespace SmartHomeMauiApp;
 
-			MainPage = new AppShell();
-		}
-	}
+public partial class App : Application
+{
+    public App()
+    {
+        InitializeComponent();
+
+        MainPage = new AppShell();
+    }
 }
