@@ -29,7 +29,7 @@ public partial class HistoryViewModel : ObservableObject
         LoadSettingsAsync();
     }
 
-    private async void LoadSettingsAsync()
+    public async void LoadSettingsAsync()
     {
         try
         {

@@ -30,7 +30,7 @@ public partial class SettingsViewModel : ObservableObject
         LoadSettings();
     }
 
-    private async void LoadSettings()
+    public async void LoadSettings()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
@@ -40,7 +40,7 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task SaveSettingsAsync()
+    public async Task SaveSettingsAsync()
     {
         try
         {

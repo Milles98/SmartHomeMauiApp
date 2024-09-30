@@ -43,7 +43,7 @@ public partial class AddDeviceViewModel : ObservableObject
     private bool _isBusy;
 
     [RelayCommand]
-    private async Task AddDeviceAsync()
+    public async Task AddDeviceAsync()
     {
         if (string.IsNullOrEmpty(DeviceId) || string.IsNullOrEmpty(DeviceName) || string.IsNullOrEmpty(SelectedDeviceType))
         {
@@ -100,7 +100,7 @@ public partial class AddDeviceViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void GenerateDeviceId()
+    public void GenerateDeviceId()
     {
         DeviceId = Guid.NewGuid().ToString();
     }
