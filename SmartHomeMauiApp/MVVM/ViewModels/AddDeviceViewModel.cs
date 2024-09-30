@@ -1,10 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json;
 using Shared.Library.Models.IotResources;
 using Shared.Library.Services;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Net.Http.Json;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
@@ -27,13 +25,13 @@ public partial class AddDeviceViewModel : ObservableObject
     private ObservableCollection<string> _availableDeviceTypes;
 
     [ObservableProperty]
-    private string _selectedDeviceType;
+    private string? _selectedDeviceType;
 
     [ObservableProperty]
-    private string _deviceId;
+    private string? _deviceId;
 
     [ObservableProperty]
-    private string _deviceName;
+    private string? _deviceName;
 
     [ObservableProperty]
     private string _responseMessage;

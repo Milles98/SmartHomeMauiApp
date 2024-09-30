@@ -21,7 +21,7 @@ public partial class HistoryViewModel : ObservableObject
     private ObservableCollection<UserSettings> _userSettings = new();
 
     [ObservableProperty]
-    private string _responseMessage;
+    private string? _responseMessage;
 
     public HistoryViewModel(DbContext dbContext)
     {

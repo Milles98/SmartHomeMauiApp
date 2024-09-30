@@ -60,7 +60,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
         //FIXA VID BORTTAGNING OM EN ENHET INTE LÄNGRE EXISTERAR, BUG
         _updateTimer = new System.Timers.Timer(5000);
-        _updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
+        _updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId!);
         _updateTimer.Start();
     }
 
@@ -76,7 +76,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
     }
 
-    partial void OnDeviceIdChanged(string value)
+    partial void OnDeviceIdChanged(string? value)
     {
         if (!string.IsNullOrEmpty(value))
         {
