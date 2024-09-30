@@ -43,7 +43,6 @@ public partial class DeviceDetailViewModel : ObservableObject
     [ObservableProperty]
     private string? _emailAddress;
 
-
     private System.Timers.Timer? _updateTimer;
 
     public bool IsRemoveDeviceVisible =>
@@ -58,19 +57,18 @@ public partial class DeviceDetailViewModel : ObservableObject
         _dbContext = dbContext;
 
         LoadUserSettings().ConfigureAwait(false);
-        LoadDeviceDetailsAsync(DeviceId).ConfigureAwait(false);
 
         //FIXA VID BORTTAGNING OM EN ENHET INTE LÄNGRE EXISTERAR, BUG
-        //_updateTimer = new System.Timers.Timer(5000);
-        //_updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
-        //_updateTimer.Start();
+        _updateTimer = new System.Timers.Timer(5000);
+        _updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId);
+        _updateTimer.Start();
     }
 
-    //~DeviceDetailViewModel()
-    //{
-    //    _updateTimer?.Stop();
-    //    _updateTimer?.Dispose();
-    //}
+    ~DeviceDetailViewModel()
+    {
+        _updateTimer?.Stop();
+        _updateTimer?.Dispose();
+    }
 
     private async Task LoadUserSettings()
     {
@@ -93,7 +91,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            if (ConnectionState.ToLower() != "true")
+            if (!ConnectionState!.Equals("true", StringComparison.CurrentCultureIgnoreCase))
             {
                 await Application.Current!.MainPage!.DisplayAlert(
                 "Error",
@@ -103,7 +101,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             }
 
             var newState = DeviceState == "On" ? "stop" : "start";
-            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, newState);
+            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId!, newState);
 
             if (!response.Succeeded || response.Content is not CloudToDeviceMethodResult result || result.Status != 200)
             {
@@ -115,7 +113,7 @@ public partial class DeviceDetailViewModel : ObservableObject
                 return;
             }
 
-            await LoadDeviceDetailsAsync(DeviceId);
+            await LoadDeviceDetailsAsync(DeviceId!);
         }
         catch (Exception ex)
         {
@@ -128,11 +126,11 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "connect");
+            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId!, "connect");
 
             if (response.Succeeded && response.Content is CloudToDeviceMethodResult result && result.Status == 200)
             {
-                await LoadDeviceDetailsAsync(DeviceId);
+                await LoadDeviceDetailsAsync(DeviceId!);
             }
             else
             {
@@ -155,11 +153,11 @@ public partial class DeviceDetailViewModel : ObservableObject
     {
         try
         {
-            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId, "disconnect");
+            var response = await _deviceManager.InvokeDirectMethodAsync(DeviceId!, "disconnect");
 
             if (response.Succeeded && response.Content is CloudToDeviceMethodResult result && result.Status == 200)
             {
-                await LoadDeviceDetailsAsync(DeviceId);
+                await LoadDeviceDetailsAsync(DeviceId!);
             }
             else
             {
@@ -225,7 +223,6 @@ public partial class DeviceDetailViewModel : ObservableObject
             }
             else
             {
-                _updateTimer?.Stop();
                 Debug.WriteLine($"Error in LoadDeviceDetailsAsync: {response.Message}");
 
                 await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -245,7 +242,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
     private async Task SaveDeviceSettingsToDatabase(Twin twin)
     {
-        var deviceSettings = await _dbContext.GetDeviceSettingsAsync(DeviceId);
+        var deviceSettings = await _dbContext.GetDeviceSettingsAsync(DeviceId!);
         if (deviceSettings == null)
         {
             deviceSettings = new DeviceSettings
@@ -271,7 +268,6 @@ public partial class DeviceDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task RemoveDeviceAsync()
     {
-        _updateTimer?.Stop();
         try
         {
             if (string.IsNullOrWhiteSpace(EmailAddress))
@@ -283,6 +279,7 @@ public partial class DeviceDetailViewModel : ObservableObject
                     "No email address registered. Cannot remove device.",
                     "Ok");
                 });
+                return;
             }
 
             var confirmed = await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -299,9 +296,12 @@ public partial class DeviceDetailViewModel : ObservableObject
                 return;
             }
 
+            _updateTimer?.Stop();
+            _updateTimer?.Dispose();
+
             _isRemovingDevice = true;
 
-            var response = await _deviceManager.DeviceRemovalSendEmailAsync(DeviceId, EmailAddress);
+            var response = await _deviceManager.DeviceRemovalSendEmailAsync(DeviceId!, EmailAddress!);
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
@@ -322,6 +322,9 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
         finally
         {
+            _updateTimer?.Stop();
+            _updateTimer?.Dispose();
+
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await Shell.Current.GoToAsync("///MainPage");
