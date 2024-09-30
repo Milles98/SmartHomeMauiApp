@@ -20,31 +20,31 @@ public partial class DeviceDetailViewModel : ObservableObject
     private bool _isRemovingDevice;
 
     [ObservableProperty]
-    private string _deviceId;
+    private string? _deviceId;
 
     [ObservableProperty]
-    private string _status;
+    private string? _status;
 
     [ObservableProperty]
-    private string _connectionState;
+    private string? _connectionState;
 
     [ObservableProperty]
-    private string _lastActivityTime;
+    private string? _lastActivityTime;
 
     [ObservableProperty]
-    private string _deviceState;
+    private string? _deviceState;
 
     [ObservableProperty]
-    private string _deviceType;
+    private string? _deviceType;
 
     [ObservableProperty]
-    private string _deviceName;
+    private string? _deviceName;
 
     [ObservableProperty]
-    private string _emailAddress;
+    private string? _emailAddress;
 
 
-    private System.Timers.Timer _updateTimer;
+    private System.Timers.Timer? _updateTimer;
 
     public bool IsRemoveDeviceVisible =>
         DeviceId != "new-fan-bd437070-7751-45ca-8040-d484cedd6201" &&
