@@ -11,9 +11,9 @@ namespace AzureFunctions.Functions;
 public class DeviceRegistration
 {
     private readonly ILogger<DeviceRegistration> _logger;
-    private readonly DeviceManager _deviceManager;
+    private readonly IDeviceManager _deviceManager;
 
-    public DeviceRegistration(ILogger<DeviceRegistration> logger, DeviceManager deviceManager)
+    public DeviceRegistration(ILogger<DeviceRegistration> logger, IDeviceManager deviceManager)
     {
         _logger = logger;
         _deviceManager = deviceManager;

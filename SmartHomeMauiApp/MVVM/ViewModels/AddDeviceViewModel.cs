@@ -9,10 +9,10 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 public partial class AddDeviceViewModel : ObservableObject
 {
-    private readonly DeviceManager _deviceManager;
+    private readonly IDeviceManager _deviceManager;
     private readonly MainViewModel _mainViewModel;
 
-    public AddDeviceViewModel(DeviceManager deviceManager, MainViewModel viewModel)
+    public AddDeviceViewModel(IDeviceManager deviceManager, MainViewModel viewModel)
     {
         _deviceManager = deviceManager;
         _mainViewModel = viewModel;

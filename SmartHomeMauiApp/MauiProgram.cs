@@ -24,7 +24,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<DbContext>();
 
-        builder.Services.AddSingleton<DeviceManager>(serviceProvider =>
+        builder.Services.AddSingleton<IDeviceManager, DeviceManager>(serviceProvider =>
         {
             var dbContext = serviceProvider.GetRequiredService<DbContext>();
             var iotHubSettings = dbContext.GetIoTHubSettingsAsync().Result;
