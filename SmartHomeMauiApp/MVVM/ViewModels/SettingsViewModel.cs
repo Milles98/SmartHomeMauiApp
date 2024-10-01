@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Shared.Library.Models;
 using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
+using SmartHomeMauiApp.Services;
 using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
@@ -11,6 +12,7 @@ public partial class SettingsViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
     private readonly IDbContext _dbContext;
+    private readonly IPreferencesService _preferencesService;
 
     [ObservableProperty]
     private string? _connectionString;
@@ -24,16 +26,20 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _responseMessageColor = "Red";
 
-    public SettingsViewModel(IDeviceManager deviceManager, IDbContext dbContext)
+    public SettingsViewModel(IDeviceManager deviceManager, IDbContext dbContext, IPreferencesService preferencesService)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;
+        _preferencesService = preferencesService;
         ResponseMessage = string.Empty;
-
-        LoadSettings();
     }
 
-    public async void LoadSettings()
+    public async Task InitializeAsync()
+    {
+        await LoadSettingsAsync();
+    }
+
+    public async Task LoadSettingsAsync()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
@@ -55,6 +61,8 @@ public partial class SettingsViewModel : ObservableObject
 
             _deviceManager.UpdateConnectionString(ConnectionString);
 
+            Debug.WriteLine("Saving settings...");
+
             var userSettings = new UserSettings { EmailAddress = EmailAddress };
             await _dbContext.SaveUserSettingsAsync(userSettings);
 
@@ -63,7 +71,7 @@ public partial class SettingsViewModel : ObservableObject
 
             ResponseMessage = "Settings have been saved, and IoT Hub connection has been updated.";
             ResponseMessageColor = "Green";
-            Preferences.Set("EmailAddress", EmailAddress);
+            _preferencesService.Set("EmailAddress", EmailAddress!);
         }
         catch (Exception ex)
         {

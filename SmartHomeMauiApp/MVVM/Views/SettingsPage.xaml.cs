@@ -10,7 +10,7 @@ public partial class SettingsPage : ContentPage
         BindingContext = viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
 
@@ -18,6 +18,7 @@ public partial class SettingsPage : ContentPage
         {
             viewModel.ResponseMessage = string.Empty;
             viewModel.ResponseMessageColor = "Red";
+            await viewModel.InitializeAsync();
         }
     }
 }
