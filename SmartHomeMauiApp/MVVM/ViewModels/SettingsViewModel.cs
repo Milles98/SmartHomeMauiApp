@@ -10,7 +10,7 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
-    private readonly DbContext _dbContext;
+    private readonly IDbContext _dbContext;
 
     [ObservableProperty]
     private string? _connectionString;
@@ -21,7 +21,7 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string? _responseMessage;
 
-    public SettingsViewModel(IDeviceManager deviceManager, DbContext dbContext)
+    public SettingsViewModel(IDeviceManager deviceManager, IDbContext dbContext)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;

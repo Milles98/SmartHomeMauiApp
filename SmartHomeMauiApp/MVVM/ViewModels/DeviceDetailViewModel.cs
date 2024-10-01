@@ -16,7 +16,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
     private readonly MainViewModel _mainViewModel;
-    private readonly DbContext _dbContext;
+    private readonly IDbContext _dbContext;
     private bool _isRemovingDevice;
 
     [ObservableProperty]
@@ -50,7 +50,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         DeviceId != "ac-3cea3c99-c45a-4f44-a8ea-1fb70b9d2dca" &&
         DeviceId != "new-lamp-33c0d9c6-66f2-4aa6-bef5-c3d4417bc74c";
 
-    public DeviceDetailViewModel(IDeviceManager deviceManager, MainViewModel mainViewModel, DbContext dbContext)
+    public DeviceDetailViewModel(IDeviceManager deviceManager, MainViewModel mainViewModel, IDbContext dbContext)
     {
         _deviceManager = deviceManager;
         _mainViewModel = mainViewModel;

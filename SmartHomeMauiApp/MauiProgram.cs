@@ -22,11 +22,11 @@ public static class MauiProgram
                 fonts.AddFont("fa-solid-900.ttf", "fa-solid");
             });
 
-        builder.Services.AddSingleton<DbContext>();
+        builder.Services.AddSingleton<IDbContext, DbContext>();
 
         builder.Services.AddSingleton<IDeviceManager, DeviceManager>(serviceProvider =>
         {
-            var dbContext = serviceProvider.GetRequiredService<DbContext>();
+            var dbContext = serviceProvider.GetRequiredService<IDbContext>();
             var iotHubSettings = dbContext.GetIoTHubSettingsAsync().Result;
             string connectionString = iotHubSettings?.ConnectionString ??
                                       "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
@@ -63,7 +63,7 @@ public static class MauiProgram
 
     private static async void SeedInitialData(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<DbContext>();
+        var dbContext = services.GetRequiredService<IDbContext>();
 
         await dbContext.SeedDataAsync(
             defaultEmail: "mille.elfver98@gmail.com",
