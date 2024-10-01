@@ -5,7 +5,6 @@ using Microsoft.Azure.Devices.Shared;
 using Shared.Library.Models;
 using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
-using SmartHomeMauiApp.MVVM.Views;
 using SmartHomeMauiApp.Services;
 using System.Diagnostics;
 
@@ -13,13 +12,14 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 [QueryProperty(nameof(DeviceId), "deviceId")]
 [QueryProperty(nameof(EmailAddress), "emailAddress")]
-public partial class DeviceDetailViewModel : ObservableObject
+public partial class DeviceDetailViewModel : ObservableObject, IDisposable
 {
     private readonly IDeviceManager _deviceManager;
-    private readonly MainViewModel _mainViewModel;
     private readonly IDbContext _dbContext;
     private readonly INavigationService _navigationService;
+    private readonly ITimerService _timerService;
     private bool _isRemovingDevice;
+    private bool _disposed;
 
     [ObservableProperty]
     private string? _deviceId;
@@ -45,35 +45,30 @@ public partial class DeviceDetailViewModel : ObservableObject
     [ObservableProperty]
     private string? _emailAddress;
 
-    private System.Timers.Timer? _updateTimer;
-
     public bool IsRemoveDeviceVisible =>
         DeviceId != "new-fan-bd437070-7751-45ca-8040-d484cedd6201" &&
         DeviceId != "ac-3cea3c99-c45a-4f44-a8ea-1fb70b9d2dca" &&
         DeviceId != "new-lamp-33c0d9c6-66f2-4aa6-bef5-c3d4417bc74c";
 
-    public DeviceDetailViewModel(IDeviceManager deviceManager, MainViewModel mainViewModel, IDbContext dbContext, INavigationService navigationService)
+    public DeviceDetailViewModel(
+        IDeviceManager deviceManager,
+        IDbContext dbContext,
+        INavigationService navigationService,
+        ITimerService timerService)
     {
         _deviceManager = deviceManager;
-        _mainViewModel = mainViewModel;
         _dbContext = dbContext;
         _navigationService = navigationService;
-
-        LoadUserSettings().ConfigureAwait(false);
-
-        //FIXA VID BORTTAGNING OM EN ENHET INTE LÄNGRE EXISTERAR, BUG
-        _updateTimer = new System.Timers.Timer(5000);
-        _updateTimer.Elapsed += async (sender, e) => await LoadDeviceDetailsAsync(DeviceId!);
-        _updateTimer.Start();
+        _timerService = timerService;
     }
 
-    ~DeviceDetailViewModel()
+    public async Task InitializeAsync()
     {
-        _updateTimer?.Stop();
-        _updateTimer?.Dispose();
+        await LoadUserSettingsAsync();
+        _timerService.Start(() => LoadDeviceDetailsAsync(DeviceId!).ConfigureAwait(false), 5000);
     }
 
-    public async Task LoadUserSettings()
+    public async Task LoadUserSettingsAsync()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
         EmailAddress = userSettings?.EmailAddress ?? string.Empty;
@@ -178,37 +173,35 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             if (response.Succeeded && response.Content is Twin twin)
             {
-                await MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    ConnectionState = twin.Properties.Reported.Contains("connectionState")
-                        ? twin.Properties.Reported["connectionState"].ToString()
-                        : (twin.Properties.Desired.Contains("connectionState")
-                            ? twin.Properties.Desired["connectionState"].ToString()
-                            : "Unknown");
+                ConnectionState = twin.Properties.Reported.Contains("connectionState")
+                    ? twin.Properties.Reported["connectionState"].ToString()
+                    : (twin.Properties.Desired.Contains("connectionState")
+                        ? twin.Properties.Desired["connectionState"].ToString()
+                        : "Unknown");
 
-                    DeviceName = twin.Properties.Reported.Contains("deviceName")
-                        ? twin.Properties.Reported["deviceName"].ToString()
-                        : (twin.Properties.Desired.Contains("deviceName")
-                            ? twin.Properties.Desired["deviceName"].ToString()
-                            : "Unknown");
+                DeviceName = twin.Properties.Reported.Contains("deviceName")
+                    ? twin.Properties.Reported["deviceName"].ToString()
+                    : (twin.Properties.Desired.Contains("deviceName")
+                        ? twin.Properties.Desired["deviceName"].ToString()
+                        : "Unknown");
 
-                    DeviceType = twin.Properties.Reported.Contains("deviceType")
-                        ? twin.Properties.Reported["deviceType"].ToString()
-                        : (twin.Properties.Desired.Contains("deviceType")
-                            ? twin.Properties.Desired["deviceType"].ToString()
-                            : "Unknown");
+                DeviceType = twin.Properties.Reported.Contains("deviceType")
+                    ? twin.Properties.Reported["deviceType"].ToString()
+                    : (twin.Properties.Desired.Contains("deviceType")
+                        ? twin.Properties.Desired["deviceType"].ToString()
+                        : "Unknown");
 
-                    DeviceState = twin.Properties.Reported.Contains("deviceState")
-                        ? (bool)twin.Properties.Reported["deviceState"] ? "On" : "Off"
-                        : (twin.Properties.Desired.Contains("deviceState")
-                            ? (bool)twin.Properties.Desired["deviceState"] ? "On" : "Off"
-                            : "Unknown");
+                DeviceState = twin.Properties.Reported.Contains("deviceState")
+                    ? (bool)twin.Properties.Reported["deviceState"] ? "On" : "Off"
+                    : (twin.Properties.Desired.Contains("deviceState")
+                        ? (bool)twin.Properties.Desired["deviceState"] ? "On" : "Off"
+                        : "Unknown");
 
-                    LastActivityTime = twin.LastActivityTime.HasValue
-                        ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
-                        : "No Activity";
-                });
-                await SaveDeviceSettingsToDatabase(twin);
+                LastActivityTime = twin.LastActivityTime.HasValue
+                    ? twin.LastActivityTime.Value.ToString("yyyy-MM-dd HH:mm:ss")
+                    : "No Activity";
+
+                await SaveDeviceSettingsToDatabaseAsync(twin);
             }
             else
             {
@@ -222,7 +215,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
     }
 
-    public async Task SaveDeviceSettingsToDatabase(Twin twin)
+    public async Task SaveDeviceSettingsToDatabaseAsync(Twin twin)
     {
         var deviceSettings = await _dbContext.GetDeviceSettingsAsync(DeviceId!);
         if (deviceSettings == null)
@@ -265,16 +258,12 @@ public partial class DeviceDetailViewModel : ObservableObject
                 return;
             }
 
-            _updateTimer?.Stop();
-            _updateTimer?.Dispose();
-
+            _timerService.Stop();
             _isRemovingDevice = true;
 
             var response = await _deviceManager.DeviceRemovalSendEmailAsync(DeviceId!, EmailAddress!);
 
             await _navigationService.ShowAlertAsync("Success", $"Device {DeviceId} removed successfully and email confirmation has been sent.", "Ok");
-
-            await _mainViewModel.LoadDevicesAsync();
 
             _isRemovingDevice = false;
         }
@@ -285,10 +274,27 @@ public partial class DeviceDetailViewModel : ObservableObject
         }
         finally
         {
-            _updateTimer?.Stop();
-            _updateTimer?.Dispose();
-
+            _timerService.Stop();
             await _navigationService.NavigateToAsync("///MainPage");
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _timerService.Stop();
+            }
+
+            _disposed = true;
         }
     }
 }
