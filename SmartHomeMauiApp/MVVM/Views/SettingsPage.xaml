@@ -60,7 +60,7 @@
 
                 <Label Text="{Binding ResponseMessage}"
                        FontSize="Medium"
-                       TextColor="Red"
+                       TextColor="{Binding ResponseMessageColor}"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
                        Margin="0,20,0,0"
