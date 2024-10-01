@@ -26,10 +26,10 @@ public partial class HistoryViewModel : ObservableObject
     public HistoryViewModel(IDbContext dbContext)
     {
         _dbContext = dbContext;
-        LoadSettingsAsync();
+        LoadSettingsAsync().ConfigureAwait(false);
     }
 
-    public async void LoadSettingsAsync()
+    public async Task LoadSettingsAsync()
     {
         try
         {
