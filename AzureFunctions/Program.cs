@@ -9,7 +9,7 @@ var host = new HostBuilder()
     {
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-        services.AddSingleton(new DeviceManager(Environment.GetEnvironmentVariable("IotHubManager")));
+        services.AddSingleton<IDeviceManager>(new DeviceManager(Environment.GetEnvironmentVariable("IotHubManager")));
     })
     .Build();
 

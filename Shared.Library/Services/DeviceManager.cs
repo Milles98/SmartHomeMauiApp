@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace Shared.Library.Services;
 
-public class DeviceManager
+public class DeviceManager : IDeviceManager
 {
     private readonly string? _connectionString;
     private RegistryManager? _registryManager;

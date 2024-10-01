@@ -14,8 +14,8 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    private readonly DeviceManager _deviceManager;
-    private readonly DbContext _dbContext;
+    private readonly IDeviceManager _deviceManager;
+    private readonly IDbContext _dbContext;
 
     [ObservableProperty]
     private ObservableCollection<Twin> _devices = [];
@@ -40,7 +40,7 @@ public partial class MainViewModel : ObservableObject
 
     private readonly System.Timers.Timer _timer;
 
-    public MainViewModel(DeviceManager deviceManager, DbContext dbContext)
+    public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;

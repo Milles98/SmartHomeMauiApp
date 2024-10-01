@@ -3,7 +3,7 @@ using SQLite;
 
 namespace SmartHomeMauiApp.Database;
 
-public class DbContext
+public class DbContext : IDbContext
 {
     private readonly SQLiteAsyncConnection _database;
 
