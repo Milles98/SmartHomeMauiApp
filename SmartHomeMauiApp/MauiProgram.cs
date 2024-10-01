@@ -28,16 +28,33 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDeviceManager, DeviceManager>(serviceProvider =>
         {
             var dbContext = serviceProvider.GetRequiredService<IDbContext>();
-            var iotHubSettings = dbContext.GetIoTHubSettingsAsync().Result;
+            var iotHubSettingsTask = dbContext.GetIoTHubSettingsAsync();
+            iotHubSettingsTask.Wait();
+            var iotHubSettings = iotHubSettingsTask.Result;
             string connectionString = iotHubSettings?.ConnectionString ??
                                       "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
             return new DeviceManager(connectionString);
         });
 
-        if (!IsRunningUnitTests)
-        {
-            RegisterPlatformSpecificServices(builder.Services);
-        }
+        builder.Services.AddSingleton<MainViewModel>();
+        builder.Services.AddSingleton<MainPage>();
+
+        builder.Services.AddSingleton<SettingsViewModel>();
+        builder.Services.AddSingleton<SettingsPage>();
+
+        builder.Services.AddSingleton<DeviceDetailViewModel>();
+        builder.Services.AddSingleton<DeviceDetailPage>();
+
+        builder.Services.AddSingleton<AddDeviceViewModel>();
+        builder.Services.AddSingleton<AddDevicePage>();
+
+        builder.Services.AddSingleton<HistoryViewModel>();
+        builder.Services.AddSingleton<HistoryPage>();
+
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
+        builder.Services.AddHttpClient<IWeatherService, WeatherService>();
+
+        builder.Services.AddTransient<DeviceTypeToImageConverter>();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -45,38 +62,19 @@ public static class MauiProgram
 
         var app = builder.Build();
 
-        SeedInitialData(app.Services);
+        _ = InitializeDatabaseAsync(app.Services);
+        _ = SeedInitialData(app.Services);
 
         return app;
     }
 
-    private static void RegisterPlatformSpecificServices(IServiceCollection services)
+    private static async Task InitializeDatabaseAsync(IServiceProvider services)
     {
-        services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainPage>();
-
-        services.AddSingleton<SettingsViewModel>();
-        services.AddSingleton<SettingsPage>();
-
-        services.AddSingleton<DeviceDetailViewModel>();
-        services.AddSingleton<DeviceDetailPage>();
-
-        services.AddSingleton<AddDeviceViewModel>();
-        services.AddSingleton<AddDevicePage>();
-
-        services.AddSingleton<HistoryViewModel>();
-        services.AddSingleton<HistoryPage>();
-
-        services.AddSingleton<INavigationService, NavigationService>();
-        services.AddHttpClient<IWeatherService, WeatherService>();
-
-        services.AddTransient<DeviceTypeToImageConverter>();
+        var dbContext = services.GetRequiredService<IDbContext>();
+        await dbContext.InitializeAsync();
     }
 
-    private static bool IsRunningUnitTests =>
-        AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName!.StartsWith("xunit"));
-
-    private static async void SeedInitialData(IServiceProvider services)
+    private static async Task SeedInitialData(IServiceProvider services)
     {
         var dbContext = services.GetRequiredService<IDbContext>();
 

@@ -4,6 +4,7 @@ namespace SmartHomeMauiApp.Database;
 
 public interface IDbContext
 {
+    Task InitializeAsync();
     Task<UserSettings> GetUserSettingsAsync();
     Task<int> SaveUserSettingsAsync(UserSettings userSettings);
     Task<IoTHubSettings> GetIoTHubSettingsAsync();
