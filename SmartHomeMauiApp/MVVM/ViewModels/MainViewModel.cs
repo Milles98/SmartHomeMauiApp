@@ -1,11 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Azure.Devices.Shared;
-using Newtonsoft.Json;
 using Shared.Library.Models;
-using Shared.Library.Models.WeatherApi;
 using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
+using SmartHomeMauiApp.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Timers;
@@ -14,6 +13,7 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
+    private readonly INavigationService _navigationService;
     private readonly IDeviceManager _deviceManager;
     private readonly IDbContext _dbContext;
     private readonly IWeatherService _weatherService;
@@ -39,13 +39,12 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? _conditionText;
 
-    private readonly System.Timers.Timer? _timer;
-
-    public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext, IWeatherService weatherService)
+    public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext, IWeatherService weatherService, INavigationService navigationService)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;
         _weatherService = weatherService;
+        _navigationService = navigationService;
 
         ResponseMessage = string.Empty;
 
@@ -61,11 +60,6 @@ public partial class MainViewModel : ObservableObject
         var timer = new System.Timers.Timer(10000);
         timer.Elapsed += (sender, e) => Time = DateTime.Now.ToString("HH:mm");
         timer.Start();
-    }
-
-    public void UpdateTime(object sender, ElapsedEventArgs e)
-    {
-        Time = DateTime.Now.ToString("HH:mm");
     }
 
     public async Task LoadWeatherDataAsync()
@@ -142,10 +136,9 @@ public partial class MainViewModel : ObservableObject
         if (device == null)
             return;
 
-
         var userSettings = await _dbContext.GetUserSettingsAsync();
         var emailAddress = userSettings?.EmailAddress ?? string.Empty;
 
-        await Shell.Current.GoToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}&emailAddress={emailAddress}");
+        await _navigationService.NavigateToAsync($"///DeviceDetailPage?deviceId={device.DeviceId}&emailAddress={emailAddress}");
     }
 }

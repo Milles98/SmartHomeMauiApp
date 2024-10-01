@@ -6,6 +6,7 @@ using Shared.Library.Models;
 using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
 using SmartHomeMauiApp.MVVM.Views;
+using SmartHomeMauiApp.Services;
 using System.Diagnostics;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
@@ -17,6 +18,7 @@ public partial class DeviceDetailViewModel : ObservableObject
     private readonly IDeviceManager _deviceManager;
     private readonly MainViewModel _mainViewModel;
     private readonly IDbContext _dbContext;
+    private readonly INavigationService _navigationService;
     private bool _isRemovingDevice;
 
     [ObservableProperty]
@@ -50,11 +52,12 @@ public partial class DeviceDetailViewModel : ObservableObject
         DeviceId != "ac-3cea3c99-c45a-4f44-a8ea-1fb70b9d2dca" &&
         DeviceId != "new-lamp-33c0d9c6-66f2-4aa6-bef5-c3d4417bc74c";
 
-    public DeviceDetailViewModel(IDeviceManager deviceManager, MainViewModel mainViewModel, IDbContext dbContext)
+    public DeviceDetailViewModel(IDeviceManager deviceManager, MainViewModel mainViewModel, IDbContext dbContext, INavigationService navigationService)
     {
         _deviceManager = deviceManager;
         _mainViewModel = mainViewModel;
         _dbContext = dbContext;
+        _navigationService = navigationService;
 
         LoadUserSettings().ConfigureAwait(false);
 
@@ -93,10 +96,7 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             if (!ConnectionState!.Equals("true", StringComparison.CurrentCultureIgnoreCase))
             {
-                await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                "Failed to toggle device state. Make sure the device connectionstring and deviceid is added to WPF-IOT application and the app is running.",
-                "Ok");
+                await _navigationService.ShowAlertAsync("Error", "Failed to toggle device state. Ensure the device connection is correct and the app is running.", "Ok");
                 return;
             }
 
@@ -106,10 +106,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             if (!response.Succeeded || response.Content is not CloudToDeviceMethodResult result || result.Status != 200)
             {
                 Debug.WriteLine($"Error in ToggleStateAsync: {response.Message}");
-                await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                "Failed to toggle device state. Make sure the device connectionstring and deviceid is added to WPF-IOT application and the app is running.",
-                "Ok");
+                await _navigationService.ShowAlertAsync("Error", "Failed to toggle device state.", "Ok");
                 return;
             }
 
@@ -135,11 +132,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             else
             {
                 Debug.WriteLine($"Error in ConnectAsync: {response.Message}");
-                await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                "Failed to connect the device. Make sure the device is reachable.",
-                "Ok");
-                return;
+                await _navigationService.ShowAlertAsync("Error", "Failed to connect the device. Ensure the device is reachable.", "Ok");
             }
         }
         catch (Exception ex)
@@ -162,11 +155,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             else
             {
                 Debug.WriteLine($"Error in DisconnectAsync: {response.Message}");
-                await Application.Current!.MainPage!.DisplayAlert(
-                "Error",
-                "Failed to disconnect the device. Make sure the device is reachable.",
-                "Ok");
-                return;
+                await _navigationService.ShowAlertAsync("Error", "Failed to disconnect the device. Ensure the device is reachable.", "Ok");
             }
         }
         catch (Exception ex)
@@ -224,14 +213,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             else
             {
                 Debug.WriteLine($"Error in LoadDeviceDetailsAsync: {response.Message}");
-
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
-                    await Application.Current!.MainPage!.DisplayAlert(
-                        "Error",
-                        "Failed to load device details",
-                        "Ok");
-                });
+                await _navigationService.ShowAlertAsync("Error", "Failed to load device details.", "Ok");
             }
         }
         catch (Exception ex)
@@ -272,24 +254,11 @@ public partial class DeviceDetailViewModel : ObservableObject
         {
             if (string.IsNullOrWhiteSpace(EmailAddress))
             {
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
-                    await Application.Current!.MainPage!.DisplayAlert(
-                    "Error",
-                    "No email address registered. Cannot remove device.",
-                    "Ok");
-                });
+                await _navigationService.ShowAlertAsync("Error", "No email address registered. Cannot remove device.", "Ok");
                 return;
             }
 
-            var confirmed = await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                return await Application.Current!.MainPage!.DisplayAlert(
-                "Confirm",
-                "Are you sure you want to remove this device?",
-                "Yes",
-                "No");
-            });
+            var confirmed = await _navigationService.ShowConfirmationAsync("Confirm", "Are you sure you want to remove this device?", "Yes", "No");
 
             if (!confirmed)
             {
@@ -303,13 +272,7 @@ public partial class DeviceDetailViewModel : ObservableObject
 
             var response = await _deviceManager.DeviceRemovalSendEmailAsync(DeviceId!, EmailAddress!);
 
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Application.Current!.MainPage!.DisplayAlert(
-                "Success",
-                $"Device {DeviceId} removed successfully and email confirmation has been sent.",
-                "Ok");
-            });
+            await _navigationService.ShowAlertAsync("Success", $"Device {DeviceId} removed successfully and email confirmation has been sent.", "Ok");
 
             await _mainViewModel.LoadDevicesAsync();
 
@@ -325,10 +288,7 @@ public partial class DeviceDetailViewModel : ObservableObject
             _updateTimer?.Stop();
             _updateTimer?.Dispose();
 
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Shell.Current.GoToAsync("///MainPage");
-            });
+            await _navigationService.NavigateToAsync("///MainPage");
         }
     }
 }

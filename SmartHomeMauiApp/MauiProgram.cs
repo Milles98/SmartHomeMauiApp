@@ -4,6 +4,7 @@ using SmartHomeMauiApp.Database;
 using SmartHomeMauiApp.MVVM.ViewModels;
 using SmartHomeMauiApp.MVVM.Views;
 using SmartHomeMauiApp.Resources.Converters;
+using SmartHomeMauiApp.Services;
 
 namespace SmartHomeMauiApp;
 
@@ -33,24 +34,10 @@ public static class MauiProgram
             return new DeviceManager(connectionString);
         });
 
-        builder.Services.AddSingleton<MainViewModel>();
-        builder.Services.AddSingleton<MainPage>();
-
-        builder.Services.AddSingleton<SettingsViewModel>();
-        builder.Services.AddSingleton<SettingsPage>();
-
-        builder.Services.AddSingleton<DeviceDetailViewModel>();
-        builder.Services.AddSingleton<DeviceDetailPage>();
-
-        builder.Services.AddSingleton<AddDeviceViewModel>();
-        builder.Services.AddSingleton<AddDevicePage>();
-
-        builder.Services.AddSingleton<HistoryViewModel>();
-        builder.Services.AddSingleton<HistoryPage>();
-
-        builder.Services.AddHttpClient<IWeatherService, WeatherService>();
-
-        builder.Services.AddTransient<DeviceTypeToImageConverter>();
+        if (!IsRunningUnitTests)
+        {
+            RegisterPlatformSpecificServices(builder.Services);
+        }
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -62,6 +49,32 @@ public static class MauiProgram
 
         return app;
     }
+
+    private static void RegisterPlatformSpecificServices(IServiceCollection services)
+    {
+        services.AddSingleton<MainViewModel>();
+        services.AddSingleton<MainPage>();
+
+        services.AddSingleton<SettingsViewModel>();
+        services.AddSingleton<SettingsPage>();
+
+        services.AddSingleton<DeviceDetailViewModel>();
+        services.AddSingleton<DeviceDetailPage>();
+
+        services.AddSingleton<AddDeviceViewModel>();
+        services.AddSingleton<AddDevicePage>();
+
+        services.AddSingleton<HistoryViewModel>();
+        services.AddSingleton<HistoryPage>();
+
+        services.AddSingleton<INavigationService, NavigationService>();
+        services.AddHttpClient<IWeatherService, WeatherService>();
+
+        services.AddTransient<DeviceTypeToImageConverter>();
+    }
+
+    private static bool IsRunningUnitTests =>
+        AppDomain.CurrentDomain.GetAssemblies().Any(a => a.FullName!.StartsWith("xunit"));
 
     private static async void SeedInitialData(IServiceProvider services)
     {
