@@ -48,6 +48,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<HistoryViewModel>();
         builder.Services.AddSingleton<HistoryPage>();
 
+        builder.Services.AddHttpClient<IWeatherService, WeatherService>();
+
         builder.Services.AddTransient<DeviceTypeToImageConverter>();
 
 #if DEBUG
