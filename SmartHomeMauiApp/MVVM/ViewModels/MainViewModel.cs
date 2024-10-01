@@ -38,7 +38,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? _conditionText;
 
-    private readonly System.Timers.Timer _timer;
+    private readonly System.Timers.Timer? _timer;
 
     public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext)
     {
@@ -49,11 +49,16 @@ public partial class MainViewModel : ObservableObject
 
         LoadDevicesAsync().ConfigureAwait(false);
         LoadWeatherDataAsync().ConfigureAwait(false);
-        Time = DateTime.Now.ToString("HH:mm");
 
-        _timer = new System.Timers.Timer(10000);
-        _timer.Elapsed += UpdateTime!;
-        _timer.Start();
+        Time = DateTime.Now.ToString("HH:mm");
+        StartTimer();
+    }
+
+    private void StartTimer()
+    {
+        var timer = new System.Timers.Timer(10000);
+        timer.Elapsed += (sender, e) => Time = DateTime.Now.ToString("HH:mm");
+        timer.Start();
     }
 
     public void UpdateTime(object sender, ElapsedEventArgs e)
