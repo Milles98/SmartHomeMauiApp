@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Shared.Library.Models.IotResources;
 using Shared.Library.Services;
+using SmartHomeMauiApp.Services;
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
 
@@ -11,11 +12,13 @@ public partial class AddDeviceViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
     private readonly MainViewModel _mainViewModel;
+    private readonly INavigationService _navigationService;
 
-    public AddDeviceViewModel(IDeviceManager deviceManager, MainViewModel viewModel)
+    public AddDeviceViewModel(IDeviceManager deviceManager, MainViewModel viewModel, INavigationService navigationService)
     {
         _deviceManager = deviceManager;
         _mainViewModel = viewModel;
+        _navigationService = navigationService;
 
         AvailableDeviceTypes = new ObservableCollection<string> { "Fan", "Lamp", "Ac" };
         ResponseMessage = string.Empty;
@@ -80,7 +83,7 @@ public partial class AddDeviceViewModel : ObservableObject
 
                 await Task.Delay(2000);
 
-                await Shell.Current.GoToAsync("///MainPage");
+                await _navigationService.NavigateToAsync("///MainPage");
             }
             else
             {

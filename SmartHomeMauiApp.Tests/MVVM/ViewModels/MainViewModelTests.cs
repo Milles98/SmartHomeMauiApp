@@ -1,9 +1,11 @@
 ﻿using Microsoft.Azure.Devices.Shared;
 using Moq;
 using Shared.Library.Models;
+using Shared.Library.Models.WeatherApi;
 using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
 using SmartHomeMauiApp.MVVM.ViewModels;
+using SmartHomeMauiApp.Services;
 using Xunit;
 
 namespace SmartHomeMauiApp.Tests.MVVM.ViewModels;
@@ -12,23 +14,29 @@ public class MainViewModelTests
 {
     private readonly Mock<IDeviceManager> _deviceManagerMock;
     private readonly Mock<IDbContext> _dbContextMock;
-    private readonly Mock<HttpClient> _httpClientMock;
+    private readonly Mock<IWeatherService> _weatherServiceMock;
+    private readonly Mock<INavigationService> _navigationServiceMock;
     private readonly MainViewModel _mainViewModel;
 
     public MainViewModelTests()
     {
         _deviceManagerMock = new Mock<IDeviceManager>();
         _dbContextMock = new Mock<IDbContext>();
-        _httpClientMock = new Mock<HttpClient>();
+        _weatherServiceMock = new Mock<IWeatherService>();
+        _navigationServiceMock = new Mock<INavigationService>();
 
-        // Initialize the MainViewModel with mocked dependencies
-        _mainViewModel = new MainViewModel(_deviceManagerMock.Object, _dbContextMock.Object, _httpClientMock.Object);
+        _mainViewModel = new MainViewModel(
+            _deviceManagerMock.Object,
+            _dbContextMock.Object,
+            _weatherServiceMock.Object,
+            _navigationServiceMock.Object
+        );
     }
 
     [Fact]
     public async Task LoadDevicesAsync_ShouldPopulateDevices_WhenResponseIsSuccessful()
     {
-        // Arrange: Prepare the mock response
+        // Arrange:
         var devices = new List<Twin>
         {
             new Twin("device1"),
@@ -45,65 +53,104 @@ public class MainViewModelTests
             .Setup(dm => dm.GetDevicesAsync(It.IsAny<string>()))
             .ReturnsAsync(responseResult);
 
-        // Act: Call the method being tested
+        // Act:
         await _mainViewModel.LoadDevicesAsync();
 
-        // Assert: Verify that the Devices collection was populated
+        // Assert:
         Assert.NotEmpty(_mainViewModel.Devices);
         Assert.Equal(2, _mainViewModel.Devices.Count);
     }
 
-    //[Fact]
-    //public async Task LoadDevicesAsync_ShouldSetResponseMessage_WhenResponseFails()
-    //{
-    //    // Arrange: Set up a failure response from the device manager
-    //    var responseResult = new ResponseResult
-    //    {
-    //        Succeeded = false,
-    //        Message = "Failed to retrieve devices"
-    //    };
+    [Fact]
+    public async Task LoadDevicesAsync_ShouldSetResponseMessage_WhenResponseFails()
+    {
+        // Arrange:
+        var responseResult = new ResponseResult
+        {
+            Succeeded = false,
+            Message = "Failed to retrieve devices"
+        };
 
-    //    _deviceManagerMock
-    //        .Setup(dm => dm.GetDevicesAsync(It.IsAny<string>()))
-    //        .ReturnsAsync(responseResult);
+        _deviceManagerMock
+            .Setup(dm => dm.GetDevicesAsync(It.IsAny<string>()))
+            .ReturnsAsync(responseResult);
 
-    //    // Act: Call the method being tested
-    //    await _mainViewModel.LoadDevicesAsync();
+        // Act:
+        await _mainViewModel.LoadDevicesAsync();
 
-    //    // Assert: Check if the response message is set correctly
-    //    Assert.Equal("Failed to retrieve devices.", _mainViewModel.ResponseMessage);
-    //}
+        // Assert:
+        Assert.Equal("Failed to retrieve devices.", _mainViewModel.ResponseMessage);
+    }
 
-    //[Fact]
-    //public async Task LoadWeatherDataAsync_ShouldSetWeatherProperties_WhenResponseIsSuccessful()
-    //{
-    //    // Arrange: Prepare a mock HTTP response for weather data
-    //    var weatherDataJson = @"
-    //    {
-    //        'current': {
-    //            'condition': {
-    //                'text': 'Sunny',
-    //                'icon': '//cdn.weatherapi.com/weather/64x64/day/113.png'
-    //            },
-    //            'temp_c': 25.0
-    //        }
-    //    }";
+    [Fact]
+    public async Task LoadWeatherDataAsync_ShouldSetWeatherProperties_WhenResponseIsSuccessful()
+    {
+        // Arrange:
+        var weatherData = new WeatherResponse
+        {
+            Current = new CurrentWeather
+            {
+                TempC = 25.0f,
+                Condition = new Shared.Library.Models.WeatherApi.Condition
+                {
+                    Text = "Sunny",
+                    Icon = "//cdn.weatherapi.com/weather/64x64/day/113.png"
+                }
+            }
+        };
 
-    //    var handler = new Mock<HttpMessageHandler>();
-    //    handler.SetupAnyRequest()
-    //        .ReturnsResponse(weatherDataJson, "application/json");
+        _weatherServiceMock
+            .Setup(ws => ws.GetWeatherAsync(It.IsAny<string>()))
+            .ReturnsAsync(weatherData);
 
-    //    var client = new HttpClient(handler.Object);
+        // Act:
+        await _mainViewModel.LoadWeatherDataAsync();
 
-    //    // Replace HttpClient with the mock client in your service if needed
-    //    // For example, inject the mock HttpClient into your MainViewModel
+        // Assert:
+        Assert.Equal("Sunny", _mainViewModel.ConditionText);
+        Assert.Equal("25°C", _mainViewModel.Temperature);
+        Assert.Equal("https://cdn.weatherapi.com/weather/64x64/day/113.png", _mainViewModel.WeatherIcon);
+    }
 
-    //    // Act: Call the method being tested
-    //    await _mainViewModel.LoadWeatherDataAsync();
+    [Fact]
+    public async Task LoadWeatherDataAsync_ShouldSetResponseMessage_WhenWeatherDataIsNull()
+    {
+        // Arrange:
+        _weatherServiceMock
+            .Setup(ws => ws.GetWeatherAsync(It.IsAny<string>()))
+            .ReturnsAsync((WeatherResponse?)null);
 
-    //    // Assert: Verify that the weather properties are set
-    //    Assert.Equal("Sunny", _mainViewModel.ConditionText);
-    //    Assert.Equal("25°C", _mainViewModel.Temperature);
-    //    Assert.Equal("https://cdn.weatherapi.com/weather/64x64/day/113.png", _mainViewModel.WeatherIcon);
-    //}
+        // Act:
+        await _mainViewModel.LoadWeatherDataAsync();
+
+        // Assert: 
+        Assert.Equal("Unable to display weather", _mainViewModel.ResponseMessage);
+    }
+
+    [Fact]
+    public async Task NavigateToDeviceDetailAsync_ShouldNavigateToDetailPage_WhenDeviceIsNotNull()
+    {
+        // Arrange
+        var twin = new Twin("device1");
+
+        var userSettings = new UserSettings { EmailAddress = "test@example.com" };
+        _dbContextMock.Setup(db => db.GetUserSettingsAsync())
+                      .ReturnsAsync(userSettings);
+
+        // Act
+        await _mainViewModel.NavigateToDeviceDetailAsync(twin);
+
+        // Assert:
+        _navigationServiceMock.Verify(nav => nav.NavigateToAsync(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task NavigateToDeviceDetailAsync_ShouldNotNavigate_WhenDeviceIsNull()
+    {
+        // Act
+        await _mainViewModel.NavigateToDeviceDetailAsync(null);
+
+        // Assert:
+        _navigationServiceMock.Verify(nav => nav.NavigateToAsync(It.IsAny<string>()), Times.Never);
+    }
 }
