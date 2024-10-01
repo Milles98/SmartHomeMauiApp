@@ -16,6 +16,7 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
     private readonly IDbContext _dbContext;
+    private readonly IWeatherService _weatherService;
 
     [ObservableProperty]
     private ObservableCollection<Twin> _devices = [];
@@ -40,10 +41,11 @@ public partial class MainViewModel : ObservableObject
 
     private readonly System.Timers.Timer? _timer;
 
-    public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext)
+    public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext, IWeatherService weatherService)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;
+        _weatherService = weatherService;
 
         ResponseMessage = string.Empty;
 
@@ -68,22 +70,18 @@ public partial class MainViewModel : ObservableObject
 
     public async Task LoadWeatherDataAsync()
     {
-        try
+        var weatherData = await _weatherService.GetWeatherAsync("Stockholm");
+
+        if (weatherData != null)
         {
-            using var client = new HttpClient();
-            string url = "http://api.weatherapi.com/v1/current.json?key=abe8320defb74b72adf111532242504&q=Stockholm&aqi=no";
-            var response = await client.GetStringAsync(url);
-
-            var weatherData = JsonConvert.DeserializeObject<WeatherResponse>(response);
-
-            WeatherIcon = $"https:{weatherData!.Current!.Condition!.Icon}";
+            WeatherIcon = $"https:{weatherData.Current!.Condition!.Icon}";
             Temperature = $"{(int)weatherData.Current.TempC}°C";
             ConditionText = weatherData.Current.Condition.Text!;
         }
-        catch (Exception ex)
+        else
         {
             ResponseMessage = "Unable to display weather";
-            Debug.WriteLine($"Error {ex.Message}");
+            Debug.WriteLine("Error loading weather data");
         }
     }
 

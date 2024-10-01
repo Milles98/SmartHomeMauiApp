@@ -21,8 +21,4 @@
 		<ProjectReference Include="..\SmartHomeMauiApp\SmartHomeMauiApp.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="MVVM\ViewModels\" />
-	</ItemGroup>
-
 </Project>
