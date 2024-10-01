@@ -11,14 +11,14 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 public partial class AddDeviceViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
-    private readonly MainViewModel _mainViewModel;
     private readonly INavigationService _navigationService;
+    private readonly HttpClient _httpClient;
 
-    public AddDeviceViewModel(IDeviceManager deviceManager, MainViewModel viewModel, INavigationService navigationService)
+    public AddDeviceViewModel(IDeviceManager deviceManager, INavigationService navigationService, HttpClient httpClient)
     {
         _deviceManager = deviceManager;
-        _mainViewModel = viewModel;
         _navigationService = navigationService;
+        _httpClient = httpClient;
 
         AvailableDeviceTypes = new ObservableCollection<string> { "Fan", "Lamp", "Ac" };
         ResponseMessage = string.Empty;
@@ -65,11 +65,7 @@ public partial class AddDeviceViewModel : ObservableObject
                 DeviceType = SelectedDeviceType
             };
 
-            using var http = new HttpClient
-            {
-                Timeout = TimeSpan.FromSeconds(60)
-            };
-            var result = await http.PostAsJsonAsync("https://mille-azure-function.azurewebsites.net/api/DeviceRegistration?code=2kQ4cfP0Og_O7tqe60ZJJ7yS63aP0ocoNen0fpeW5AvoAzFuR6vgEg%3D%3D", drr);
+            var result = await _httpClient.PostAsJsonAsync("https://mille-azure-function.azurewebsites.net/api/DeviceRegistration?code=2kQ4cfP0Og_O7tqe60ZJJ7yS63aP0ocoNen0fpeW5AvoAzFuR6vgEg%3D%3D", drr);
 
             if (result.IsSuccessStatusCode)
             {
@@ -78,8 +74,6 @@ public partial class AddDeviceViewModel : ObservableObject
                 DeviceId = string.Empty;
                 DeviceName = string.Empty;
                 SelectedDeviceType = string.Empty;
-
-                await _mainViewModel.LoadDevicesAsync();
 
                 await Task.Delay(2000);
 
