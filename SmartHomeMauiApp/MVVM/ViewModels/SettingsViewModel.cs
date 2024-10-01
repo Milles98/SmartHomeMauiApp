@@ -21,6 +21,9 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string? _responseMessage;
 
+    [ObservableProperty]
+    private string _responseMessageColor = "Red";
+
     public SettingsViewModel(IDeviceManager deviceManager, IDbContext dbContext)
     {
         _deviceManager = deviceManager;
@@ -59,11 +62,13 @@ public partial class SettingsViewModel : ObservableObject
             await _dbContext.SaveIoTHubSettingsAsync(iotHubSettings);
 
             ResponseMessage = "Settings have been saved, and IoT Hub connection has been updated.";
+            ResponseMessageColor = "Green";
             Preferences.Set("EmailAddress", EmailAddress);
         }
         catch (Exception ex)
         {
             ResponseMessage = "An error occurred while saving settings. Please try again.";
+            ResponseMessageColor = "Red";
             Debug.WriteLine($"Error in SaveSettingsAsync: {ex.Message}");
         }
 
