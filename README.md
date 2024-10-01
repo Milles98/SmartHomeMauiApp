@@ -19,24 +19,20 @@ It supports Android, iOS, MacCatalyst, and Windows platforms, and it utilizes mo
 This solution consists of five main projects:
 
 1. SmartHomeMauiApp:
-
-- The main project for the smart home app using .NET MAUI.
-- Implements the UI, device management, and settings for controlling IoT devices.
-- Organized using the MVVM pattern for clean separation of concerns.
+    - The main project for the smart home app using .NET MAUI.
+    - Implements the UI, device management, and settings for controlling IoT devices.
+    - Organized using the MVVM pattern for clean separation of concerns.
 
 2. Shared.Library:
-
-- A shared library that provides core services and models used by the main app.
-- Contains reusable services like Azure IoT Hub interactions, communication handling, and database management.
+    - A shared library that provides core services and models used by the main app.
+    - Contains reusable services like Azure IoT Hub interactions, communication handling, and database management.
 
 3. AzureFunctions:
-
-- Handles serverless logic, such as device registration, and communication between the app and Azure IoT services.
+    - Handles serverless logic, such as device registration, and communication between the app and Azure IoT services.
 
 4. SmartHomeMauiApp.Tests:
-
-- Contains unit tests and integration tests for validating the core functionality of the SmartHomeMauiApp.
-- Includes xUnit tests for testing viewmodels, services, and Azure Functions.
+    - Contains unit tests and integration tests for validating the core functionality of the SmartHomeMauiApp.
+    - Includes xUnit tests for testing viewmodels, services, and Azure Functions.
 
 5. Platforms:
 
@@ -45,32 +41,28 @@ This solution consists of five main projects:
 ## Folders in SmartHomeMauiApp
 
 * MVVM/ViewModels: Contains the viewmodels following the MVVM pattern.
-
-- AddDeviceViewModel.cs: Manages device addition logic.
-- SettingsViewModel.cs: Handles user preferences and settings storage.
-- MainViewModel.cs: Handles the main page and device interactions.
-- DeviceDetailViewModel.cs: Manages device-specific details for viewing and control.
-- HistoryViewModel.cs: Retrieves and displays device usage or state history.
+    - AddDeviceViewModel.cs: Manages device addition logic.
+    - SettingsViewModel.cs: Handles user preferences and settings storage.
+    - MainViewModel.cs: Handles the main page and device interactions.
+    - DeviceDetailViewModel.cs: Manages device-specific details for viewing and control.
+    - HistoryViewModel.cs: Retrieves and displays device usage or state history.
 
 * MVVM/Views: Contains the XAML pages that represent the UI of the app.
-
-- AddDevicePage.xaml
-- SettingsPage.xaml
-- DeviceDetailPage.xaml
-- MainPage.xaml
-- HistoryPage.xaml
+    - AddDevicePage.xaml
+    - SettingsPage.xaml
+    - DeviceDetailPage.xaml
+    - MainPage.xaml
+    - HistoryPage.xaml
 
 * Services: Provides common services, including navigation and preferences management.
-
-- INavigationService.cs
-- IPreferencesService.cs
-- PreferencesService.cs
-- NavigationService.cs
+    - INavigationService.cs
+    - IPreferencesService.cs
+    - PreferencesService.cs
+    - NavigationService.cs
 
 * Database: Handles SQLite database operations.
-
-- DbContext.cs
-- IDbContext.cs
+    - DbContext.cs
+    - IDbContext.cs
 
 ## Prerequisites
 
