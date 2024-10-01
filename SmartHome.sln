@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateApp", "TemplateApp\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions", "AzureFunctions\AzureFunctions.csproj", "{B21155F5-DDE2-48B3-A61D-4B2528630DA3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartHomeMauiApp.Tests", "SmartHomeMauiApp.Tests\SmartHomeMauiApp.Tests.csproj", "{0C078F28-D66E-42FE-A582-BAE7292A113B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{B21155F5-DDE2-48B3-A61D-4B2528630DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B21155F5-DDE2-48B3-A61D-4B2528630DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B21155F5-DDE2-48B3-A61D-4B2528630DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C078F28-D66E-42FE-A582-BAE7292A113B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C078F28-D66E-42FE-A582-BAE7292A113B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C078F28-D66E-42FE-A582-BAE7292A113B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C078F28-D66E-42FE-A582-BAE7292A113B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
