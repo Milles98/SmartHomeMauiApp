@@ -1,6 +1,8 @@
 # SmartHomeMauiApp
 
-SmartHomeMauiApp is a cross-platform application built using .NET MAUI. It supports Android, iOS, MacCatalyst, and Windows platforms. The app is designed to manage smart home devices and integrates with Azure IoT Hub.
+SmartHomeMauiApp is a cross-platform smart home management application built using .NET MAUI. 
+The app integrates with Azure IoT Hub to manage various smart home devices such as AC, Fans, and Lamps. 
+It supports Android, iOS, MacCatalyst, and Windows platforms, and it utilizes modern MVVM architecture and asynchronous programming patterns.
 
 ## Project Structure
 
