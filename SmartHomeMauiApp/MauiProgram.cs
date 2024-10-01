@@ -52,6 +52,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<HistoryPage>();
 
         builder.Services.AddSingleton<INavigationService, NavigationService>();
+        builder.Services.AddSingleton<IPreferencesService, PreferencesService>();
+
         builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 
         builder.Services.AddTransient<DeviceTypeToImageConverter>();
