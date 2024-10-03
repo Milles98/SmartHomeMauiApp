@@ -94,20 +94,21 @@
                                                  VerticalOptions="Center">
                                         <Label Text="Device Id:"
                                                FontSize="16"
-                                               TextColor="Gray"
-                                               Margin="0,5,0,0" />
+                                               TextColor="Gray"/>
                                         <Label Text="{Binding DeviceId}"
                                                FontSize="18"
                                                TextColor="White"
                                                FontAttributes="Bold"
                                                LineBreakMode="TailTruncation" />
-                                        <Label Text="Last Activity:"
+                                        <Label Text="Device Name:"
                                                FontSize="16"
                                                TextColor="Gray"
                                                Margin="0,5,0,0" />
-                                        <Label Text="{Binding LastActivityTime, StringFormat='{}{0:MM/dd/yyyy hh:mm}'}"
-                                               FontSize="14"
-                                               TextColor="White" />
+                                        <Label Text="{Binding ., Converter={StaticResource TwinDeviceNameConverter}}"
+                                               FontSize="18"
+                                               TextColor="White"
+                                               FontAttributes="Bold"
+                                               LineBreakMode="TailTruncation" />
                                     </StackLayout>
 
                                     <Button Grid.Row="0"
