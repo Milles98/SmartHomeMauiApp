@@ -48,4 +48,13 @@ public partial class HistoryViewModel : ObservableObject
             Debug.WriteLine($"Error in LoadSettingsAsync: {ex.Message}");
         }
     }
+
+    [RelayCommand]
+    public async Task ShowFullDeviceId(string deviceId)
+    {
+        if (!string.IsNullOrEmpty(deviceId))
+        {
+            await Application.Current!.MainPage!.DisplayAlert("Device ID", deviceId, "OK");
+        }
+    }
 }

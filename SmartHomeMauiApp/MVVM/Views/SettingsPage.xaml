@@ -28,21 +28,21 @@
                 <Label Text="Connection String:"
                        FontSize="16"
                        TextColor="White"
-                       Margin="0,10,0,5" />
+                       Margin="0,10,0,0" />
                 <Entry Text="{Binding ConnectionString, Mode=TwoWay}"
                        TextColor="White"
                        BackgroundColor="#333333"
-                       Margin="0,5,0,15"
+                       Margin="0,0,0,15"
                        HeightRequest="40" />
 
                 <Label Text="Email Address for Notifications:"
                        FontSize="16"
                        TextColor="White"
-                       Margin="0,10,0,5" />
+                       Margin="0,10,0,0" />
                 <Entry Text="{Binding EmailAddress, Mode=TwoWay}"
                        TextColor="White"
                        BackgroundColor="#333333"
-                       Margin="0,5,0,15"
+                       Margin="0,0,0,15"
                        HeightRequest="40" />
 
                 <Button Text="Save Settings"

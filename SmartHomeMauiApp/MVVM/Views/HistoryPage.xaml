@@ -27,38 +27,69 @@
                     <StackLayout Grid.Column="0"
                                  Grid.ColumnSpan="2"
                                  Padding="10">
-                        <Label Text="Devices in database (information fetched from device twins)"
+                        <Label Text="Devices stored in the database"
                                FontAttributes="Bold"
                                FontSize="26"
                                HorizontalOptions="Center"
                                TextColor="White" />
 
-                        <CollectionView ItemsSource="{Binding DeviceSettings}">
+                        <CollectionView Grid.Row="1"
+                                        ItemsSource="{Binding DeviceSettings}"
+                                        SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical"
+                                                 Span="4"
+                                                 HorizontalItemSpacing="10"
+                                                 VerticalItemSpacing="10" />
+                            </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="{x:Type models:DeviceSettings}">
                                     <Frame BorderColor="#333"
-                                           CornerRadius="15"
-                                           Margin="5"
-                                           Padding="10"
+                                           CornerRadius="10"
+                                           Padding="5"
                                            BackgroundColor="{DynamicResource SemiTransparentGray}"
-                                           HasShadow="True">
-                                        <StackLayout>
-                                            <Label Text="{Binding DeviceId}"
-                                                   FontSize="Medium"
-                                                   TextColor="White"
-                                                   FontAttributes="Bold" />
-                                            <Label Text="{Binding DeviceType}"
-                                                   FontSize="Small"
-                                                   TextColor="White" />
+                                           HasShadow="True"
+                                           HeightRequest="130"
+                                           WidthRequest="172">
+                                        <StackLayout HorizontalOptions="Center"
+                                                     VerticalOptions="Center">
+                                            <Image Source="{Binding ., Converter={StaticResource DeviceSettingsTypeToImageConverter}}"
+                                                   HeightRequest="40"
+                                                   WidthRequest="40"
+                                                   HorizontalOptions="Center"
+                                                   Margin="0,5" />
+
                                             <Label Text="{Binding DeviceName}"
-                                                   FontSize="Small"
-                                                   TextColor="White" />
-                                            <Label Text="{Binding LastActivityTime}"
-                                                   FontSize="Small"
-                                                   TextColor="White" />
-                                            <Label Text="{Binding DeviceState}"
-                                                   FontSize="Small"
-                                                   TextColor="White" />
+                                                   FontSize="16"
+                                                   TextColor="White"
+                                                   FontAttributes="Bold"
+                                                   LineBreakMode="TailTruncation"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   Margin="0,2" />
+
+                                            <Label Text="{Binding DeviceType}"
+                                                   FontSize="14"
+                                                   TextColor="Gray"
+                                                   HorizontalOptions="Center"
+                                                   Margin="0,2" />
+
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding DeviceId, Converter={StaticResource TruncateDeviceIdConverter}}"
+                                                              FontSize="12"
+                                                              TextColor="LightBlue" />
+                                                        <Span Text=" (Tap to view)"
+                                                              FontSize="12"
+                                                              TextColor="Gray" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:HistoryViewModel}}, Path=ShowFullDeviceIdCommand}"
+                                                                          CommandParameter="{Binding DeviceId}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
                                         </StackLayout>
                                     </Frame>
                                 </DataTemplate>

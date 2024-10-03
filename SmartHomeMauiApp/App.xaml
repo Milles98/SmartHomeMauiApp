@@ -12,8 +12,10 @@
                 <ResourceDictionary>
                     <converters:BooleanToColorConverter x:Key="BooleanToColorConverter" />
                     <converters:DeviceTypeToImageConverter x:Key="DeviceTypeToImageConverter" />
+                    <converters:DeviceSettingsTypeToImageConverter x:Key="DeviceSettingsTypeToImageConverter" />
+                    <converters:TruncateDeviceIdConverter x:Key="TruncateDeviceIdConverter" />
                     <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-                    <converters:TwinDeviceNameConverter x:Key="TwinDeviceNameConverter"/>
+                    <converters:TwinDeviceNameConverter x:Key="TwinDeviceNameConverter" />
                     <Color x:Key="SemiTransparentGray">#E61E1E1E</Color>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
