@@ -18,14 +18,12 @@
                          HorizontalOptions="CenterAndExpand"
                          BackgroundColor="Transparent">
 
-                <!-- Title -->
                 <Label Text="Add New Device"
                        FontSize="{OnPlatform Android='22', WinUI='26'}"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        TextColor="White" />
 
-                <!-- Device Type Picker -->
                 <Picker Title="Select Device Type"
                         Background="#333"
                         ItemsSource="{Binding AvailableDeviceTypes}"
@@ -33,7 +31,6 @@
                         HorizontalOptions="FillAndExpand"
                         Margin="{OnPlatform Android='0,10,0,0'}" />
 
-                <!-- Device Name Entry -->
                 <Entry Placeholder="Enter Desired Device Name"
                        Text="{Binding DeviceName}"
                        BackgroundColor="#333"
@@ -44,7 +41,6 @@
                        HorizontalOptions="FillAndExpand"
                        Margin="{OnPlatform Android='0,10,0,10', WinUI='0,0,0,0'}" />
 
-                <!-- Generated Device ID Labels -->
                 <Label Text="Generated Device ID:"
                        FontSize="{OnPlatform Android='14', WinUI='16'}"
                        FontAttributes="Bold"
@@ -57,7 +53,6 @@
                        TextColor="Gray"
                        HorizontalOptions="FillAndExpand" />
 
-                <!-- Generate Device ID Button -->
                 <Button Text="Generate Device ID"
                         Command="{Binding GenerateDeviceIdCommand}"
                         BackgroundColor="DodgerBlue"
@@ -65,7 +60,6 @@
                         HorizontalOptions="Center"
                         Margin="{OnPlatform Android='0,10,0,0'}" />
 
-                <!-- Add Device Button -->
                 <Button Text="Add Device"
                         Command="{Binding AddDeviceCommand}"
                         BackgroundColor="Green"
@@ -73,7 +67,6 @@
                         HorizontalOptions="FillAndExpand"
                         Margin="{OnPlatform Android='0,20,0,0', WinUI='0,10,0,0'}" />
 
-                <!-- Response Message -->
                 <Label Text="{Binding ResponseMessage}"
                        FontSize="Medium"
                        TextColor="{Binding ResponseMessageColor}"
@@ -81,7 +74,6 @@
                        VerticalOptions="Center"
                        IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
 
-                <!-- Loading Indicator -->
                 <ActivityIndicator IsRunning="{Binding IsBusy}"
                                    IsVisible="{Binding IsBusy}"
                                    Color="White"

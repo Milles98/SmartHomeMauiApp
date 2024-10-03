@@ -28,9 +28,6 @@ public partial class MainViewModel : ObservableObject
     private Twin? _selectedDevice;
 
     [ObservableProperty]
-    private string? _responseMessage;
-
-    [ObservableProperty]
     private string? _weatherIcon;
 
     [ObservableProperty]
@@ -39,14 +36,15 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string? _conditionText;
 
+    [ObservableProperty]
+    private bool _isWeatherVisible = false;
+
     public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext, IWeatherService weatherService, INavigationService navigationService)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;
         _weatherService = weatherService;
         _navigationService = navigationService;
-
-        ResponseMessage = string.Empty;
 
         LoadDevicesAsync().ConfigureAwait(false);
         LoadWeatherDataAsync().ConfigureAwait(false);
@@ -71,10 +69,11 @@ public partial class MainViewModel : ObservableObject
             WeatherIcon = $"https:{weatherData.Current!.Condition!.Icon}";
             Temperature = $"{(int)weatherData.Current.TempC}°C";
             ConditionText = weatherData.Current.Condition.Text!;
+            IsWeatherVisible = true;
         }
         else
         {
-            ResponseMessage = "Unable to display weather";
+            IsWeatherVisible = false;
             Debug.WriteLine("Error loading weather data");
         }
     }
@@ -106,7 +105,6 @@ public partial class MainViewModel : ObservableObject
         }
         else
         {
-            ResponseMessage = "Failed to retrieve devices.";
             Debug.WriteLine($"Error in SetDevicesAsync: {response.Message}");
         }
     }
