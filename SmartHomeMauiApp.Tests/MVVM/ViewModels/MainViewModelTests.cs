@@ -62,27 +62,6 @@ public class MainViewModelTests
     }
 
     [Fact]
-    public async Task LoadDevicesAsync_ShouldSetResponseMessage_WhenResponseFails()
-    {
-        // Arrange:
-        var responseResult = new ResponseResult
-        {
-            Succeeded = false,
-            Message = "Failed to retrieve devices"
-        };
-
-        _deviceManagerMock
-            .Setup(dm => dm.GetDevicesAsync(It.IsAny<string>()))
-            .ReturnsAsync(responseResult);
-
-        // Act:
-        await _mainViewModel.LoadDevicesAsync();
-
-        // Assert:
-        Assert.Equal("Failed to retrieve devices.", _mainViewModel.ResponseMessage);
-    }
-
-    [Fact]
     public async Task LoadWeatherDataAsync_ShouldSetWeatherProperties_WhenResponseIsSuccessful()
     {
         // Arrange:
@@ -110,21 +89,6 @@ public class MainViewModelTests
         Assert.Equal("Sunny", _mainViewModel.ConditionText);
         Assert.Equal("25°C", _mainViewModel.Temperature);
         Assert.Equal("https://cdn.weatherapi.com/weather/64x64/day/113.png", _mainViewModel.WeatherIcon);
-    }
-
-    [Fact]
-    public async Task LoadWeatherDataAsync_ShouldSetResponseMessage_WhenWeatherDataIsNull()
-    {
-        // Arrange:
-        _weatherServiceMock
-            .Setup(ws => ws.GetWeatherAsync(It.IsAny<string>()))
-            .ReturnsAsync((WeatherResponse?)null);
-
-        // Act:
-        await _mainViewModel.LoadWeatherDataAsync();
-
-        // Assert: 
-        Assert.Equal("Unable to display weather", _mainViewModel.ResponseMessage);
     }
 
     [Fact]

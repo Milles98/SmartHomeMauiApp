@@ -29,7 +29,8 @@
                                  Padding="10">
                         <Label Text="Devices stored in the database"
                                FontAttributes="Bold"
-                               FontSize="{OnPlatform Android='22', WinUI='26'}"
+                               FontSize="{OnPlatform Android='14', WinUI='26'}"
+                               Margin="{OnPlatform Android='0,0,0,10'}"
                                HorizontalOptions="Center"
                                TextColor="White" />
 
@@ -49,8 +50,8 @@
                                            Padding="5"
                                            BackgroundColor="{DynamicResource SemiTransparentGray}"
                                            HasShadow="True"
-                                           HeightRequest="130"
-                                           WidthRequest="172">
+                                           HeightRequest="{OnPlatform Android='150', WinUI='130'}"
+                                           WidthRequest="{OnPlatform Android='200', WinUI='172'}">
                                         <StackLayout HorizontalOptions="Center"
                                                      VerticalOptions="Center">
                                             <Image Source="{Binding ., Converter={StaticResource DeviceSettingsTypeToImageConverter}}"
