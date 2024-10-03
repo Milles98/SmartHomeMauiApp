@@ -29,7 +29,7 @@
                                  Padding="10">
                         <Label Text="Devices stored in the database"
                                FontAttributes="Bold"
-                               FontSize="26"
+                               FontSize="{OnPlatform Android='22', WinUI='26'}"
                                HorizontalOptions="Center"
                                TextColor="White" />
 
@@ -38,7 +38,7 @@
                                         SelectionMode="None">
                             <CollectionView.ItemsLayout>
                                 <GridItemsLayout Orientation="Vertical"
-                                                 Span="4"
+                                                 Span="{OnPlatform Android='1', WinUI='4'}"
                                                  HorizontalItemSpacing="10"
                                                  VerticalItemSpacing="10" />
                             </CollectionView.ItemsLayout>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SmartHomeMauiApp.MVVM.Views.AddDevicePage"
@@ -12,58 +11,69 @@
                Opacity="0.2" />
 
         <ScrollView>
-            <StackLayout Padding="30"
-                         Spacing="20"
-                         WidthRequest="500"
+            <StackLayout Padding="{OnPlatform Android='10,20,10,20', WinUI='30'}"
+                         Spacing="{OnPlatform Android='10', WinUI='20'}"
+                         WidthRequest="{OnPlatform Android='400', WinUI='500'}"
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand"
                          BackgroundColor="Transparent">
 
+                <!-- Title -->
                 <Label Text="Add New Device"
-                       FontSize="26"
+                       FontSize="{OnPlatform Android='22', WinUI='26'}"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
                        TextColor="White" />
 
+                <!-- Device Type Picker -->
                 <Picker Title="Select Device Type"
                         Background="#333"
                         ItemsSource="{Binding AvailableDeviceTypes}"
                         SelectedItem="{Binding SelectedDeviceType}"
-                        HorizontalOptions="FillAndExpand" />
+                        HorizontalOptions="FillAndExpand"
+                        Margin="{OnPlatform Android='0,10,0,0'}" />
 
+                <!-- Device Name Entry -->
                 <Entry Placeholder="Enter Desired Device Name"
                        Text="{Binding DeviceName}"
                        BackgroundColor="#333"
                        TextColor="White"
                        PlaceholderColor="Gray"
-                       FontSize="14"
-                       HeightRequest="20"
+                       FontSize="{OnPlatform Android='14', WinUI='14'}"
+                       HeightRequest="{OnPlatform Android='40', WinUI='20'}"
                        HorizontalOptions="FillAndExpand"
-                       Margin="0,0,0,0" />
+                       Margin="{OnPlatform Android='0,10,0,10', WinUI='0,0,0,0'}" />
 
+                <!-- Generated Device ID Labels -->
                 <Label Text="Generated Device ID:"
-                       FontSize="16"
+                       FontSize="{OnPlatform Android='14', WinUI='16'}"
                        FontAttributes="Bold"
                        HorizontalTextAlignment="Center"
-                       TextColor="White" />
+                       TextColor="White"
+                       Margin="{OnPlatform Android='0,10,0,0', WinUI='0,0,0,0'}" />
                 <Label Text="{Binding DeviceId}"
-                       FontSize="Small"
+                       FontSize="{OnPlatform Android='12', WinUI='Small'}"
                        HorizontalTextAlignment="Center"
                        TextColor="Gray"
                        HorizontalOptions="FillAndExpand" />
 
+                <!-- Generate Device ID Button -->
                 <Button Text="Generate Device ID"
                         Command="{Binding GenerateDeviceIdCommand}"
                         BackgroundColor="DodgerBlue"
                         TextColor="White"
-                        HorizontalOptions="Center" />
+                        HorizontalOptions="Center"
+                        Margin="{OnPlatform Android='0,10,0,0'}" />
 
+                <!-- Add Device Button -->
                 <Button Text="Add Device"
                         Command="{Binding AddDeviceCommand}"
                         BackgroundColor="Green"
                         TextColor="White"
-                        HorizontalOptions="FillAndExpand" />
+                        HorizontalOptions="FillAndExpand"
+                        Margin="{OnPlatform Android='0,20,0,0', WinUI='0,10,0,0'}" />
 
+                <!-- Response Message -->
                 <Label Text="{Binding ResponseMessage}"
                        FontSize="Medium"
                        TextColor="{Binding ResponseMessageColor}"
@@ -71,6 +81,7 @@
                        VerticalOptions="Center"
                        IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
 
+                <!-- Loading Indicator -->
                 <ActivityIndicator IsRunning="{Binding IsBusy}"
                                    IsVisible="{Binding IsBusy}"
                                    Color="White"
