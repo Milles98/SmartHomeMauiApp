@@ -112,7 +112,7 @@ public class MainViewModelTests
     public async Task NavigateToDeviceDetailAsync_ShouldNotNavigate_WhenDeviceIsNull()
     {
         // Act
-        await _mainViewModel.NavigateToDeviceDetailAsync(null);
+        await _mainViewModel.NavigateToDeviceDetailAsync(null!);
 
         // Assert:
         _navigationServiceMock.Verify(nav => nav.NavigateToAsync(It.IsAny<string>()), Times.Never);
