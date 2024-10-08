@@ -11,14 +11,14 @@ namespace SmartHomeMauiApp.Tests.MVVM.ViewModels;
 public class SettingsViewModelTests
 {
     private readonly Mock<IDeviceManager> _deviceManagerMock;
-    private readonly Mock<IDbContext> _dbContextMock;
+    private readonly Mock<ISmarthomeContext> _dbContextMock;
     private readonly Mock<IPreferencesService> _preferencesServiceMock;
     private readonly SettingsViewModel _settingsViewModel;
 
     public SettingsViewModelTests()
     {
         _deviceManagerMock = new Mock<IDeviceManager>();
-        _dbContextMock = new Mock<IDbContext>();
+        _dbContextMock = new Mock<ISmarthomeContext>();
         _preferencesServiceMock = new Mock<IPreferencesService>();
 
         _settingsViewModel = new SettingsViewModel(

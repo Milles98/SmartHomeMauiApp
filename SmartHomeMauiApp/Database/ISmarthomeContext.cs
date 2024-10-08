@@ -2,7 +2,7 @@
 
 namespace SmartHomeMauiApp.Database;
 
-public interface IDbContext
+public interface ISmarthomeContext
 {
     Task InitializeAsync();
     Task<UserSettings> GetUserSettingsAsync();

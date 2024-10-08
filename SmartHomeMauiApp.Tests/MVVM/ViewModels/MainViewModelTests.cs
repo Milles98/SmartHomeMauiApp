@@ -13,7 +13,7 @@ namespace SmartHomeMauiApp.Tests.MVVM.ViewModels;
 public class MainViewModelTests
 {
     private readonly Mock<IDeviceManager> _deviceManagerMock;
-    private readonly Mock<IDbContext> _dbContextMock;
+    private readonly Mock<ISmarthomeContext> _dbContextMock;
     private readonly Mock<IWeatherService> _weatherServiceMock;
     private readonly Mock<INavigationService> _navigationServiceMock;
     private readonly MainViewModel _mainViewModel;
@@ -21,7 +21,7 @@ public class MainViewModelTests
     public MainViewModelTests()
     {
         _deviceManagerMock = new Mock<IDeviceManager>();
-        _dbContextMock = new Mock<IDbContext>();
+        _dbContextMock = new Mock<ISmarthomeContext>();
         _weatherServiceMock = new Mock<IWeatherService>();
         _navigationServiceMock = new Mock<INavigationService>();
 

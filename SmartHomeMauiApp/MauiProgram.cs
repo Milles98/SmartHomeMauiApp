@@ -23,11 +23,11 @@ public static class MauiProgram
                 fonts.AddFont("fa-solid-900.ttf", "fa-solid");
             });
 
-        builder.Services.AddSingleton<IDbContext, DbContext>();
+        builder.Services.AddSingleton<ISmarthomeContext, SmarthomeContext>();
 
         builder.Services.AddSingleton<IDeviceManager, DeviceManager>(serviceProvider =>
         {
-            var dbContext = serviceProvider.GetRequiredService<IDbContext>();
+            var dbContext = serviceProvider.GetRequiredService<ISmarthomeContext>();
             var iotHubSettingsTask = dbContext.GetIoTHubSettingsAsync();
             iotHubSettingsTask.Wait();
             var iotHubSettings = iotHubSettingsTask.Result;
@@ -73,13 +73,13 @@ public static class MauiProgram
 
     private static async Task InitializeDatabaseAsync(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<IDbContext>();
+        var dbContext = services.GetRequiredService<ISmarthomeContext>();
         await dbContext.InitializeAsync();
     }
 
     private static async Task SeedInitialData(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<IDbContext>();
+        var dbContext = services.GetRequiredService<ISmarthomeContext>();
 
         await dbContext.SeedDataAsync(
             defaultEmail: "mille.elfver98@gmail.com",

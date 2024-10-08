@@ -9,7 +9,7 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 
 public partial class HistoryViewModel : ObservableObject
 {
-    private readonly IDbContext _dbContext;
+    private readonly ISmarthomeContext _dbContext;
 
     [ObservableProperty]
     private ObservableCollection<DeviceSettings> _deviceSettings = new();
@@ -23,7 +23,7 @@ public partial class HistoryViewModel : ObservableObject
     [ObservableProperty]
     private string? _responseMessage;
 
-    public HistoryViewModel(IDbContext dbContext)
+    public HistoryViewModel(ISmarthomeContext dbContext)
     {
         _dbContext = dbContext;
         LoadSettingsAsync().ConfigureAwait(false);
