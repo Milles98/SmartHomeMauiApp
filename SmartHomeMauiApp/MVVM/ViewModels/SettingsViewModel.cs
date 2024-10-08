@@ -11,7 +11,7 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 public partial class SettingsViewModel : ObservableObject
 {
     private readonly IDeviceManager _deviceManager;
-    private readonly IDbContext _dbContext;
+    private readonly ISmarthomeContext _dbContext;
     private readonly IPreferencesService _preferencesService;
 
     [ObservableProperty]
@@ -26,7 +26,7 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _responseMessageColor = "Red";
 
-    public SettingsViewModel(IDeviceManager deviceManager, IDbContext dbContext, IPreferencesService preferencesService)
+    public SettingsViewModel(IDeviceManager deviceManager, ISmarthomeContext dbContext, IPreferencesService preferencesService)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;

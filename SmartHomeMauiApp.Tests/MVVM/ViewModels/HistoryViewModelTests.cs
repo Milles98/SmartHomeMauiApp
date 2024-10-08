@@ -12,12 +12,12 @@ namespace SmartHomeMauiApp.Tests.MVVM.ViewModels
 {
     public class HistoryViewModelTests
     {
-        private readonly Mock<IDbContext> _dbContextMock;
+        private readonly Mock<ISmarthomeContext> _dbContextMock;
         private readonly HistoryViewModel _viewModel;
 
         public HistoryViewModelTests()
         {
-            _dbContextMock = new Mock<IDbContext>();
+            _dbContextMock = new Mock<ISmarthomeContext>();
 
             _viewModel = new HistoryViewModel(_dbContextMock.Object);
         }

@@ -15,7 +15,7 @@ namespace SmartHomeMauiApp.MVVM.ViewModels;
 public partial class DeviceDetailViewModel : ObservableObject, IDisposable
 {
     private readonly IDeviceManager _deviceManager;
-    private readonly IDbContext _dbContext;
+    private readonly ISmarthomeContext _dbContext;
     private readonly INavigationService _navigationService;
     private readonly ITimerService _timerService;
     private bool _isRemovingDevice;
@@ -52,7 +52,7 @@ public partial class DeviceDetailViewModel : ObservableObject, IDisposable
 
     public DeviceDetailViewModel(
         IDeviceManager deviceManager,
-        IDbContext dbContext,
+        ISmarthomeContext dbContext,
         INavigationService navigationService,
         ITimerService timerService)
     {

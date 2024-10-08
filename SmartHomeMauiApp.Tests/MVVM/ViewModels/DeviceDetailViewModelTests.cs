@@ -13,7 +13,7 @@ public class DeviceDetailViewModelTests
 {
     private readonly Mock<IDeviceManager> _deviceManagerMock;
     private readonly Mock<INavigationService> _navigationServiceMock;
-    private readonly Mock<IDbContext> _dbContextMock;
+    private readonly Mock<ISmarthomeContext> _dbContextMock;
     private readonly Mock<ITimerService> _timerServiceMock;
     private DeviceDetailViewModel _viewModel;
 
@@ -21,7 +21,7 @@ public class DeviceDetailViewModelTests
     {
         _deviceManagerMock = new Mock<IDeviceManager>();
         _navigationServiceMock = new Mock<INavigationService>();
-        _dbContextMock = new Mock<IDbContext>();
+        _dbContextMock = new Mock<ISmarthomeContext>();
         _timerServiceMock = new Mock<ITimerService>();
 
         _viewModel = new DeviceDetailViewModel(

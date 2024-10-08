@@ -15,7 +15,7 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly INavigationService _navigationService;
     private readonly IDeviceManager _deviceManager;
-    private readonly IDbContext _dbContext;
+    private readonly ISmarthomeContext _dbContext;
     private readonly IWeatherService _weatherService;
 
     [ObservableProperty]
@@ -39,7 +39,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool _isWeatherVisible = false;
 
-    public MainViewModel(IDeviceManager deviceManager, IDbContext dbContext, IWeatherService weatherService, INavigationService navigationService)
+    public MainViewModel(IDeviceManager deviceManager, ISmarthomeContext dbContext, IWeatherService weatherService, INavigationService navigationService)
     {
         _deviceManager = deviceManager;
         _dbContext = dbContext;
