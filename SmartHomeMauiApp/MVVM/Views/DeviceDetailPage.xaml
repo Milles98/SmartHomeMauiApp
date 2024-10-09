@@ -22,61 +22,61 @@
 
                     <Label Text="Device ID:"
                            FontSize="18"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceId}"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Italic"
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Device Name:"
                            FontSize="18"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceName}"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Italic"
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Device Type:"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceType}"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Italic"
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Connection State:"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding ConnectionState}"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Italic"
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Last Activity Time:"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding LastActivityTime}"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Italic"
                            Margin="10, 0, 0, 10" />
 
                     <Label Text="Device State:"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontSize="18"
                            FontAttributes="Bold"
                            Margin="10,0,0,0" />
                     <Label Text="{Binding DeviceState}"
-                           TextColor="{OnPlatform Android='White'}"
+                           TextColor="White"
                            FontAttributes="Italic"
                            Margin="10, 0, 0, 10" />
 
