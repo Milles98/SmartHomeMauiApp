@@ -5,11 +5,15 @@ using SmartHomeMauiApp.MVVM.ViewModels;
 using SmartHomeMauiApp.MVVM.Views;
 using SmartHomeMauiApp.Resources.Converters;
 using SmartHomeMauiApp.Services;
+using System.Diagnostics;
 
 namespace SmartHomeMauiApp;
 
 public static class MauiProgram
 {
+
+    //Fake iothub: HostName=fake-iothub.azure-devices.net;SharedAccessKeyName=fakePolicy;SharedAccessKey=fakeSharedAccessKey12345
+
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
@@ -25,9 +29,12 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ISmarthomeContext, SmarthomeContext>();
 
-        builder.Services.AddSingleton<IDeviceManager, DeviceManager>(serviceProvider =>
+        builder.Services.AddSingleton<IDeviceManager>(serviceProvider =>
         {
-            string connectionString = "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
+            var dbContext = serviceProvider.GetRequiredService<ISmarthomeContext>();
+            var iotHubSettings = Task.Run(async () => await dbContext.GetIoTHubSettingsAsync()).Result;
+
+            string connectionString = iotHubSettings?.ConnectionString ?? "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
             return new DeviceManager(connectionString);
         });
 
@@ -68,16 +75,34 @@ public static class MauiProgram
 
     private static async Task InitializeDatabaseAsync(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<ISmarthomeContext>();
-        await dbContext.InitializeAsync();
+        try
+        {
+            var dbContext = services.GetRequiredService<ISmarthomeContext>();
+            await dbContext.InitializeAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error {ex}");
+        }
     }
 
     private static async Task SeedInitialData(IServiceProvider services)
     {
-        var dbContext = services.GetRequiredService<ISmarthomeContext>();
+        try
+        {
+            var dbContext = services.GetRequiredService<ISmarthomeContext>();
 
-        await dbContext.SeedDataIntoDbAsync(
-            defaultConnectionString: "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="
-        );
+            var iotHubSettings = await dbContext.GetIoTHubSettingsAsync();
+            if (iotHubSettings == null)
+            {
+                await dbContext.SeedDataIntoDbAsync(
+                    defaultConnectionString: "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="
+                );
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error {ex}");
+        }
     }
 }
