@@ -1,38 +1,32 @@
 ﻿using Moq;
-using Shared.Library.Models;
 using SmartHomeMauiApp.Database;
 using SmartHomeMauiApp.MVVM.ViewModels;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace SmartHomeMauiApp.Tests.MVVM.ViewModels
+namespace SmartHomeMauiApp.Tests.MVVM.ViewModels;
+
+public class HistoryViewModelTests
 {
-    public class HistoryViewModelTests
+    private readonly Mock<ISmarthomeContext> _dbContextMock;
+    private readonly HistoryViewModel _viewModel;
+
+    public HistoryViewModelTests()
     {
-        private readonly Mock<ISmarthomeContext> _dbContextMock;
-        private readonly HistoryViewModel _viewModel;
+        _dbContextMock = new Mock<ISmarthomeContext>();
 
-        public HistoryViewModelTests()
-        {
-            _dbContextMock = new Mock<ISmarthomeContext>();
+        _viewModel = new HistoryViewModel(_dbContextMock.Object);
+    }
 
-            _viewModel = new HistoryViewModel(_dbContextMock.Object);
-        }
+    [Fact]
+    public async Task LoadSettingsAsync_ShouldHandleException()
+    {
+        // Arrange
+        _dbContextMock.Setup(db => db.GetAllDeviceSettingsAsync()).ThrowsAsync(new System.Exception("Database error"));
 
-        [Fact]
-        public async Task LoadSettingsAsync_ShouldHandleException()
-        {
-            // Arrange
-            _dbContextMock.Setup(db => db.GetAllDeviceSettingsAsync()).ThrowsAsync(new System.Exception("Database error"));
+        // Act
+        await _viewModel.LoadSettingsAsync();
 
-            // Act
-            await _viewModel.LoadSettingsAsync();
-
-            // Assert
-            Assert.Equal("Failed to load settings.", _viewModel.ResponseMessage);
-        }
+        // Assert
+        Assert.Equal("Failed to load settings.", _viewModel.ResponseMessage);
     }
 }
