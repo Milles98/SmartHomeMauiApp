@@ -39,6 +39,8 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool _isWeatherVisible = false;
 
+    private const string DefaultConnectionString = "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
+
     public MainViewModel(IDeviceManager deviceManager, ISmarthomeContext dbContext, IWeatherService weatherService, INavigationService navigationService)
     {
         _deviceManager = deviceManager;
@@ -46,8 +48,7 @@ public partial class MainViewModel : ObservableObject
         _weatherService = weatherService;
         _navigationService = navigationService;
 
-        LoadDevicesAsync().ConfigureAwait(false);
-        LoadWeatherDataAsync().ConfigureAwait(false);
+        InitializeAsync().ConfigureAwait(false);
 
         Time = DateTime.Now.ToString("HH:mm");
         StartTimer();
@@ -58,6 +59,17 @@ public partial class MainViewModel : ObservableObject
         var timer = new System.Timers.Timer(10000);
         timer.Elapsed += (sender, e) => Time = DateTime.Now.ToString("HH:mm");
         timer.Start();
+    }
+
+    private async Task InitializeAsync()
+    {
+        var iotHubSettings = await _dbContext.GetIoTHubSettingsAsync();
+        var connectionString = iotHubSettings?.ConnectionString ?? DefaultConnectionString;
+
+        _deviceManager.UpdateConnectionString(connectionString);
+
+        await LoadDevicesAsync();
+        await LoadWeatherDataAsync();
     }
 
     public async Task LoadWeatherDataAsync()
