@@ -95,7 +95,7 @@ public class SettingsViewModelTests
         await _settingsViewModel.SaveSettingsAsync();
 
         // Assert
-        Assert.Equal("An error occurred while saving settings. Please try again.", _settingsViewModel.ResponseMessage);
+        Assert.Equal("An error occurred while saving settings. Please double check that your Iot-Hub connectionstring is valid.", _settingsViewModel.ResponseMessage);
         Assert.Equal("Red", _settingsViewModel.ResponseMessageColor);
     }
 }
