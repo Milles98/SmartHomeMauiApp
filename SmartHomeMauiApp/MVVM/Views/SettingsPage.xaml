@@ -15,6 +15,7 @@
         <ScrollView>
             <StackLayout Padding="30"
                          Spacing="20"
+                         WidthRequest="{OnPlatform WinUI='1050'}"
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="CenterAndExpand"
                          BackgroundColor="Transparent">

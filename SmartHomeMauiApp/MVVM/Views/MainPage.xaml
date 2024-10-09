@@ -116,7 +116,7 @@
                                             BackgroundColor="#6f42c1"
                                             TextColor="White"
                                             CornerRadius="20"
-                                            WidthRequest="{OnPlatform Android='100', WinUI='80'}"
+                                            WidthRequest="{OnPlatform Android='60', WinUI='80'}"
                                             HeightRequest="{OnPlatform Android='40'}"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=NavigateToDeviceDetailCommand}"
                                             CommandParameter="{Binding .}"
