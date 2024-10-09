@@ -34,11 +34,6 @@ public partial class SettingsViewModel : ObservableObject
         ResponseMessage = string.Empty;
     }
 
-    public async Task InitializeAsync()
-    {
-        await LoadSettingsAsync();
-    }
-
     public async Task LoadSettingsAsync()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
@@ -75,7 +70,7 @@ public partial class SettingsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            ResponseMessage = "An error occurred while saving settings. Please try again.";
+            ResponseMessage = "An error occurred while saving settings. Please double check that your Iot-Hub connectionstring is valid.";
             ResponseMessageColor = "Red";
             Debug.WriteLine($"Error in SaveSettingsAsync: {ex.Message}");
         }

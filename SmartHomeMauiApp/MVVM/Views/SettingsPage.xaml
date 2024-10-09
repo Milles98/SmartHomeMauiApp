@@ -64,6 +64,7 @@
                        TextColor="{Binding ResponseMessageColor}"
                        HorizontalOptions="Center"
                        VerticalOptions="Center"
+                       HorizontalTextAlignment="Center"
                        Margin="0,20,0,0"
                        IsVisible="{Binding ResponseMessage, Converter={StaticResource StringToVisibilityConverter}}" />
 
