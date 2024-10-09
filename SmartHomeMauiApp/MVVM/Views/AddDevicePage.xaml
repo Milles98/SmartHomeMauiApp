@@ -27,6 +27,7 @@
                 <Picker Title="Select Device Type"
                         Background="#333"
                         ItemsSource="{Binding AvailableDeviceTypes}"
+                        WidthRequest="{OnPlatform Android='300'}"
                         SelectedItem="{Binding SelectedDeviceType}"
                         HorizontalOptions="FillAndExpand"
                         Margin="{OnPlatform Android='0,10,0,0'}" />
@@ -38,6 +39,7 @@
                        PlaceholderColor="Gray"
                        FontSize="{OnPlatform Android='14', WinUI='14'}"
                        HeightRequest="{OnPlatform Android='40', WinUI='20'}"
+                       WidthRequest="{OnPlatform Android='300'}"
                        HorizontalOptions="FillAndExpand"
                        Margin="{OnPlatform Android='0,10,0,10', WinUI='0,0,0,0'}" />
 
@@ -63,6 +65,7 @@
                 <Button Text="Add Device"
                         Command="{Binding AddDeviceCommand}"
                         BackgroundColor="Green"
+                        WidthRequest="{OnPlatform Android='200'}"
                         TextColor="White"
                         HorizontalOptions="FillAndExpand"
                         Margin="{OnPlatform Android='0,20,0,0', WinUI='0,10,0,0'}" />
