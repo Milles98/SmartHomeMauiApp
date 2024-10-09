@@ -18,7 +18,7 @@ public partial class SettingsPage : ContentPage
         {
             viewModel.ResponseMessage = string.Empty;
             viewModel.ResponseMessageColor = "Red";
-            await viewModel.InitializeAsync();
+            await viewModel.LoadSettingsAsync();
         }
     }
 }
