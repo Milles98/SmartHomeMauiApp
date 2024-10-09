@@ -1,5 +1,6 @@
 ﻿using Shared.Library.Models;
 using SQLite;
+using System.Diagnostics;
 
 namespace SmartHomeMauiApp.Database;
 
@@ -10,87 +11,169 @@ public class SmarthomeContext : ISmarthomeContext
     public SmarthomeContext()
     {
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "smarthome.db3");
-        Console.WriteLine($"Db added to {dbPath}");
+        Debug.WriteLine($"Db added to {dbPath}");
         _database = new SQLiteAsyncConnection(dbPath);
     }
 
     public async Task InitializeAsync()
     {
-        await _database.CreateTableAsync<UserSettings>();
-        await _database.CreateTableAsync<IoTHubSettings>();
-        await _database.CreateTableAsync<DeviceSettings>();
+        try
+        {
+            await _database.CreateTableAsync<UserSettings>();
+            await _database.CreateTableAsync<IoTHubSettings>();
+            await _database.CreateTableAsync<DeviceSettings>();
+            Debug.WriteLine("Database tables created successfully.");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error initializing database: {ex.Message}");
+        }
     }
 
-    public Task<UserSettings> GetUserSettingsAsync()
+    public async Task<UserSettings> GetUserSettingsAsync()
     {
-        return _database.Table<UserSettings>().FirstOrDefaultAsync();
+        try
+        {
+            var userSettings = await _database.Table<UserSettings>().FirstOrDefaultAsync();
+            Debug.WriteLine("User settings retrieved successfully.");
+            return userSettings;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error getting user settings: {ex.Message}");
+            return null!;
+        }
     }
 
     public async Task<int> SaveUserSettingsAsync(UserSettings userSettings)
     {
-        await _database.RunInTransactionAsync(tran =>
+        try
         {
-            tran.DeleteAll<UserSettings>();
-            tran.Insert(userSettings);
-        });
-        return 1;
+            await _database.RunInTransactionAsync(tran =>
+            {
+                tran.DeleteAll<UserSettings>();
+                tran.Insert(userSettings);
+            });
+            Debug.WriteLine("User settings saved successfully.");
+            return 1;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error saving user settings: {ex.Message}");
+            return 0;
+        }
     }
 
-    public Task<IoTHubSettings> GetIoTHubSettingsAsync()
+    public async Task<IoTHubSettings> GetIoTHubSettingsAsync()
     {
-        return _database.Table<IoTHubSettings>().FirstOrDefaultAsync();
+        try
+        {
+            var iotHubSettings = await _database.Table<IoTHubSettings>().FirstOrDefaultAsync();
+            Debug.WriteLine("IoT Hub settings retrieved successfully.");
+            return iotHubSettings;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error getting IoT Hub settings: {ex.Message}");
+            return null!;
+        }
     }
 
     public async Task<int> SaveIoTHubSettingsAsync(IoTHubSettings ioTHubSettings)
     {
-        var existingIoTHubSettings = await _database.Table<IoTHubSettings>().FirstOrDefaultAsync();
-        if (existingIoTHubSettings != null)
+        try
         {
-            ioTHubSettings.Id = existingIoTHubSettings.Id;
-            return await _database.UpdateAsync(ioTHubSettings);
+            var existingIoTHubSettings = await _database.Table<IoTHubSettings>().FirstOrDefaultAsync();
+            if (existingIoTHubSettings != null)
+            {
+                ioTHubSettings.Id = existingIoTHubSettings.Id;
+                var result = await _database.UpdateAsync(ioTHubSettings);
+                Debug.WriteLine("IoT Hub settings updated successfully.");
+                return result;
+            }
+            var insertResult = await _database.InsertAsync(ioTHubSettings);
+            Debug.WriteLine("IoT Hub settings inserted successfully.");
+            return insertResult;
         }
-        return await _database.InsertAsync(ioTHubSettings);
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error saving IoT Hub settings: {ex.Message}");
+            return 0;
+        }
     }
 
-    public Task<DeviceSettings> GetDeviceSettingsAsync(string deviceId)
+    public async Task<DeviceSettings> GetDeviceSettingsAsync(string deviceId)
     {
-        return _database.Table<DeviceSettings>().Where(d => d.DeviceId == deviceId).FirstOrDefaultAsync();
+        try
+        {
+            var deviceSettings = await _database.Table<DeviceSettings>().Where(d => d.DeviceId == deviceId).FirstOrDefaultAsync();
+            Debug.WriteLine("Device settings retrieved successfully.");
+            return deviceSettings;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error getting device settings: {ex.Message}");
+            return null!;
+        }
     }
 
-    public Task<List<DeviceSettings>> GetAllDeviceSettingsAsync()
+    public async Task<List<DeviceSettings>> GetAllDeviceSettingsAsync()
     {
-        return _database.Table<DeviceSettings>().ToListAsync();
+        try
+        {
+            var deviceSettingsList = await _database.Table<DeviceSettings>().ToListAsync();
+            Debug.WriteLine("All device settings retrieved successfully.");
+            return deviceSettingsList;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error getting all device settings: {ex.Message}");
+            return new List<DeviceSettings>();
+        }
     }
 
     public async Task<int> SaveDeviceSettingsAsync(DeviceSettings deviceSettings)
     {
-        var existingDevice = await _database.Table<DeviceSettings>()
-            .Where(d => d.DeviceId == deviceSettings.DeviceId)
-            .FirstOrDefaultAsync();
-
-        if (existingDevice != null)
+        try
         {
-            deviceSettings.Id = existingDevice.Id;
-            return await _database.UpdateAsync(deviceSettings);
-        }
+            var existingDevice = await _database.Table<DeviceSettings>()
+                .Where(d => d.DeviceId == deviceSettings.DeviceId)
+                .FirstOrDefaultAsync();
 
-        return await _database.InsertAsync(deviceSettings);
+            if (existingDevice != null)
+            {
+                deviceSettings.Id = existingDevice.Id;
+                var result = await _database.UpdateAsync(deviceSettings);
+                Debug.WriteLine("Device settings updated successfully.");
+                return result;
+            }
+
+            var insertResult = await _database.InsertAsync(deviceSettings);
+            Debug.WriteLine("Device settings inserted successfully.");
+            return insertResult;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error saving device settings: {ex.Message}");
+            return 0;
+        }
     }
 
-    public async Task SeedDataAsync(string defaultEmail, string defaultConnectionString)
+    public async Task SeedDataIntoDbAsync(string defaultConnectionString)
     {
-        var userSettings = await GetUserSettingsAsync();
-        if (userSettings == null)
+        try
         {
-            userSettings = new UserSettings { EmailAddress = defaultEmail };
-            await SaveUserSettingsAsync(userSettings);
+            var iotHubSettings = await GetIoTHubSettingsAsync();
+            if (iotHubSettings == null)
+            {
+                iotHubSettings = new IoTHubSettings { ConnectionString = defaultConnectionString };
+                await SaveIoTHubSettingsAsync(iotHubSettings);
+                Debug.WriteLine("Default IoT Hub settings seeded.");
+            }
         }
-
-        var iotHubSettings = await GetIoTHubSettingsAsync();
-        if (iotHubSettings == null)
+        catch (Exception ex)
         {
-            iotHubSettings = new IoTHubSettings { ConnectionString = defaultConnectionString };
-            await SaveIoTHubSettingsAsync(iotHubSettings);
+            Debug.WriteLine($"Error seeding data: {ex.Message}");
         }
     }
 }
