@@ -19,6 +19,16 @@ public class DeviceManager : IDeviceManager
         _connectionString = connectionString;
         UpdateConnectionString(_connectionString!);
     }
+    public void UpdateConnectionString(string connectionString)
+    {
+        _registryManager = RegistryManager.CreateFromConnectionString(connectionString);
+        _serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
+
+        if (_serviceClient == null || _registryManager == null)
+            Debug.WriteLine("Error: ServiceClient or RegistryManager is not initialized.");
+        else
+            Debug.WriteLine("ServiceClient and RegistryManager are initialized successfully.");
+    }
 
     public bool Disconnect()
     {
@@ -93,17 +103,6 @@ public class DeviceManager : IDeviceManager
             Debug.WriteLine($"Error updating desired properties: {ex.Message}");
             return false;
         }
-    }
-
-    public void UpdateConnectionString(string connectionString)
-    {
-        _registryManager = RegistryManager.CreateFromConnectionString(connectionString);
-        _serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
-
-        if (_serviceClient == null || _registryManager == null)
-            Debug.WriteLine("Error: ServiceClient or RegistryManager is not initialized.");
-        else
-            Debug.WriteLine("ServiceClient and RegistryManager are initialized successfully.");
     }
 
     public async Task<ResponseResult> GetDevicesAsync(string query)
