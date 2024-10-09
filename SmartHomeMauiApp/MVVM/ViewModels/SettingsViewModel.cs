@@ -42,10 +42,10 @@ public partial class SettingsViewModel : ObservableObject
     public async Task LoadSettingsAsync()
     {
         var userSettings = await _dbContext.GetUserSettingsAsync();
-        EmailAddress = userSettings?.EmailAddress ?? string.Empty;
+        EmailAddress = userSettings?.EmailAddress ?? "mille.elfver98@gmail.com";
 
         var iotHubSettings = await _dbContext.GetIoTHubSettingsAsync();
-        ConnectionString = iotHubSettings?.ConnectionString ?? string.Empty;
+        ConnectionString = iotHubSettings?.ConnectionString ?? "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
     }
 
     [RelayCommand]
