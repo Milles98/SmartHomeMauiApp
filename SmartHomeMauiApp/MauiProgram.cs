@@ -68,7 +68,6 @@ public static class MauiProgram
         var app = builder.Build();
 
         _ = InitializeDatabaseAsync(app.Services);
-        _ = SeedInitialData(app.Services);
 
         return app;
     }
@@ -79,26 +78,6 @@ public static class MauiProgram
         {
             var dbContext = services.GetRequiredService<ISmarthomeContext>();
             await dbContext.InitializeAsync();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error {ex}");
-        }
-    }
-
-    private static async Task SeedInitialData(IServiceProvider services)
-    {
-        try
-        {
-            var dbContext = services.GetRequiredService<ISmarthomeContext>();
-
-            var iotHubSettings = await dbContext.GetIoTHubSettingsAsync();
-            if (iotHubSettings == null)
-            {
-                await dbContext.SeedDataIntoDbAsync(
-                    defaultConnectionString: "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="
-                );
-            }
         }
         catch (Exception ex)
         {
