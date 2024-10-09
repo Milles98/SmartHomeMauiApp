@@ -12,5 +12,5 @@ public interface ISmarthomeContext
     Task<DeviceSettings> GetDeviceSettingsAsync(string deviceId);
     Task<List<DeviceSettings>> GetAllDeviceSettingsAsync();
     Task<int> SaveDeviceSettingsAsync(DeviceSettings deviceSettings);
-    Task SeedDataAsync(string defaultEmail, string defaultConnectionString);
+    Task SeedDataIntoDbAsync(string defaultConnectionString);
 }

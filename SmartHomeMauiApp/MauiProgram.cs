@@ -76,8 +76,7 @@ public static class MauiProgram
     {
         var dbContext = services.GetRequiredService<ISmarthomeContext>();
 
-        await dbContext.SeedDataAsync(
-            defaultEmail: "mille.elfver98@gmail.com",
+        await dbContext.SeedDataIntoDbAsync(
             defaultConnectionString: "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI="
         );
     }

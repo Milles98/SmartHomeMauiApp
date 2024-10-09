@@ -69,7 +69,7 @@ public partial class SettingsViewModel : ObservableObject
             var iotHubSettings = new IoTHubSettings { ConnectionString = ConnectionString };
             await _dbContext.SaveIoTHubSettingsAsync(iotHubSettings);
 
-            ResponseMessage = "Settings have been saved, and IoT Hub connection has been updated.";
+            ResponseMessage = "Settings has been saved.";
             ResponseMessageColor = "Green";
             _preferencesService.Set("EmailAddress", EmailAddress!);
         }
