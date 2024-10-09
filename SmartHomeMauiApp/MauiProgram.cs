@@ -27,12 +27,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<IDeviceManager, DeviceManager>(serviceProvider =>
         {
-            var dbContext = serviceProvider.GetRequiredService<ISmarthomeContext>();
-            var iotHubSettingsTask = dbContext.GetIoTHubSettingsAsync();
-            iotHubSettingsTask.Wait();
-            var iotHubSettings = iotHubSettingsTask.Result;
-            string connectionString = iotHubSettings?.ConnectionString ??
-                                      "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
+            string connectionString = "HostName=Milles-IoT.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=4o/msHXU6XCzmeL9Jazb6eKlPZJbf6D4KAIoTFqR/EI=";
             return new DeviceManager(connectionString);
         });
 
