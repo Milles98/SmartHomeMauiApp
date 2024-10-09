@@ -9,7 +9,7 @@ public class SmarthomeContext : ISmarthomeContext
 
     public SmarthomeContext()
     {
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "smarthometester.db3");
+        var dbPath = Path.Combine(FileSystem.AppDataDirectory, "smarthome.db3");
         Console.WriteLine($"Db added to {dbPath}");
         _database = new SQLiteAsyncConnection(dbPath);
     }
