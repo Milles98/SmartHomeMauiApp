@@ -46,7 +46,7 @@ public partial class DeviceDetailViewModel : ObservableObject, IDisposable
     private string? _emailAddress;
 
     public bool IsRemoveDeviceVisible =>
-        DeviceId != "new-fan-bd437070-7751-45ca-8040-d484cedd6201" &&
+        DeviceId != "fan-5f8521d6-bf2a-4322-bf9a-69cc70bf9148" &&
         DeviceId != "ac-3cea3c99-c45a-4f44-a8ea-1fb70b9d2dca" &&
         DeviceId != "new-lamp-33c0d9c6-66f2-4aa6-bef5-c3d4417bc74c";
 
