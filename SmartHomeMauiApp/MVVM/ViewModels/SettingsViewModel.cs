@@ -5,6 +5,7 @@ using Shared.Library.Services;
 using SmartHomeMauiApp.Database;
 using SmartHomeMauiApp.Services;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace SmartHomeMauiApp.MVVM.ViewModels;
 
@@ -54,6 +55,13 @@ public partial class SettingsViewModel : ObservableObject
                 return;
             }
 
+            if (!IsValidEmail(EmailAddress))
+            {
+                ResponseMessage = "Invalid email address format.";
+                ResponseMessageColor = "Red";
+                return;
+            }
+
             _deviceManager.UpdateConnectionString(ConnectionString);
 
             Debug.WriteLine("Saving settings...");
@@ -76,5 +84,14 @@ public partial class SettingsViewModel : ObservableObject
         }
 
         await Task.CompletedTask;
+    }
+
+    private bool IsValidEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return false;
+
+        var emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        return Regex.IsMatch(email, emailRegex, RegexOptions.IgnoreCase);
     }
 }

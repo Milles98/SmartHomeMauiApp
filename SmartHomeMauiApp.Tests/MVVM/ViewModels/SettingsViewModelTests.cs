@@ -89,6 +89,8 @@ public class SettingsViewModelTests
     {
         // Arrange
         _settingsViewModel.ConnectionString = "ValidConnectionString";
+        _settingsViewModel.EmailAddress = "test@example.com";
+
         _dbContextMock.Setup(db => db.SaveUserSettingsAsync(It.IsAny<UserSettings>())).ThrowsAsync(new Exception("Database error"));
 
         // Act
@@ -97,5 +99,42 @@ public class SettingsViewModelTests
         // Assert
         Assert.Equal("An error occurred while saving settings. Please double check that your Iot-Hub connectionstring is valid.", _settingsViewModel.ResponseMessage);
         Assert.Equal("Red", _settingsViewModel.ResponseMessageColor);
+    }
+
+    [Fact]
+    public async Task SaveSettingsAsync_ShouldShowError_WhenEmailIsInvalid()
+    {
+        // Arrange
+        _settingsViewModel.ConnectionString = "ValidConnectionString";
+        _settingsViewModel.EmailAddress = "invalid-email";  // Invalid email
+
+        // Act
+        await _settingsViewModel.SaveSettingsAsync();
+
+        // Assert
+        Assert.Equal("Invalid email address format.", _settingsViewModel.ResponseMessage);
+        _deviceManagerMock.Verify(dm => dm.UpdateConnectionString(It.IsAny<string>()), Times.Never);
+        _dbContextMock.Verify(db => db.SaveUserSettingsAsync(It.IsAny<UserSettings>()), Times.Never);
+        _dbContextMock.Verify(db => db.SaveIoTHubSettingsAsync(It.IsAny<IoTHubSettings>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task SaveSettingsAsync_ShouldSaveSettings_WhenEmailIsValid()
+    {
+        // Arrange
+        _settingsViewModel.ConnectionString = "ValidConnectionString";
+        _settingsViewModel.EmailAddress = "test@example.com";  // Valid email
+
+        _dbContextMock.Setup(db => db.SaveUserSettingsAsync(It.IsAny<UserSettings>())).ReturnsAsync(1);
+        _dbContextMock.Setup(db => db.SaveIoTHubSettingsAsync(It.IsAny<IoTHubSettings>())).ReturnsAsync(1);
+
+        // Act
+        await _settingsViewModel.SaveSettingsAsync();
+
+        // Assert
+        _deviceManagerMock.Verify(dm => dm.UpdateConnectionString("ValidConnectionString"), Times.Once);
+        _dbContextMock.Verify(db => db.SaveUserSettingsAsync(It.IsAny<UserSettings>()), Times.Once);
+        _dbContextMock.Verify(db => db.SaveIoTHubSettingsAsync(It.IsAny<IoTHubSettings>()), Times.Once);
+        _preferencesServiceMock.Verify(ps => ps.Set("EmailAddress", "test@example.com"), Times.Once);
     }
 }
